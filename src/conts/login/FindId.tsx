@@ -78,7 +78,11 @@ const FindId: React.FC = () => {
         email: email,
         name: name
       });
-      setUserid(res.data);
+      if (res.data === "checkEmail") {
+        alert("이름과 가입한 메일을 확인해주세요.")
+      } else {
+        setUserid(res.data);
+      }
     } catch (error) {
       alert("처리 중 문제 발생");
       console.error(error);

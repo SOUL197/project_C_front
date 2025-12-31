@@ -45,6 +45,7 @@ const FindPwd: React.FC = () => {
       const res = await axios.post(`${url}/api/auth/emailCheck`, {
         email: email,
         type: "find",
+        userid: userid,
       });
       if (res.data === 2) {
         alert("인증 번호가 발송되었습니다.");
@@ -109,6 +110,7 @@ const FindPwd: React.FC = () => {
     try {
         await axios.post(`${url}/member/findPwd`,{
             userid:userid,
+            email:email,
             password:password
         });
         alert('비밀번호 변경이 완료되었습니다.');
