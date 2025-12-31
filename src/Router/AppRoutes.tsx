@@ -25,6 +25,8 @@ import LikeDetail from '../conts/Like/LikeDetail'
 import AdminAnswer from '../conts/faq/AdminAnswer'
 import MyQna from '../conts/faq/MyQna'
 import Mypagehome from '../conts/mypage/Mypagehome (1)'
+import FindId from '../conts/login/FindId'
+import FindPwd from '../conts/login/FindPwd'
 
 
 const AppRoutes: React.FC = () => {
@@ -44,6 +46,8 @@ const AppRoutes: React.FC = () => {
         { path: '/mypage', element: <Mypagehome /> },
         { path: '/mypage/detail', element: <Mypagedetail /> },
         { path: '/signup', element: <Signup /> },
+        { path: '/findId', element: <FindId /> },
+        { path: '/findPwd', element: <FindPwd /> },
         { path: '/login', element: <Login /> },
         { path: '/gongji', element: <Gongjilist /> },
         { path: '/gongji/form', element: <GongjiForm /> },
