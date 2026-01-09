@@ -27,6 +27,7 @@ import MyQna from '../conts/faq/MyQna'
 import Mypagehome from '../conts/mypage/Mypagehome (1)'
 import FindId from '../conts/login/FindId'
 import FindPwd from '../conts/login/FindPwd'
+import TestChart from '../conts/chart_ui/TestChart'
 
 
 const AppRoutes: React.FC = () => {
@@ -58,6 +59,7 @@ const AppRoutes: React.FC = () => {
         { path: '/like/detail/:num', element: <LikeDetail /> },
         { path: '/adminanswer', element: <AdminAnswer /> },
         { path: '/myqna', element: <MyQna /> },
+        { path: '/test', element: <TestChart /> },
     ]
 
     return (

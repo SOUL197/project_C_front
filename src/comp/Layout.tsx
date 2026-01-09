@@ -26,6 +26,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                             <a href="/"><img src="/image/header.png" alt="" style={{marginTop: '13px', width:'200px',marginRight:'450px'}}/></a>
                             <ul className="nav col-12 col-lg-auto my-2 my-md-0" style={{ justifyContent: 'center', marginLeft: 10 }}>
                                 <li>
+                                    <a href="/test" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
+                                        테스트
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="/" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
                                         홈
                                     </a>
