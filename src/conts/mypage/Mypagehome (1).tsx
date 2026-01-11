@@ -11,6 +11,7 @@ import MyQna from '../faq/MyQna'
 import { Button, Modal } from 'react-bootstrap'
 import Mypageimage from './MypageImage'
 import Loginlog from '../login/Loginlog'
+import MyPageStats from '../chart_ui/MyPageStats'
 
 const Mypagehome: React.FC = () => {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ const Mypagehome: React.FC = () => {
   const renderContent = (menu: string) => {
     switch (menu) {
       case 'Chart':
-        return <Chart />
+        return <MyPageStats />
       case 'Change Profile':
         return <Mypagedetail />
       case 'Gallery':
