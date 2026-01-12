@@ -18,7 +18,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
     return (
 
-        <div>
+        <div style={{height:'100vh', display:'flex', flexDirection:'column'}}>
             <header>
                 <div className="header">
                     <div className="container">
@@ -61,7 +61,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
             </header>
 
-            <main>{children}</main>
+            <main style={{flex:1, minHeight:0, overflow:'auto'}}>{children}</main>
 
             <footer>
                 <div style={{ color: '#000', padding: '1px', borderRadius: '0 0 8px 8px', textAlign: 'center' }}>

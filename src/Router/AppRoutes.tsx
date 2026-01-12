@@ -28,6 +28,9 @@ import Mypagehome from '../conts/mypage/Mypagehome (1)'
 import FindId from '../conts/login/FindId'
 import FindPwd from '../conts/login/FindPwd'
 import TestChart from '../conts/chart_ui/TestChart'
+import TestChart2 from '../conts/chart_ui/TestChart2'
+import MyPageStats from '../conts/chart_ui/MyPageStats'
+import AdminDashboard from '../conts/chart_ui/AdminDashboard'
 
 
 const AppRoutes: React.FC = () => {
@@ -59,11 +62,10 @@ const AppRoutes: React.FC = () => {
         { path: '/like/detail/:num', element: <LikeDetail /> },
         { path: '/adminanswer', element: <AdminAnswer /> },
         { path: '/myqna', element: <MyQna /> },
-        { path: '/test', element: <TestChart /> },
+        { path: '/test', element: <AdminDashboard /> },
     ]
 
     return (
-        <div>
             <Routes>
                 {
                     routelist.map((route, i) => (
@@ -71,7 +73,6 @@ const AppRoutes: React.FC = () => {
                     ))
                 }
             </Routes>
-        </div>
     )
 }
 
