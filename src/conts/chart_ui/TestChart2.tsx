@@ -5,11 +5,9 @@ const TestChart2: React.FC = () => {
     const chartRef = useRef<any>(null);
     const [isDrilldown, setIsDrilldown] = useState(false);
 
-    /* KPI 더미 데이터 */
     const totalUsers = 12480;
     const activeUsers = 3421;
 
-    /* 성별 비율 (도넛) */
     const genderOption = {
         tooltip: { trigger: 'item' },
         legend: { bottom: '0%' },
@@ -41,7 +39,6 @@ const TestChart2: React.FC = () => {
         ],
     };
 
-    /* 지역별 사용자 수 (바 차트) */
     const regionOption = {
         tooltip: {
             trigger: 'axis',
@@ -61,6 +58,7 @@ const TestChart2: React.FC = () => {
                 barWidth: '50%',
             },
         ],
+        colorBy: 's'
     };
 
     const drilldownData = [
@@ -99,7 +97,6 @@ const TestChart2: React.FC = () => {
         },
     ];
 
-    /* 최근 30일 매칭 수 (라인 차트) */
     const matchOption = {
         tooltip: {
             trigger: 'axis',
@@ -152,7 +149,7 @@ const TestChart2: React.FC = () => {
 
     return (
         <div style={{ width: '100%', height: '100%', padding: 16 }}>
-            {/* KPI */}
+
             <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
                 <div style={cardStyle}>
                     <div style={cardTitle}>총 가입자 수</div>
@@ -164,13 +161,11 @@ const TestChart2: React.FC = () => {
                 </div>
             </div>
 
-            {/* 성별 비율 */}
             <section style={sectionStyle}>
                 <h3>성별 비율</h3>
                 <ECharts option={genderOption} style={{ height: 300 }} />
             </section>
 
-            {/* 지역별 사용자 */}
             <section style={sectionStyle}>
                 <h3>지역별 사용자</h3>
                 {isDrilldown && (
@@ -185,10 +180,9 @@ const TestChart2: React.FC = () => {
                         ← 뒤로가기
                     </button>
                 )}
-                <ECharts option={regionOption} style={{ height: 300 }} onEvents={onEvents} ref={chartRef} />
+                <ECharts option={regionOption} style={{ height: 500 }} onEvents={onEvents} ref={chartRef} />
             </section>
 
-            {/* 최근 30일 매칭 */}
             <section style={sectionStyle}>
                 <h3>최근 30일 매칭 수</h3>
                 <ECharts option={matchOption} style={{ height: 300 }} />

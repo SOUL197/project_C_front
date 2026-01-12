@@ -6,10 +6,6 @@ const TestChart: React.FC = () => {
   const chartRef = useRef<any>(null);
   const [isDrilldown, setIsDrilldown] = useState(false);
 
-  interface DataItem {
-    value: number;
-    groupId: string;
-  }
   const options = {
     grid: {
       top: 20,

@@ -2,7 +2,7 @@ import React from 'react';
 import ECharts from 'echarts-for-react';
 
 const AdminDashboard: React.FC = () => {
-  /* ===================== KPI ===================== */
+
   const kpiStyle: React.CSSProperties = {
     flex: 1,
     padding: '16px',
@@ -12,7 +12,6 @@ const AdminDashboard: React.FC = () => {
     background: '#fafafa',
   };
 
-  /* ===================== 1. 가입 → 유료 퍼널 ===================== */
   const funnelOption = {
     tooltip: { trigger: 'item' },
     series: [
@@ -21,15 +20,15 @@ const AdminDashboard: React.FC = () => {
         width: '60%',
         data: [
           { value: 5000, name: '가입' },
-          { value: 3200, name: '프로필 완성' },
+          { value: 3200, name: '좋아요' },
           { value: 1800, name: '첫 매칭' },
-          { value: 620, name: '유료 전환' },
+          { value: 620, name: '데이트' },
         ],
+        left: '20%'
       },
     ],
   };
 
-  /* ===================== 2. 코호트 유지율 ===================== */
   const cohortOption = {
     tooltip: { trigger: 'axis' },
     legend: {
@@ -51,7 +50,6 @@ const AdminDashboard: React.FC = () => {
     ],
   };
 
-  /* ===================== 3. 성별 / 연령 스택 바 ===================== */
   const genderAgeOption = {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: {
@@ -80,7 +78,6 @@ const AdminDashboard: React.FC = () => {
     ],
   };
 
-  /* ===================== 4. 신고 발생 추이 + 경고 ===================== */
   const reportTrendOption = {
     tooltip: { trigger: 'axis' },
     xAxis: {
@@ -91,25 +88,50 @@ const AdminDashboard: React.FC = () => {
       type: 'value',
     },
     series: [
+      // {
+      //   name: '신고 건수',
+      //   type: 'line',
+      //   data: [12, 18, 15, 26, 40],
+      //   markLine: {
+      //     data: [
+      //       {
+      //         yAxis: 30,
+      //         name: '경고 기준',
+      //       },
+      //     ],
+      //   },
+      // },
       {
-        name: '신고 건수',
+        name: '방문자',
         type: 'line',
-        data: [12, 18, 15, 26, 40],
         markLine: {
           data: [
             {
-              yAxis: 30,
-              name: '경고 기준',
-            },
-          ],
+              yAxis: 5000,
+              name: '평균 회원 방문율'
+            }
+          ]
         },
+        data: [5000, 3900, 6700, 5300, 4800]
       },
+      {
+        name: '회원 방문',
+        type: 'line',
+        markLine: {
+          data: [
+            {
+              yAxis: '27%'
+            }
+          ]
+        },
+        data: []
+      }
     ],
   };
 
   return (
     <div style={{ padding: 24 }}>
-      {/* ===================== KPI ===================== */}
+
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
         <div style={kpiStyle}>
           <h4>DAU</h4>
@@ -120,33 +142,29 @@ const AdminDashboard: React.FC = () => {
           <strong>24,800</strong>
         </div>
         <div style={kpiStyle}>
-          <h4>유료 전환율</h4>
-          <strong>12.4%</strong>
+          <h4>사용자 참여도</h4>
+          <strong>13.8%</strong>
         </div>
       </div>
 
       <hr />
 
-      {/* ===================== 퍼널 ===================== */}
-      <h4>가입 → 유료 퍼널</h4>
+      <h4>가입 → 데이트 성사 퍼널</h4>
       <ECharts option={funnelOption} style={{ height: 300 }} />
 
       <hr />
 
-      {/* ===================== 코호트 ===================== */}
       <h4>코호트 유지율</h4>
       <ECharts option={cohortOption} style={{ height: 300 }} />
 
       <hr />
 
-      {/* ===================== 성별/연령 ===================== */}
       <h4>성별 / 연령 분포</h4>
       <ECharts option={genderAgeOption} style={{ height: 300 }} />
 
       <hr />
 
-      {/* ===================== 신고 추이 ===================== */}
-      <h4>신고 발생 추이</h4>
+      <h4>회원 전환율 추이</h4>
       <ECharts option={reportTrendOption} style={{ height: 260 }} />
     </div>
   );

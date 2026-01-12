@@ -23,11 +23,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <div className="header">
                     <div className="container">
                         <div className="d-flex flex-wrap align-items-center justify-content-lg-start" style={{ justifyContent: 'center' }}>
-                            <a href="/"><img src="/image/header.png" alt="" style={{marginTop: '13px', width:'200px',marginRight:'450px'}}/></a>
+                            <a href="/"><img src="/image/header_1.png" alt="" style={{marginTop: '13px', width:'200px',marginRight:'450px'}}/></a>
                             <ul className="nav col-12 col-lg-auto my-2 my-md-0" style={{ justifyContent: 'center', marginLeft: 10 }}>
                                 <li>
-                                    <a href="/test" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
+                                    <a href="/test" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
                                         테스트
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/test2" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
+                                        테스트2
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/test3" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
+                                        테스트3
                                     </a>
                                 </li>
                                 <li>
@@ -51,7 +61,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 </li>
                             </ul>
                             <div className="text-end">
-                                <button type="button" className="login-btn" onClick={loginNav}>Login</button> <a href="/alarm"><img src="/home/alarm.jpg" alt="1" style={{ width: '45px', paddingLeft: '8px' }} /></a>
+                                <button type="button" className="login-btn" onClick={loginNav}>Login</button> <a href="/alarm"><img src="/home/alarm_1.png" alt="1" style={{ width: '45px', paddingLeft: '8px' }} /></a>
                                 <a href="/mypage"><img src="/imgs/Default_user.jpg" alt="1" style={{ marginLeft: '13px', border: '3px solid #ddd', borderRadius: '50%', width: '45px' }} /></a>
                             </div>
                         </div>

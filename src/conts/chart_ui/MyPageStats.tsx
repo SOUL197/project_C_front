@@ -2,7 +2,7 @@ import React from 'react';
 import ECharts from 'echarts-for-react';
 
 const MyPageStats: React.FC = () => {
-  /* ===================== 상단 KPI ===================== */
+
   const kpiStyle: React.CSSProperties = {
     flex: 1,
     padding: '16px',
@@ -11,7 +11,6 @@ const MyPageStats: React.FC = () => {
     textAlign: 'center',
   };
 
-  /* ===================== 1. 주간 매칭 추이 ===================== */
   const weeklyMatchOption = {
     tooltip: { trigger: 'axis' },
     xAxis: {
@@ -28,7 +27,6 @@ const MyPageStats: React.FC = () => {
     ],
   };
 
-  /* ===================== 2. 좋아요 → 매칭 퍼널 ===================== */
   const funnelOption = {
     tooltip: { trigger: 'item' },
     series: [
@@ -37,14 +35,14 @@ const MyPageStats: React.FC = () => {
         width: '60%',
         data: [
           { value: 120, name: '받은 좋아요' },
-          { value: 70, name: '대화 시작' },
-          { value: 35, name: '매칭 성사' },
+          { value: 70, name: '매칭 성사' },
+          { value: 35, name: '데이팅(만남)' },
         ],
+        left: '20%'
       },
     ],
   };
 
-  /* ===================== 3. 활동 시간대 히트맵 ===================== */
   const heatmapOption = {
     tooltip: { position: 'top' },
     grid: { height: '70%' },
@@ -76,7 +74,6 @@ const MyPageStats: React.FC = () => {
     ],
   };
 
-  /* ===================== 4. 내 응답률 vs 평균 ===================== */
   const responseRateOption = {
     tooltip: { trigger: 'axis' },
     xAxis: {
@@ -103,12 +100,12 @@ const MyPageStats: React.FC = () => {
 
   return (
     <div style={{ padding: 24 }}>
-      {/* ===================== KPI ===================== */}
+
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        <div style={kpiStyle}>
+        {/* <div style={kpiStyle}>
           <h4>내 조회 수</h4>
           <strong>1,284</strong>
-        </div>
+        </div> */}
         <div style={kpiStyle}>
           <h4>받은 좋아요</h4>
           <strong>120</strong>
@@ -121,27 +118,23 @@ const MyPageStats: React.FC = () => {
 
       <hr />
 
-      {/* ===================== 주간 매칭 추이 ===================== */}
       <h4>주간 매칭 추이</h4>
       <ECharts option={weeklyMatchOption} style={{ height: 260 }} />
 
       <hr />
 
-      {/* ===================== 퍼널 ===================== */}
       <h4>좋아요 → 매칭 퍼널</h4>
       <ECharts option={funnelOption} style={{ height: 260 }} />
 
       <hr />
 
-      {/* ===================== 히트맵 ===================== */}
       <h4>활동 시간대</h4>
       <ECharts option={heatmapOption} style={{ height: 320 }} />
 
       <hr />
 
-      {/* ===================== 응답률 비교 ===================== */}
       <h4>내 응답률 vs 평균</h4>
-      <ECharts option={responseRateOption} style={{ height: 220 }} />
+      <ECharts option={responseRateOption} style={{ height: 400 }} />
     </div>
   );
 };

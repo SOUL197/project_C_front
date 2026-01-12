@@ -62,7 +62,9 @@ const AppRoutes: React.FC = () => {
         { path: '/like/detail/:num', element: <LikeDetail /> },
         { path: '/adminanswer', element: <AdminAnswer /> },
         { path: '/myqna', element: <MyQna /> },
-        { path: '/test', element: <AdminDashboard /> },
+        { path: '/test', element: <TestChart2 /> },
+        { path: '/test2', element: <MyPageStats /> },
+        { path: '/test3', element: <AdminDashboard /> },
     ]
 
     return (
