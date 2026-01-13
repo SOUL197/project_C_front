@@ -11,11 +11,12 @@ interface GalleryVO {
   CONTENTS: string;
   REIP?: string;
   HIT?: string;
+  ELIKE?:string;
   GDATE?: string;
   IMAGENAME: string;    //json data는 대소문자 구분함.
 }
 const Gallery: React.FC = () => {
-  const [upboardlist, setUpboardList] = useState<GalleryVO[]>([]);
+  const [galleryList, setGalleryList] = useState<GalleryVO[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,7 +26,40 @@ const Gallery: React.FC = () => {
   // 검색을 위한 useState를 추가
   const [searchType, setSearchType] = useState('1');
   const [searchValue, setSearchValue] = useState('');
-  const pagePerBlock = 5;
+  const imageBasePath=`${process.env.REACT_APP_BACK_END_URL}/imgfile/gallery/`;
+
+const fetchGalleryList= async(page:number)=>{
+      try{
+        //@RequestParam Map<String, String> paramMap
+        const urls=`${process.env.REACT_APP_BACK_END_URL}/gallery/gallist`;
+        const response = await axios.get(urls, 
+          {params: { cPage:page, searchType:searchType, searchValue: searchValue
+          }})
+
+        console.log(response.data.data);
+        setGalleryList(response.data.data);
+        setTotalItems(response.data.totalItems);
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(response.data.currentPage);
+        setStartPage(response.data.startPage);
+        setEndPage(response.data.endPage);
+
+      }catch(error){
+        console.error("데이터 가져오기 실패:" +error);
+      }
+    }
+useEffect(() =>{
+      fetchGalleryList(currentPage);
+      }, [currentPage]);
+
+//page Handler
+const pageChange =(page:number) =>{
+        setCurrentPage(page);
+      }
+const searchFunction= () =>{
+        fetchGalleryList(1);
+      };
+
 
   return (
     <div className={styles.container}>
@@ -35,76 +69,20 @@ const Gallery: React.FC = () => {
         <Link to="/gallery/write" className={styles.button}>글쓰기</Link>
       </div>
       <div className={styles.grid}>
-
-
-        <Link to={'/gallery/gdetail/1'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'./imge/1.jpg'} />
-            제목
-          </div>
-        </Link>
-        <Link to={'/gallery/gdetail/2'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'./imge/2.jpg'} />
-            <div>야경 같이봐요~</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/3'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'./imge/3.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/4'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/4.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/5'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/5.jpg'} />
-            <div>불금이래요~</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/6'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/6.jpg'} />
-            <div>우리 결혼했어요~</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/7'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/7.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/8'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/8.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/9'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/9.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/10'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/10.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/11'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/11.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link><Link to={'/gallery/gdetail/12'} style={{ textDecoration: 'none' }}>
-          <div className={styles.card}>
-            <img src={'/imge/12.jpg'} />
-            <div>제목</div>
-          </div>
-        </Link>
-
+        {galleryList.map(item => (
+          <Link to={`/gallery/gdetail/${item.NUM}`} key={item.NUM} style={{ textDecoration: 'none' }}>
+            <div className={styles.card}>
+              <img src={`${imageBasePath}${item.IMAGENAME}`} alt={item.IMAGENAME} />
+              <div className={styles.cardTitle}>{item.TITLE}&nbsp;&nbsp;[{item.HIT}]</div>
+            </div>
+          </Link>
+        ))}
       </div>
 
-
-      <tfoot>
         <table className={styles.container} >
+      <tfoot>
+        
+        <tr>
         <td style={{width:"500px", textAlign:"center",margin:"10px" , borderRadius:"8px"}}>
           <select onChange={(e) => { setSearchType(e.target.value) }}>
             <option value="1">작성자</option>
@@ -113,7 +91,7 @@ const Gallery: React.FC = () => {
 
           </select>
           <input type='text' onChange={(e) => { setSearchValue(e.target.value) }} />
-          <button className='btn btn-warning' >검색
+          <button className='btn btn-warning' onClick={searchFunction}>검색
 
           </button>
 
@@ -122,25 +100,25 @@ const Gallery: React.FC = () => {
           <ul className='pagination justify-content-center'>
             {startPage > 1 && (
               <li className='page-item'>
-                <button className='page-link' onClick={() => { }}>
+                <button className='page-link' onClick={() => {pageChange(startPage-1) }}>
                   이전</button>
               </li>
             )}
             {
               Array.from({ length: endPage - startPage + 1 }, (xx, i) => i + startPage).map((page) => (
                 <li key={page} className={`page-item ${page === currentPage ? 'active' : ''}`}>
-                  <button className='page-link' onClick={() => { }}>{page}</button>
+                  <button className='page-link' onClick={() => {pageChange(page)}}>{page}</button>
                 </li>
               ))
             }
             {endPage < totalPages && (
               <li className='page-item'>
-                <button className='page-link' onClick={() => { }}>다음</button>
+                <button className='page-link' onClick={() => {pageChange(endPage+1)}}>다음</button>
               </li>
             )}
-          </ul></td></table>
+          </ul></td></tr>
       </tfoot>
-
+</table>
     </div>
 
   );

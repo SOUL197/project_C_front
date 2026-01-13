@@ -25,7 +25,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         <div className="d-flex flex-wrap align-items-center justify-content-lg-start" style={{ justifyContent: 'center' }}>
                             <a href="/"><img src="/image/header_1.png" alt="" style={{marginTop: '13px', width:'200px',marginRight:'450px'}}/></a>
                             <ul className="nav col-12 col-lg-auto my-2 my-md-0" style={{ justifyContent: 'center', marginLeft: 10 }}>
-                                <li>
+                                {/* <li>
                                     <a href="/test" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
                                         테스트
                                     </a>
@@ -39,7 +39,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                     <a href="/test3" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
                                         테스트3
                                     </a>
-                                </li>
+                                </li> */}
                                 <li>
                                     <a href="/" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
                                         홈

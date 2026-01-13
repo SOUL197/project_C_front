@@ -11,6 +11,7 @@ interface UpBoardVO {
   content: string;
   imgn?: string;
   hit?: number;
+  elike?:number;
   reip?: string;
   bdate?: string;
   mfile: File | null;
@@ -66,7 +67,7 @@ const UpboardForm: React.FC = () => {
     if (formData.mfile) {
       data.append('mfile', formData.mfile);
       try {
-        const url = '';
+        const url =`${process.env.REACT_APP_BACK_END_URL}/board/add`;
         await axios.post(url, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });

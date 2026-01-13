@@ -1,46 +1,102 @@
 import { Link } from "react-router-dom";
 import style from '../upboard/upboard.module.css'
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+interface Qna_VO {
+    qnum: number;
+    qtitle: string;
+    qwriter: string;
+    qcontent: string;
+    qdate: string;
+    anum: number;
+    awriter: string;
+    acontent: string;
+    adate: string;
+}
+
+interface QnaQ_VO {
+    qnum: number;
+    qtitle: string;
+    qwriter: string;
+    qcontent: string;
+    qdate: string;
+}
 
 const AdminAnswer: React.FC = () => {
-    const boardV = [
-        {
-            num: 1, title: "제 정보를 잘못 입력했는데 어디에서 수정 가능한가요?", writer: "박수영",
-            content: "마이페이지에서 수정 가능합니다"
-        },
-        {
-            num: 2, title: "제가 좋아요를 선택한 상대방의 정보는 어떻게 알 수 있나요?", writer: "한지혜",
-            content: ''//"좋아요를 받은 상대방도 회원님에게 '좋아요'를 전송하게 된다면 회원님도 상대방의 정보를 열람하실 수 있게 됩니다"
-        },
-        {
-            num: 3, title: "서로 매칭이 되면 어떻게 되나요?", writer: "한지혜",
-            content: "매칭이 성사가 되면 회원님들의 정보를 바탕으로 데이트 장소를 추천해드립니다."
-        },
-        {
-            num: 4, title: "자랑 게시판에 올리면 무슨 혜택이 있을까요?", writer: "한지혜",
-            content: "자랑 게시판에 두 분이 함께 찍은 사진을 올려주시면 두 분에게 포인트를 각각 적립해 드리고, 해당 포인트를 통해 더 많은 데이트 코스를 추천받으실 수 있습니다. 이달의 사진으로 선정 시 추가 추가 상금을 지급해드립니다!"
-        },
-        {
-            num: 5, title: "'<경고>사진을 교체해주세요'라는 경고 메시지를 운영자님께 받았습니다. 이유를 알고 싶습니다.", writer: "박수영",
-            content: "타 회원들에게 불쾌감을 줄 수 있는 사진 및 건전하지 않은 사진은 강제삭제 하고 있습니다. 회원님께 경고 메세지 전송 후, 3일 내 변경 및 삭제하시지 않을 경우 강제삭제 처리해드립니다."
-        },
-        {
-            num: 6, title: "자랑 게시판에 사진은 몇 장 업로드해야 하나요?", writer: "박수영",
-            content: "가장 잘 나오신 사진 한 장만 올리면 됩니다!"
-        },
-        {
-            num: 7, title: "제가 마음에 드는 상대의 정보를 더 알고 싶어요. 어떻게 해야 하나요?", writer: "한지혜",
-            content: ''//"서로 '좋아요'를 보내면 더 많은 상대방의 정보를 볼 수 있습니다."
-        },
-        {
-            num: 8, title: "매칭이 성사 되었는지 어떻게 알 수 있나요?", writer: "한지혜",
-            content: "홈페이지 상단 우측에 있는 종 모양 아이콘의 알림을 통해 알 수 있습니다."
-        },
-        {
-            num: 9, title: "현재 데이트코스는 수도권만 추천해주는 건가요?", writer: "박수영",
-            content: "현재 데이트코스는 수도권 및 충청권 지역이 있으며, 차츰 타 지역까지 추가할 예정입니다. 추가되면 공지사항을 통해 알려드릴 예정입니다."
+    
+    const [qnalist, setQnaList] = useState<Qna_VO[]>([]);
+    const [answerContent, setAnswerContent] = useState<string>(""); // 입력 필드 값 저장
+
+        const [totalItems, setTotalItems] = useState(0);
+        const [totalPages, setTotalPages] = useState(0);
+        const [currentPage, setCurrentPage] = useState(1);
+        const [startPage, setStartPage] = useState(1);
+        const [endPage, setEndPage] = useState(1);
+
+        //검색을 위한 useState 추가하기
+        const [searchType, setSearchType] = useState('1');
+        const [searchValue, setSearchValue] = useState('');
+        
+        //한 번에 보여줄 페이지 블록 수
+        const pagePerBlcok = 5;
+
+        const fetchfaqList = async (page: number) => {
+        try {
+            const urls = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`
+            const response = await axios.get(urls, 
+                {params: {cPage: page,
+                    searchType: searchType,
+                    searchValue: searchValue}});
+            setQnaList(response.data.data);
+            setTotalItems(response.data.totalItems);
+            setTotalPages(response.data.totalPages);
+            setCurrentPage(response.data.currentPage);
+            setStartPage(response.data.startPage);
+            setEndPage(response.data.endPage);
+        } catch (error) {
+            console.error("실패" + error)
         }
-    ];
+    }
+    useEffect(() => {
+            fetchfaqList(currentPage);
+        }, [currentPage]);
+    
+        const pageChange = (page: number) => {
+            setCurrentPage(page);
+        }
+    
+        const searchFunction = () => {
+            fetchfaqList(1);
+        }
+
+
+    useEffect(() => {
+        const qnalist = async () => {
+            try {
+                const urlqnaq = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`; //qna_q 게시판 글들을 가져오는 url
+                const urlqnaa = `${process.env.REACT_APP_BACK_END_URL}/qna/alist`; //qna_a 게시판 글들을 가져오는 url
+                const [qnaq, qnaa] = await Promise.all([ //qna_q 게시판과 qna_a 게시판 내용을 한번에 불러옴
+                    axios.get(urlqnaq, { withCredentials: true }),
+                    axios.get(urlqnaa, { withCredentials: true })
+                    // axios.get(urlqnaa,{params:{anum:'anum'},withCredentials:true}),
+                ]);
+                console.log(qnaq.data);
+                console.log(qnaa.data);
+
+                const allqnalist = qnaq.data.data.map((e: QnaQ_VO, i: number) => ({
+                    ...e, ...qnaa.data.data[i]
+                } as Qna_VO));
+
+                console.log(allqnalist);
+                setQnaList(allqnalist);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        qnalist();
+    }, []) //한 번만 실행
+      
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
     const ctoggle = (Num: number) => {
@@ -52,45 +108,125 @@ const AdminAnswer: React.FC = () => {
             setNumber(Num);
         }
     };
+
+    const handleAnswerSubmit = async(anum:number)=>{
+        try {
+            const url = `${process.env.REACT_APP_BACK_END_URL}/qna/addanswer`;
+            const response = await axios.post(url,{
+                anum:anum, //어떤 질문에 대한 답변인지
+                acontent:answerContent
+            },{withCredentials:true});
+            alert("답변이 등록되었습니다.");
+            setToggle(false);
+            setAnswerContent(""); //입력창 초기화
+            window.location.reload(); //새로고침
+        } catch (error) {
+            console.error("답변 등록 실패:",error);
+            alert("답변 등록 실패")
+        }
+    };
+
     return (
         <div className={style.container}>
-            <h1 style={{ marginBottom: 30 }}>고객 상담</h1>
+            <h1 style={{ marginBottom: 30 }}>1:1문의</h1>
             <table className={style.boardTable} >
                 <thead>
                     <tr>
-                        <th colSpan={2} style={{ fontSize: 25 }}>대기 응답</th>
+                        <th colSpan={2} style={{ fontSize: 25 }}>1:1문의 내역</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        (boardV.map((e) => (
-                            <React.Fragment key={e.num}>
+                        (qnalist.map((e) => (
+                            <React.Fragment key={e.qnum}>
                                 <tr>
-                                    <td className={style.titleLink} onClick={() => { ctoggle(e.num) }} colSpan={2}>{e.title}</td>
-                                    <td style={{ textAlign: 'center', width: '105px', border: 'none', visibility: e.content === '' ? 'visible' : 'hidden', pointerEvents: e.content === '' ? 'auto' : 'none' }}>
-                                        <button className={style.abutton} onClick={() => { ctoggle(e.num) }}>답변하기</button>
+                                    <td className={style.titleLink} onClick={() => { ctoggle(e.qnum) }} colSpan={2}>{e.qtitle}</td>
+                                    <td style={{ textAlign: 'center', width: '105px', border: 'none' }}>
+                                          {(!e.acontent || e.acontent === '') && (
+                                           <button className={style.abutton} onClick={() => { ctoggle(e.qnum) }}>대기중</button>)}
                                     </td>
                                 </tr>
                                 {
-                                    toggle && number === e.num && (
+                                    toggle && number === e.anum && (
                                         <tr>
                                             <td style={{ fontWeight: 'bold', height: '90px' }} colSpan={2}>
-                                                <div>A. {e.content}</div> <div style={{ visibility: e.content === '' ? 'visible' : 'hidden', pointerEvents: e.content === '' ? 'auto' : 'none' }}><input type="text" style={{height:30}}/> <button>확인</button> </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                }
+                                                {e.acontent ? (
+                                     // 이미 답변이 있는 경우
+                                    <div style={{ color: 'lightblue' }}>{e.acontent}</div>
+                                    ) : (
+                                    // 답변이 없는 경우: 입력 폼 표시
+                                   <div style={{ display: 'flex', gap: '10px' }}>
+                                     <input 
+                                    type="text" 
+                                    style={{ flex: 1, height: 30, padding: '0 10px' }}
+                                    placeholder="답변 내용을 입력하세요..."
+                                    value={answerContent}
+                                    onChange={(event) => setAnswerContent(event.target.value)}/> 
+                                    <button type="submit" onClick={()=>handleAnswerSubmit(e.anum)}>확인</button></div>
+                        )}
+                    </td>
+                </tr>
+            )}
                             </React.Fragment>)
                         )
                         )
                     }
                 </tbody>
                 <tfoot style={{ textAlign: 'right' }}>
+                   <tr>
+                        <th colSpan={6} className="text-center align-middle">
+                            <select onChange={(e) => { setSearchType(e.target.value) }}>
+                                <option value="1">작성자</option>
+                                <option value="2">제목</option>
+                                <option value="3">내용</option>
+                            </select>
+                            <input type='text'
+                                onChange={(e) => { setSearchValue(e.target.value) }}
+                            />
+                            <button className="btn btn-warning" onClick={searchFunction}>검색</button>
+                        </th>
+                        {/* 검색폼 추가 영역 */}
+                    </tr>
                     <tr>
+                        <td colSpan={6} style={{ textAlign: "center" }}>
+                            <nav>
+                                <ul className="pagination justify-content-center">
+                                    {startPage > 1 && (
+                                        <li className="page-item">
+                                            <button className="page-link"
+                                                onClick={() => { pageChange(startPage - 1) }}>
+                                                이전</button>
+                                        </li>
+                                    )}
+                                    {/* 페이지 출력하기 */}
+                                    {
+                                        Array.from({ length: endPage - startPage + 1 }, (xx, i) => i + startPage)
+                                            .map((page) => (
+                                                <li key={page} className={`page-item ${page === currentPage ? 'active' : ''}`}>
+                                                    <button className='page-link' onClick={() => { pageChange(page) }}>{page}</button>
+                                                </li>
+                                            ))
+                                    }
+                                    {/* 
+                      NextPage 출력하기 : totalPage 보다 endPage 적을 때 다음페이지가 있는 것으로 계산
+                      */}
+                                    {endPage < totalPages && (
+                                        <li className='page-item'>
+                                            <button className='page-link' onClick={() => { pageChange(endPage + 1) }}>다음</button>
+                                        </li>
+                                    )}
+                                </ul>
+
+                            </nav>
+
+                            {/* UpBoardForm.tsx */}
+                           
+                        </td>
 
                     </tr>
-                    <tr>
-                    </tr>
+
+
+
                 </tfoot>
             </table>
         </div>

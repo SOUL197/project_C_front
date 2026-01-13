@@ -72,7 +72,7 @@ const GalleryForm: React.FC = () => {
         });
         try {
             console.log(`FormData =>${myFormdata}`);
-            const response = await fetch(`http://192.168.0.250/myictstudy/gallery/add`
+            const response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/gallery/galadd`
                 , {method:'POST', body:myFormdata});
             naviate('/gallery/');
         } catch (error) {

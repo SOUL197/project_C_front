@@ -11,6 +11,7 @@ interface UpBoardVO {
   content:string;
   imgn:string;
   hit:number;
+  elike:number;
   reip:string;
   bdate:string;
 }
@@ -28,10 +29,40 @@ const UpboardList: React.FC = () => {
   const [searchType, setSearchType] =useState('1');
   const [searchValue, setSearchValue] =useState('');
   const pagePerBlock =5;
+  const imageBasePath =`${process.env.REACT_APP_BACK_END_URL}/imgfile/gallery/`;
+  const fetchUpboardList= async (page:number)=>{
+      try{
+        //@RequestParam Map<String, String> paramMap
+        const urls=`${process.env.REACT_APP_BACK_END_URL}/board/list`;
+        const response = await axios.get<any>(urls, 
+          {params: { cPage:page,
+            searchType:searchType,
+            searchValue: searchValue
+          }})
 
+        console.log(response.data.data);
+        setUpboardList(response.data.data);
+        setTotalItems(response.data.totalItems);
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(response.data.currentPage);
+        setStartPage(response.data.startPage);
+        setEndPage(response.data.endPage);
 
-  const imageBasePath ='http://192.168.0.250/myictstudy/imgfile/';
-
+      }catch(error){
+        console.error("데이터 가져오기 실패:" +error);
+      }
+    };
+  useEffect(() =>{
+   
+    fetchUpboardList(currentPage);
+  }, [currentPage]);
+  //page Handler
+  const pageChange =(page:number) =>{
+    setCurrentPage(page);
+  }
+  const searchFunction= () =>{
+    fetchUpboardList(1);
+  };
 
   return (
 
@@ -54,60 +85,21 @@ const UpboardList: React.FC = () => {
             </tr>
         </thead>
         <tbody>
-           <tr >
-                <td style={{width:"70px"}}>1</td>
-                <td><Link to={`/community/updetail/1`} className={style.titleLink} style={{color:"black"}}>월요일</Link></td>
-                <td style={{width:"120px"}}>이문세</td>
+          {
+            upboardlist.map((item) =>(
+            <tr key={item.num}>
+                <td style={{width:"70px"}}>{item.num}</td>
+                <td><Link to={`/community/updetail/${item.num}`} className={style.titleLink} style={{color:"black"}}>{item.title}</Link></td>
+                <td style={{width:"120px"}}>{item.writer}</td>
                
-                <td style={{width:"70px"}}>35</td>
-                <td style={{width:"70px"}}>3</td>                
+                <td style={{width:"80px"}}>{item.hit}</td>
+                <td style={{width:"80px"}}>{item.elike}
+                                </td>
+                
+                
             </tr>
-            <tr >
-                <td style={{width:"70px"}}>2</td>
-                <td><Link to={`/community/updetail/2`} className={style.titleLink} style={{color:"black"}}>화요일</Link></td>
-                <td style={{width:""}}>변집섭</td>
-                <td style={{width:"70px"}}>24</td>
-                <td style={{width:"70px"}}>5</td> 
-            </tr>
-            <tr >
-                <td style={{width:"70px"}}>3</td>
-                <td><Link to={`/community/updetail/3`} className={style.titleLink} style={{color:"black"}}>수요일</Link></td>
-                <td style={{width:"70px"}}>김광석</td>
-               
-                <td style={{width:"70px"}}>53</td>
-                <td style={{width:"70px"}}>4</td> 
-            </tr>
-            <tr >
-                <td style={{width:"70px"}}>4</td>
-                <td><Link to={`/community/updetail/4`} className={style.titleLink} style={{color:"black"}}>목요일</Link></td>
-                <td style={{width:"70px"}}>이소라</td>
-               
-                <td style={{width:"70px"}}>31</td>
-                <td style={{width:"70px"}}>6</td> 
-            </tr>
-            <tr >
-                <td style={{width:"70px"}}>5</td>
-                <td><Link to={`/community/updetail/5`} className={style.titleLink} style={{color:"black"}}>금요일</Link></td>
-                <td style={{width:"70px"}}>아이유</td>
-               
-                <td style={{width:"70px"}}>100</td>
-                <td style={{width:"70px"}}>51</td> 
-            </tr>
-            <tr >
-                <td style={{width:"70px"}}>6</td>
-                <td><Link to={`/community/updetail/6`} className={style.titleLink} style={{color:"black"}}>토요일</Link></td>
-                <td style={{width:"70px"}}>거미</td>
-               
-                <td style={{width:"70px"}}>77</td>
-                <td style={{width:"70px"}}>3</td> 
-            </tr><tr >
-                <td style={{width:"70px"}}>7</td>
-                <td><Link to={`/community/updetail/6`} className={style.titleLink} style={{color:"black"}}>일요일</Link></td>
-                <td style={{width:"70px"}}>녹색지대</td>
-               
-                <td style={{width:"70px"}}>76</td>
-                <td style={{width:"70px"}}>3</td> 
-            </tr>
+           )) }
+          
         </tbody>
         <tfoot>
           <tr>
@@ -119,7 +111,7 @@ const UpboardList: React.FC = () => {
 
               </select>
               <input type='text' onChange={(e)=>{setSearchValue(e.target.value)}}/>
-              <button className='btn btn-warning' >검색
+              <button className='btn btn-warning' onClick={searchFunction}>검색
 
               </button>
             </th>      
@@ -135,13 +127,13 @@ const UpboardList: React.FC = () => {
                       {
                         Array.from({length:endPage-startPage+1}, (xx,i) =>i+startPage).map((page)=>(
                           <li key={page} className={`page-item ${page===currentPage?'active':''}`}>
-                          <button className='page-link' onClick={()=>{}}>{page}</button>
+                          <button className='page-link' onClick={()=>{pageChange(page)}}>{page}</button>
                           </li>
                         ))                     
                       }
                        {endPage <totalPages &&(
                         <li className='page-item'>
-                          <button className='page-link' onClick={()=>{}}>다음</button>
+                          <button className='page-link' onClick={()=>{pageChange(endPage+1)}}>다음</button>
                         </li>
                        )}
                     </ul>

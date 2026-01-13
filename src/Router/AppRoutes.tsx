@@ -31,6 +31,7 @@ import TestChart from '../conts/chart_ui/TestChart'
 import TestChart2 from '../conts/chart_ui/TestChart2'
 import MyPageStats from '../conts/chart_ui/MyPageStats'
 import AdminDashboard from '../conts/chart_ui/AdminDashboard'
+import QnaForm from '../conts/faq/QnaForm'
 
 
 const AppRoutes: React.FC = () => {
@@ -65,6 +66,8 @@ const AppRoutes: React.FC = () => {
         { path: '/test', element: <TestChart2 /> },
         { path: '/test2', element: <MyPageStats /> },
         { path: '/test3', element: <AdminDashboard /> },
+        { path: '/qnaform', element: <QnaForm /> },
+        
     ]
 
     return (

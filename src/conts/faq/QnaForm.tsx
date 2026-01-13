@@ -3,20 +3,20 @@ import style from '../upboard/upboard.module.css'
 import { useNavigate } from 'react-router-dom';
 
 interface FormData {
-    num: number;
-    title: string;
-    writer: string;
-    content: string;
-    gdate?: string;
+    qnum: number;
+    qtitle: string;
+    qwriter: string;
+    qcontent: string;
+    qdate?: string;
 
 }
 
-const FaqForm: React.FC = () => {
+const QnaForm: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
-        num: 0,
-        title: '',
-        writer: '',
-        content: '',
+        qnum: 0,
+        qtitle: '',
+        qwriter: '',
+        qcontent: '',
     });
 
   const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
@@ -27,17 +27,17 @@ const navigate = useNavigate();
 
 const myFormSubmit = async (e:React.FormEvent)=>{
         e.preventDefault();
-        alert('faq가 등록되었습니다.')
-        const  faqdata = new FormData();
-        faqdata.append('title',formData.title);
-        faqdata.append('writer',formData.writer);
-        faqdata.append('content',formData.content);
+        alert('1:1 문의가 등록되었습니다.')
+        const  qnadata = new FormData();
+        qnadata.append('qtitle',formData.qtitle);
+        qnadata.append('qwriter',formData.qwriter);
+        qnadata.append('qcontent',formData.qcontent);
 
         try {
-            console.log(`formData=?${faqdata}`);
-            const response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/faq/add`,
-                {method:'post',body:faqdata});
-                navigate('/faq')
+            console.log(`formData=?${qnadata}`);
+            const response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/qna/addq`,
+                {method:'post',body:qnadata});
+                navigate('/myqna')
         } catch (error) {
             console.log('전송 오류');
         }
@@ -46,14 +46,14 @@ const myFormSubmit = async (e:React.FormEvent)=>{
 
     return (
         <div className={style.container}>
-            <h1 style={{ textAlign: 'center' }}>FAQ 작성하기</h1>
+            <h1 style={{ textAlign: 'center' }}>1:1문의</h1>
             <form onSubmit={myFormSubmit} className={style.form}>
                 <table className={style.boardTable}>
                     <tbody>
                         <tr>
                             <th>제목</th>
                             <td>
-                                <input type="text" name="title" id="title" style={{ width: "95%" }} required
+                                <input type="text" name="qtitle" id="qtitle" style={{ width: "95%" }} required
                                     className={style.input} onChange={formChange} />
                             </td>
                         </tr>
@@ -61,7 +61,7 @@ const myFormSubmit = async (e:React.FormEvent)=>{
                             <tr>
                             <th>작성자</th>
                             <td>
-                                <input type="text" name="writer" id="writer" style={{ width: "95%" }} required
+                                <input type="text" name="qwriter" id="qwriter" style={{ width: "95%" }} required
                                     className={style.input} onChange={formChange} />
                             </td>
 
@@ -70,8 +70,9 @@ const myFormSubmit = async (e:React.FormEvent)=>{
                         <tr>
                             <th>내용</th>
                             <td>
-                                <input type="text" name="content" id="content" style={{ width: "95%", height: "150px", padding: "8px" }}
-                                className={style.input} onChange={formChange} required/>
+                                <textarea name="qcontent" id="qcontent"
+                                    style={{ width: "95%", height: "150px", padding: "8px" }}
+                                onChange={formChange} required/>
                             </td>
                         </tr>
                         
@@ -91,4 +92,4 @@ const myFormSubmit = async (e:React.FormEvent)=>{
     )
 }
 
-export default FaqForm
+export default QnaForm

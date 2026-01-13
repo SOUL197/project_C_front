@@ -9,8 +9,8 @@ const FindPwd: React.FC = () => {
   const location = useLocation();
   const {state} = location;
 
-  const [userid, setUserid] = useState<string|null>("");
-  const [password, setPassword] = useState("");
+  const [id, setId] = useState<string|null>("");
+  const [pwd, setPwd] = useState("");
   const [passCheck, setPassCheck] = useState("");
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -24,13 +24,13 @@ const FindPwd: React.FC = () => {
 
   useEffect(()=>{
     if(state!==null) {
-        setUserid(state.userid);
+        setId(state.id);
         setIsEmailVerified(state.emailVerify)
     }
   },[state])
 
   useEffect(()=>{
-    if(password !== passCheck) {
+    if(pwd !== passCheck) {
         setPassMessage("비밀번호를 확인해주세요.");
     } else {
         setPassMessage("");
@@ -45,7 +45,7 @@ const FindPwd: React.FC = () => {
       const res = await axios.post(`${url}/api/auth/emailCheck`, {
         email: email,
         type: "find",
-        userid: userid,
+        id: id,
       });
       if (res.data === 2) {
         alert("인증 번호가 발송되었습니다.");
@@ -95,7 +95,7 @@ const FindPwd: React.FC = () => {
     e.preventDefault();
     setIdMessage("");
     try {
-      const res = await axios.get(`${url}/member/idCheck?id=${userid}`);
+      const res = await axios.get(`${url}/member/idCheck?id=${id}`);
       if (res.data === 0) {
         setIdMessage('가입된 아이디가 아닙니다. 다시 확인해 주세요.')
       } else {
@@ -109,12 +109,12 @@ const FindPwd: React.FC = () => {
     e.preventDefault();
     try {
         await axios.post(`${url}/member/findPwd`,{
-            userid:userid,
+            id:id,
             email:email,
-            password:password
+            pwd:pwd
         });
         alert('비밀번호 변경이 완료되었습니다.');
-        navigate('/login',{state:{userid:userid}});
+        navigate('/login',{state:{id:id}});
     } catch (error) {
         alert('변경 중 문제 발생');
         console.error(error);
@@ -131,7 +131,7 @@ const FindPwd: React.FC = () => {
 
         <label>아이디</label>
             <div className={style.inputRow}>
-                <input type="name" name="userid" id="userid" onChange={(e) => {setUserid(e.target.value)}} />
+                <input type="name" name="id" id="id" onChange={(e) => {setId(e.target.value)}} />
             </div>
             {idMessage && <div>{idMessage}</div>}
         <button type="submit" className={style.submitButton}>
@@ -178,10 +178,10 @@ const FindPwd: React.FC = () => {
             <h2>새 비밀번호를 입력해주세요</h2>
             <form className={style.form} onSubmit={handleSubmit}>
                 <label>비밀번호</label>
-                    <input type="password" name="password" id="password" onChange={(e)=>{setPassword(e.target.value)}}/>
+                    <input type="password" name="pwd" id="pwd" onChange={(e)=>{setPwd(e.target.value)}}/>
 
                 <label>비밀번호 확인</label>
-                    <input type="password" name="passCheck" id="passCheck" onChange={(e)=>{setPassCheck(e.target.value)}}/>
+                    <input type="password" name="pwdCheck" id="pwdCheck" onChange={(e)=>{setPassCheck(e.target.value)}}/>
                     {passMessage && (<div>{passMessage}</div>)}
                 <button type='submit' className={style.submitButton}>변경</button>
             </form>

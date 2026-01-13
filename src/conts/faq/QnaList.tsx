@@ -1,39 +1,36 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import style from '../upboard/upboard.module.css'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-interface FaqVO {
-    num: number;
-    title: string;
-    writer: string;
-    content: string;
-    img: string;
-    fdate: string;
-
+interface Qna_VO {
+    qnum: number;
+    qtitle: string;
+    qwriter: string;
+    qcontent: string;
+    qdate: string;
+    anum: number;
+    awriter: string;
+    acontent: string;
+    adate: string;
 }
-/*private int num;
-    private String title;
-    private String writer;
-    private String content;
-    private String img;
-    private String fdate;
-    private MultipartFile mfile; */
 
-const FAQ: React.FC = () => {
-    //페이지 만들기,
-    const{num} = useParams<{num:string}>();
-    const [faqList, setFaqList] = useState<FaqVO[]>([]);
+interface QnaQ_VO {
+    qnum: number;
+    qtitle: string;
+    qwriter: string;
+    qcontent: string;
+    qdate: string;
+}
+
+const QnaList: React.FC = () => {
+    const [qnalist, setQnaList] = useState<Qna_VO[]>([]);
 
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [startPage, setStartPage] = useState(1);
     const [endPage, setEndPage] = useState(1);
-
-    const navigate = useNavigate();
-
-    
 
     //검색을 위한 useState 추가하기
     const [searchType, setSearchType] = useState('1');
@@ -42,15 +39,14 @@ const FAQ: React.FC = () => {
     //한 번에 보여줄 페이지 블록 수
     const pagePerBlcok = 5;
 
-
-    const fetchfaqList = async (page: number) => {
+        const fetchfaqList = async (page: number) => {
         try {
             const urls = `${process.env.REACT_APP_BACK_END_URL}/faq/list`
             const response = await axios.get(urls, 
                 {params: {cPage: page,
                     searchType: searchType,
                     searchValue: searchValue}});
-            setFaqList(response.data.data);
+            setQnaList(response.data.data);
             setTotalItems(response.data.totalItems);
             setTotalPages(response.data.totalPages);
             setCurrentPage(response.data.currentPage);
@@ -61,10 +57,9 @@ const FAQ: React.FC = () => {
         }
     }
     useEffect(() => {
-        fetchfaqList(currentPage);
-    }, [currentPage]);
-
-    const pageChange = (page: number) => {
+            fetchfaqList(currentPage);
+        }, [currentPage]);
+        const pageChange = (page: number) => {
         setCurrentPage(page);
     }
 
@@ -72,21 +67,31 @@ const FAQ: React.FC = () => {
         fetchfaqList(1);
     }
 
-    const faqdel = async(targetNum: number)=>{
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-        try {
-            const url = `${process.env.REACT_APP_BACK_END_URL}/faq/delete?num=${targetNum}`;
-            await axios.get(url); 
-            
-            alert("삭제되었습니다.");
-            fetchfaqList(currentPage); 
-        } catch (error) {
-            console.error("삭제 실패:", error);
-            alert("삭제 중 오류가 발생했습니다.");
-        }
-    }
-    };
+    useEffect(() => {
+        const qnalist = async () => {
+            try {
+                const urlqnaq = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`; //qna_q 게시판 글들을 가져오는 url
+                const urlqnaa = `${process.env.REACT_APP_BACK_END_URL}/qna/alist`; //qna_a 게시판 글들을 가져오는 url
+                const [qnaq, qnaa] = await Promise.all([ //qna_q 게시판과 qna_a 게시판 내용을 한번에 불러옴
+                    axios.get(urlqnaq, { withCredentials: true }),
+                    axios.get(urlqnaa, { withCredentials: true })
+                    // axios.get(urlqnaa,{params:{anum:'anum'},withCredentials:true}),
+                ]);
+                console.log(qnaq.data);
+                console.log(qnaa.data);
 
+                const allqnalist = qnaq.data.data.map((e: QnaQ_VO, i: number) => ({
+                    ...e, ...qnaa.data.data[i]
+                } as Qna_VO));
+
+                console.log(allqnalist);
+                setQnaList(allqnalist);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        qnalist();
+    }, []) //한 번만 실행
 
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
@@ -99,48 +104,41 @@ const FAQ: React.FC = () => {
             setNumber(Num);
         }
     };
-
     return (
         <div className={style.container}>
-            <div className={style.fading}>
-                <h3 className={style.title} >FAQ</h3></div>
+            <h1 style={{ marginBottom: 30 }}>1:1문의</h1>
             <table className={style.boardTable} >
                 <thead>
                     <tr>
-                        <th colSpan={2} style={{ fontSize: 20, borderTop: '1px solid rgba(82, 194, 231, 0.445)', textAlign: 'center', color: 'lightpink' }}>FAQ</th>
+                        <th colSpan={2} style={{ fontSize: 25 }}>문의내역</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {
-                        faqList.map((item) => (
-                            <React.Fragment key={item.num}>
-                                <tr style={{ height: '60px' }}>
-                                    <td className={style.titleLink3} onClick={() => { ctoggle(item.num) }} colSpan={2}>{item.title}</td>
+                        (qnalist.map((e) => (
+                            <React.Fragment key={e.qnum}>
+                                <tr>
+                                    <td className={style.titleLink} onClick={() => { ctoggle(e.qnum) }} colSpan={2}>{e.qtitle}</td>
+                                    <td style={{ textAlign: 'center', width: '105px', border: 'none', visibility: !e.acontent ? 'visible' : 'hidden', pointerEvents: e.acontent === '' ? 'auto' : 'none' }}>
+                                        <button className={style.abutton}>대기중</button>
+                                    </td>
                                 </tr>
-
                                 {
-                                    toggle && number === item.num && (
+                                    toggle && number === e.qnum && (
                                         <tr>
-                                            <td style={{ fontWeight: 'bold', height: '75px', color: 'lightblue' }} colSpan={2}>
-                                                {item.content}
-                                                {
-                                                    
-                                                }
-                                                <button className={style.button} style={{ border: 'none' }}  onClick={()=>faqdel(item.num)}>삭제</button>&nbsp;
+                                            <td style={{ fontWeight: 'bold', height: '75px' }} colSpan={2}>
+                                               {e.acontent}
                                             </td>
                                         </tr>
                                     )
                                 }
-
                             </React.Fragment>)
                         )
-
+                        )
                     }
                 </tbody>
                 <tfoot style={{ textAlign: 'right' }}>
-
-                    <tr>
+                     <tr>
                         <th colSpan={6} className="text-center align-middle">
                             <select onChange={(e) => { setSearchType(e.target.value) }}>
                                 <option value="1">작성자</option>
@@ -186,37 +184,15 @@ const FAQ: React.FC = () => {
                                 </ul>
 
                             </nav>
-
-                            {/* UpBoardForm.tsx */}
-                            <Link to="/faq/form" className={style.button}>
-                                글쓰기
-                            </Link>
+                            
                         </td>
 
                     </tr>
 
-
-                    <tr>
-                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/myqna" className={style.button}>1대1 문의내역
-                            </Link>
-                        </td>
-                    </tr>
-                      <tr>
-                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/qnaform" className={style.button}>1대1 문의하기
-                            </Link>
-                        </td>
-                    </tr>
-                    <tr>
-                    </tr>
                 </tfoot>
             </table>
-            <div style={{ textAlign: 'right' }}>
-                <Link to="/adminanswer" className={style.button}>admin</Link>
-            </div>
-           
         </div>
     )
 }
-export default FAQ;
+
+export default QnaList

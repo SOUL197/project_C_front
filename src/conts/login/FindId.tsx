@@ -7,12 +7,12 @@ import { useNavigate } from "react-router-dom";
 const FindId: React.FC = () => {
   const url = `${process.env.REACT_APP_BACK_END_URL}`;
   const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [code, setCode] = useState("");
   const [emailMessage, setEmailMessage] = useState("");
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [userid, setUserid] = useState<string|null>(null);
+  const [id, setId] = useState<string|null>(null);
   const navigate = useNavigate();
 
   const emailCheck = async () => {
@@ -76,12 +76,12 @@ const FindId: React.FC = () => {
     try {
       const res = await axios.post(`${url}/member/findId`, {
         email: email,
-        name: name
+        username: username
       });
       if (res.data === "checkEmail") {
         alert("이름과 가입한 메일을 확인해주세요.")
       } else {
-        setUserid(res.data);
+        setId(res.data);
       }
     } catch (error) {
       alert("처리 중 문제 발생");
@@ -91,14 +91,14 @@ const FindId: React.FC = () => {
 
   return (
     <div className={style.signupContainer}>
-      {!userid && (
+      {!id && (
       <div>
       <h2>아이디 찾기</h2>
       <form className={style.form} onSubmit={handleSubmit}>
 
         <label>이름</label>
             <div className={style.inputRow}>
-                <input type="name" name="name" id="name" onChange={(e) => {setName(e.target.value)}} />
+                <input type="text" name="username" id="username" onChange={(e) => {setUsername(e.target.value)}} />
             </div>
 
         <label>이메일</label>
@@ -133,7 +133,7 @@ const FindId: React.FC = () => {
       </form>
       </div>
       )}
-      {userid && (
+      {id && (
         <div>
             <h2>아이디를 찾았어요</h2>
             <p>비밀번호를 잊으셨다면 '비밀번호 찾기'를 눌러주세요.</p>
@@ -141,13 +141,13 @@ const FindId: React.FC = () => {
                 <div className={style.inputRow}>
                     <p style={{border:'1px solid #ccc', borderRadius:'4px', flex:1, backgroundColor:'white',
                         fontSize:'20px', padding:'8px'
-                    }}>{userid}</p>
+                    }}>{id}</p>
                 </div>
                 <div style={{display:'flex', justifyContent:'space-evenly'}}>
-                <button onClick={()=> navigate('/findPwd',{state:{userid:userid, emailVerify:true}})} className={style.submitButton} style={{width:'45%', backgroundColor:'lightgray'}}>
+                <button onClick={()=> navigate('/findPwd',{state:{id:id, emailVerify:true}})} className={style.submitButton} style={{width:'45%', backgroundColor:'lightgray'}}>
                     비밀번호 찾기
                 </button>
-                <button onClick={()=> navigate('/login',{state:{userid:userid}})} className={style.submitButton} style={{width:'45%'}}>
+                <button onClick={()=> navigate('/login',{state:{id:id}})} className={style.submitButton} style={{width:'45%'}}>
                     로그인하러 가기
                 </button>
                 </div>
