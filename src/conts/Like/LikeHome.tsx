@@ -79,34 +79,34 @@ const LikeHome: React.FC = () => {
   };
 
   // 리스트 갱신하는 함수
-  const fetchLikeList = async (page: number) => {
-    const matchingdata = {
-      cPage: page,
-      matchingTypeList: matchingTypeList,
-      matchingValue: matchingValue,
-      searchType: searchType,
-      searchValue: searchValue,
-      period: period,
+    const fetchLikeList = async (page: number) => {
+      const matchingdata = {
+        cPage: page,
+        matchingTypeList: matchingTypeList,
+        matchingValue: matchingValue,
+        searchType: searchType,
+        searchValue: searchValue,
+        period: period,
+      }
+      try {
+        const urls = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
+        const response = await axios.post(urls, matchingdata, {
+          headers: {
+            'Content-Type': 'application/json'
+          }, withCredentials: true
+        })
+        console.log(response.data);
+        console.log(response.data.currentPage);
+        setLikeList(response.data.data);
+        setTotalItems(response.data.totalItems);
+        setTotalPages(response.data.totalPages);
+        setCurrentPage(response.data.currentPage);
+        setStartPage(response.data.startPage);
+        setEndPage(response.data.endPage);
+      } catch (error) {
+        console.log("데이터 가져오기 실패: " + error);
+      }
     }
-    try {
-      const urls = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
-      const response = await axios.post(urls, matchingdata, {
-        headers: {
-          'Content-Type': 'application/json'
-        }, withCredentials: true
-      })
-      console.log(response.data);
-      console.log(response.data.currentPage);
-      setLikeList(response.data.data);
-      setTotalItems(response.data.totalItems);
-      setTotalPages(response.data.totalPages);
-      setCurrentPage(response.data.currentPage);
-      setStartPage(response.data.startPage);
-      setEndPage(response.data.endPage);
-    } catch (error) {
-      console.log("데이터 가져오기 실패: " + error);
-    }
-  }
 
   // 검색시 1페이지로
   const searchFunction = () => {

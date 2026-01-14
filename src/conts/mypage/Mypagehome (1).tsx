@@ -20,6 +20,8 @@ const Mypagehome: React.FC = () => {
   const { member } = useAuth();
   const navigate = useNavigate();
   const [profileimage, setProfileImage] = useState('');
+  const [likes, setLikes] = useState(0);
+  const [date, setDate] = useState([]);
   const [show, setShow] = useState(false);
   const [menu, setMenu] = useState('');
   const [selectedMenu, setSelectedMenu] = useState<React.ReactElement>();
@@ -54,8 +56,17 @@ const Mypagehome: React.FC = () => {
     const getprofileimage = async () => {
       try {
         const url = `${process.env.REACT_APP_BACK_END_URL}/matching/getimage`;
-        const resp = await axios.get(url, { withCredentials: true });
+        const urla = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
+        const urlb = `${process.env.REACT_APP_BACK_END_URL}/api/date/mydate`;
+        const [resp, respa, respb] = await Promise.all([
+          axios.get(url, { withCredentials: true }),
+          axios.post(urla, { cPage: 1 }, { withCredentials: true }),
+          axios.get(urlb, { withCredentials: true })
+        ]);
         setProfileImage(resp.data);
+        setLikes(respa.data.data.length);
+        setDate(respb.data);
+        console.log(respb.data);
       } catch (error) {
         console.error(error);
       }
@@ -85,7 +96,7 @@ const Mypagehome: React.FC = () => {
             <div className={style.profileSection}>
               <img
                 className={style.profileImg}
-                src={`${imageBasePath}${profileimage}`} 
+                src={`${imageBasePath}${profileimage}`}
                 alt="user"
               />
               <button id='Image' className={style.addBtn} onClick={handleClick}>+</button>
@@ -106,14 +117,14 @@ const Mypagehome: React.FC = () => {
                 className={style.statBtn}
 
               >
-                <div className={style.num}>10</div>
-                <div className={style.label}>팔로워</div>
+                <div className={style.num}>{likes}</div>
+                <div className={style.label}>Like</div>
               </button>
               <button
                 className={style.statBtn}
               >
-                <div className={style.num}>30</div>
-                <div className={style.label}>즐겨찾기</div>
+                <div className={style.num}>{date.length ? 'YES' : 'NO'}</div>
+                <div className={style.label}>Date</div>
               </button>
             </div>
           </div>
