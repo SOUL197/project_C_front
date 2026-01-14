@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from '../upboard/upboard.module.css'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../comp/AuthProvider';
 
 interface FormData {
     num: number;
     title: string;
     writer: string;
+    member_num: number;
     content: string;
     gdate?: string;
 
@@ -16,8 +18,16 @@ const FaqForm: React.FC = () => {
         num: 0,
         title: '',
         writer: '',
+        member_num: 0,
         content: '',
     });
+
+    const {member} = useAuth();
+    useEffect(()=>{
+        if(member !== null) {
+            setFormData({...formData, member_num: member.num})
+        }
+    },[member])
 
   const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
           const {name, value} = e.target
@@ -32,6 +42,7 @@ const myFormSubmit = async (e:React.FormEvent)=>{
         faqdata.append('title',formData.title);
         faqdata.append('writer',formData.writer);
         faqdata.append('content',formData.content);
+        faqdata.append('member_num',formData.member_num.toString());
 
         try {
             console.log(`formData=?${faqdata}`);

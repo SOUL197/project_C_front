@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import styles from '../matching/MatchingHome.module.css'
+import { useAuth } from '../../comp/AuthProvider';
 
 //부모로부터 전송되어 오는 properties
 interface GalleryCommProps {
@@ -9,10 +10,11 @@ interface GalleryCommProps {
 }
 
 interface GalleryCommVO {
-  num: number;
-  ucode: number;
-  uwriter: string;
-  ucontent: string;
+  comm_num: number;
+  gallery_num: number;
+  gwriter: string;
+  member_num: number;
+  gcontent: string;
   elike: string;
   reip: string;
   gcdate: string;
@@ -28,6 +30,15 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
   const [imoticon, setImoticon] = useState(false);
   const [writer, setWriter] = useState("");
   const [content, setContent] = useState("");
+
+  const [member_num,setMember_num] = useState(0);
+  const {member} = useAuth();
+  useEffect(()=>{
+    if(member !== null) {
+      setMember_num(member.num);
+    }
+  },[member])
+
   const imotV = [
     { num: 1, img: `${process.env.REACT_APP_BACK_END_URL}/imgfile/1.png` },
     { num: 2, img: `${process.env.REACT_APP_BACK_END_URL}/imgfile/2.png` },
@@ -74,9 +85,10 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
       return;
     }
     const commentData = {
-      ucode: num,
-      uwriter: writer,
-      ucontent: content
+      gallery_num: num,
+      gwriter: writer,
+      member_num: member_num.toString(),
+      gcontent: content
     }
     try {
       await axios.post(`${process.env.REACT_APP_BACK_END_URL}/gallery/addcomm`, commentData,
@@ -143,7 +155,7 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
                 className="hover-bg-light"> <img src={item.img} alt={`icon-${item.num}`} style={{ width: '40px', height: '40px' }} />
               </div>))} </div> </div>)}
           {/* 2. 입력 영역 (이미지 미리보기 OR 텍스트 영역) */}
-          {content.startsWith("http") && (content.includes("/imgfile/") || content.includes(".png")) ?
+          {content?.startsWith("http") && (content?.includes("/imgfile/") || content?.includes(".png")) ?
             (<div className="form-control d-flex align-items-center justify-content-between" style={{ height: 'auto', minHeight: '80px' }}>
               <div> <span className="badge bg-secondary me-2">Sticker</span><img src={content} alt="selected" style={{ width: '60px' }} />
               </div> <button type="button" className="btn btn-close" aria-label="Close" onClick={() => setContent("")}></button>
@@ -152,7 +164,7 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
             </textarea>)}
           {/* 3. 스티커 토글 버튼 (입력창 내부 우측 하단에 고정) */}
           {/* 이미지가 선택되지 않은 텍스트 모드일 때만 버튼을 보여주거나, 항상 보여줄 수 있음. 여기선 항상 노출 */}
-          {!content.startsWith("http") && (<button type="button" className="btn btn-link text-decoration-none"
+          {!content?.startsWith("http") && (<button type="button" className="btn btn-link text-decoration-none"
             onClick={() => setImoticon(!imoticon)}
             style={{
               position: 'absolute', bottom: '15px', left: '10px',
@@ -164,15 +176,15 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
 
       <ul className='list-group'>
         {comments && comments.map((vo) => (
-          <div key={vo.num} className='list-group-item'>
+          <div key={vo.comm_num} className='list-group-item'>
             <li className='list-group-item' style={{ textAlign: "left" }}>
               {/* [수정] 내용이 이미지 URL인지 텍스트인지 판별하여 출력 */}
-              {vo.ucontent.startsWith("http") && (vo.ucontent.includes("/imgfile/") || vo.ucontent.includes(".png")) ?
-                (<div><img src={vo.ucontent} alt="이모티콘" style={{ maxWidth: '100px', maxHeight: '100px' }} />
-                </div>) : (<span>{vo.ucontent}</span>)}
+              {vo.gcontent?.startsWith("http") && (vo.gcontent?.includes("/imgfile/") || vo.gcontent?.includes(".png")) ?
+                (<div><img src={vo.gcontent} alt="이모티콘" style={{ maxWidth: '100px', maxHeight: '100px' }} />
+                </div>) : (<span>{vo.gcontent}</span>)}
               {/* 작성자와 날짜를 보기 좋게 구분 (선택사항) */}
               <div style={{ fontSize: '0.85em', color: '#666', marginTop: '5px' }}>
-                {vo.uwriter} | {vo.gcdate} </div></li>
+                {vo.gwriter} | {vo.gcdate} </div></li>
 
           </div>
         ))

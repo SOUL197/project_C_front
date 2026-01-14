@@ -142,7 +142,7 @@ const AdminAnswer: React.FC = () => {
                                 <tr>
                                     <td className={style.titleLink} onClick={() => { ctoggle(e.qnum) }} colSpan={2}>{e.qtitle}</td>
                                     <td style={{ textAlign: 'center', width: '105px', border: 'none' }}>
-                                          {(!e.acontent || e.acontent === '') && (
+                                          {(!e.acontent || e.acontent === '응답대기중') && (
                                            <button className={style.abutton} onClick={() => { ctoggle(e.qnum) }}>대기중</button>)}
                                     </td>
                                 </tr>
@@ -150,7 +150,7 @@ const AdminAnswer: React.FC = () => {
                                     toggle && number === e.anum && (
                                         <tr>
                                             <td style={{ fontWeight: 'bold', height: '90px' }} colSpan={2}>
-                                                {e.acontent ? (
+                                                {e.acontent !== '응답대기중' ? (
                                      // 이미 답변이 있는 경우
                                     <div style={{ color: 'lightblue' }}>{e.acontent}</div>
                                     ) : (

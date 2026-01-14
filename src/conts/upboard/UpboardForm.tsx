@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import style from './upboard.module.css';
 import axios from 'axios';
+import { useAuth } from '../../comp/AuthProvider';
 
 
 interface UpBoardVO {
@@ -23,6 +24,7 @@ const UpboardForm: React.FC = () => {
   const [formData, setFormData] = useState<UpBoardVO>({
     title: '',
     writer: '',
+    num: 0,
     content: '',
     mfile: null as File | null
   });
@@ -30,6 +32,11 @@ const UpboardForm: React.FC = () => {
 
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
 
+  const {member} = useAuth();
+  
+  useEffect(()=>{
+    setFormData({...formData, num: member?.num})
+  },[member]);
 
   const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 
@@ -64,6 +71,10 @@ const UpboardForm: React.FC = () => {
     data.append('title', formData.title);
     data.append('writer', formData.writer);
     data.append('content', formData.content);
+    if (formData.num !== undefined) {
+      data.append('member_num', formData.num.toString());
+    }
+
     if (formData.mfile) {
       data.append('mfile', formData.mfile);
       try {

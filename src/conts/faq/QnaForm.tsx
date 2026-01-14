@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from '../upboard/upboard.module.css'
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../comp/AuthProvider';
 
 interface FormData {
     qnum: number;
     qtitle: string;
     qwriter: string;
+    member_num: number;
     qcontent: string;
     qdate?: string;
 
@@ -16,8 +18,16 @@ const QnaForm: React.FC = () => {
         qnum: 0,
         qtitle: '',
         qwriter: '',
+        member_num: 0,
         qcontent: '',
     });
+
+    const {member} = useAuth();
+    useEffect(()=>{
+        if(member !== null) {
+            setFormData({...formData, member_num: member.num})
+        }
+    },[member])
 
   const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
           const {name, value} = e.target
@@ -32,6 +42,7 @@ const myFormSubmit = async (e:React.FormEvent)=>{
         qnadata.append('qtitle',formData.qtitle);
         qnadata.append('qwriter',formData.qwriter);
         qnadata.append('qcontent',formData.qcontent);
+        qnadata.append('member_num',formData.member_num.toString());
 
         try {
             console.log(`formData=?${qnadata}`);

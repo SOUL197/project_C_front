@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from '../upboard/upboard.module.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../comp/AuthProvider';
 
 interface GongjiVO{
     num: number;
     title: string;
     writer: string;
+    member_num: number;
     content: string;
     gdate?: string;
    
@@ -18,10 +20,17 @@ const GongjiForm: React.FC = () => {
         num: 0,
         title: '',
         writer: '',
+        member_num: 0,
         content: '',
    
     });
 
+    const {member} = useAuth();
+    useEffect(()=>{
+        if(member !== null) {
+            setFormData({...formData, member_num: member.num})
+        }
+    },[member])
 
     const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
         const {name, value} = e.target
@@ -38,6 +47,7 @@ const GongjiForm: React.FC = () => {
         gongjidata.append('title',formData.title);
         gongjidata.append('writer', formData.writer);
         gongjidata.append('content', formData.content);
+        gongjidata.append('member_num', formData.member_num.toString());
         
         try {
           console.log(`FormData=?${gongjidata}`);

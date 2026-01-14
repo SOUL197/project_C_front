@@ -32,6 +32,7 @@ import TestChart2 from '../conts/chart_ui/TestChart2'
 import MyPageStats from '../conts/chart_ui/MyPageStats'
 import AdminDashboard from '../conts/chart_ui/AdminDashboard'
 import QnaForm from '../conts/faq/QnaForm'
+import QnaList from '../conts/faq/QnaList'
 
 
 const AppRoutes: React.FC = () => {
@@ -46,7 +47,7 @@ const AppRoutes: React.FC = () => {
         { path: '/gallery/write', element: <GalleryForm /> },
         { path: '/gallery/gdetail/:num', element: <GalleryDetail /> },
         { path: '/community/upform', element: <UpboardForm /> },
-        { path: '/chart', element: <Chart /> },
+        { path: '/vchart', element: <TestChart2 /> },
         { path: '/fortune', element: <Fortune /> },
         { path: '/mypage', element: <Mypagehome /> },
         { path: '/mypage/detail', element: <Mypagedetail /> },
@@ -62,11 +63,10 @@ const AppRoutes: React.FC = () => {
         { path: '/like', element: <LikeHome /> },
         { path: '/like/detail/:num', element: <LikeDetail /> },
         { path: '/adminanswer', element: <AdminAnswer /> },
-        { path: '/myqna', element: <MyQna /> },
-        { path: '/test', element: <TestChart2 /> },
+        { path: '/myqna', element: <QnaList /> },
+        { path: '/qnaform', element: <QnaForm /> },
         { path: '/test2', element: <MyPageStats /> },
         { path: '/test3', element: <AdminDashboard /> },
-        { path: '/qnaform', element: <QnaForm /> },
         
     ]
 

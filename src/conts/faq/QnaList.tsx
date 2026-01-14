@@ -119,8 +119,8 @@ const QnaList: React.FC = () => {
                             <React.Fragment key={e.qnum}>
                                 <tr>
                                     <td className={style.titleLink} onClick={() => { ctoggle(e.qnum) }} colSpan={2}>{e.qtitle}</td>
-                                    <td style={{ textAlign: 'center', width: '105px', border: 'none', visibility: !e.acontent ? 'visible' : 'hidden', pointerEvents: e.acontent === '' ? 'auto' : 'none' }}>
-                                        <button className={style.abutton}>대기중</button>
+                                    <td style={{ textAlign: 'center', width: '105px', border: 'none', visibility: e.acontent === '응답대기중' ? 'visible' : 'hidden', pointerEvents: e.acontent === '응답대기중' ? 'auto' : 'none' }}>
+                                        {e.acontent === '응답대기중' && <button className={style.abutton}>대기중</button>}
                                     </td>
                                 </tr>
                                 {

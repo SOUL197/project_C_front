@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './gallery.module.css';
 import { useNavigate } from 'react-router-dom';
 import { resolve } from 'path';
+import { useAuth } from '../../comp/AuthProvider';
 
 //미리보기, 폼 전송을 위한 인터페이스
 interface FormData {
     num: number;
     title: string;
     writer: string;
+    member_num: number;
     contents: string;
     reip?: string;
     hit?: number;
@@ -25,8 +27,16 @@ const GalleryForm: React.FC = () => {
         title: '',
         writer: '',
         contents: '',
+        member_num:0,
         images: [] //여러개의 이미지 파일 [data:img/pngAS,data:img/pngAS]
     });
+
+    const {member} = useAuth();
+    useEffect(()=>{
+        if(member !== null){
+            setFormData({...formData, member_num:member?.num})
+        }
+    },[member])
     // 미리보기를 구현할때 사용하는 상태관리 (넘어오는 파일의 이름이 한개가 아니기 때문에 배열로 처리리)
     const [preview, setPreview] = useState<string[]>([]);
     // navigate
@@ -67,6 +77,7 @@ const GalleryForm: React.FC = () => {
         myFormdata.append('writer', formData.writer);
         myFormdata.append('title', formData.title);
         myFormdata.append('contents', formData.contents);
+        myFormdata.append('member_num', formData.member_num.toString());
         formData.images.forEach((file, index) => {
             myFormdata.append('images', file);
         });

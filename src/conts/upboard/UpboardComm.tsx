@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import styles from '../matching/MatchingHome.module.css'
+import { useAuth } from '../../comp/AuthProvider';
 
 //부모로부터 전송되어 오는 properties
 interface UpboardCommProps {
@@ -9,10 +10,11 @@ interface UpboardCommProps {
 }
 
 interface UpboardCommVO {
-  num:number;
-  ucode:number;
-  uwriter: string;
-  ucontent: string;
+  comm_num:number;
+  board_num:number;
+  bwriter: string;
+  member_num: number;
+  bcontent: string;
   elike: string;
   reip: string;
   bcdate: string;
@@ -29,6 +31,14 @@ const UpboardComm: React.FC<UpboardCommProps> = ({num}) => {
     const [endPage, setEndPage] =useState(1);
     const [writer, setWriter] =useState("");
     const [content, setContent] =useState("");
+    const [member_num, setMember_num] = useState(0);
+
+    const {member} = useAuth();
+    useEffect(()=>{
+      if(member !== null) {
+        setMember_num(member?.num);
+      }
+    },[member])
     
     const commentSubmit =async (e:React.FormEvent) =>{
         e.preventDefault();
@@ -39,9 +49,10 @@ const UpboardComm: React.FC<UpboardCommProps> = ({num}) => {
 
         const commentData={
            
-            ucode:num,
-            uwriter:writer,
-            ucontent:content,
+            board_num:num,
+            bwriter:writer,
+            member_num: member_num.toString(),
+            bcontent:content,
             // reip:'192.168.0.9'  --> 자동 입력으로 설정함
         }
         //axios.post(url,data,{headers:{'Content-Type':'application/json='}})
@@ -62,7 +73,7 @@ const UpboardComm: React.FC<UpboardCommProps> = ({num}) => {
         const urls=`${process.env.REACT_APP_BACK_END_URL}/board/commlist`;
         const response = await axios.get(urls, 
           {params: { cPage:page,
-            num: num 
+            board_num: num 
           }})
 
         console.log(response.data.data);
@@ -116,11 +127,11 @@ const UpboardComm: React.FC<UpboardCommProps> = ({num}) => {
  <ul className='list-group'>
         {
             comments && comments.map((vo)=>(
-                <div key={vo.num} className='list-group-item'>  
-                    <li className='list-group-item' style={{textAlign:"left"}}>{vo.ucontent} 
+                <div key={vo.comm_num} className='list-group-item'>  
+                    <li className='list-group-item' style={{textAlign:"left"}}>{vo.bcontent} 
                     <div style={{ fontSize: '0.85em', color: '#666', marginTop: '5px' }}>     
-                      {vo.uwriter} | {vo.bcdate}
-                     <button onClick={()=>{delcomment(vo.num)}}>삭제</button></div></li>
+                      {vo.bwriter} | {vo.bcdate}
+                     <button onClick={()=>{delcomment(vo.comm_num)}}>삭제</button></div></li>
                 </div>
             ))
         }
