@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import './home.css'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, Modal } from 'react-bootstrap'
 import Survey from '../survey/Survey'
 
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
+import { useAuth } from '../../comp/AuthProvider'
 
 const Home: React.FC = () => {
-  const navigate = useNavigate()
+  const { member } = useAuth();
+  const [checked, setChecked] = useState(false);
+  const navigate = useNavigate();
 
   const settings = {
     dots: false,
@@ -60,8 +63,14 @@ const Home: React.FC = () => {
   const nav = () => navigate('/matchingHome')
   const signupnav = () => navigate('/signup')
 
-  const [show, setShow] = useState(false)
-  const handleClose = () => setShow(false)
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleModalClose = () => {
+    if (checked) {
+      localStorage.setItem('surveyCompleted', 'true');
+    }
+    handleClose();
+  };
 
   const [isSurveyCompleted] = useState(
     localStorage.getItem('surveyCompleted') === 'true'
@@ -88,12 +97,18 @@ const Home: React.FC = () => {
                 <p className="home-subtitle">{item.subtitle}</p>
 
                 <div className="btn-group">
-                  <button className="main-btn" onClick={signupnav}>
-                    계정 만들기
-                  </button>
-                  <button className="main-btn outline" onClick={nav}>
-                    매칭하기
-                  </button>
+                  <div className="btn-group">
+                    {
+                      !member && <button className="main-btn" onClick={signupnav}>
+                        계정 만들기
+                      </button>
+                    }
+                    {
+                      member && <button className="main-btn outline" onClick={() => { navigate('/matchingHome'); sessionStorage.removeItem('matchingSearchData'); }}>
+                        매칭하기
+                      </button>
+                    }
+                  </div>
                 </div>
               </div>
             </div>
@@ -105,11 +120,28 @@ const Home: React.FC = () => {
         <Modal.Header closeButton>
           <Modal.Title>설문조사 부탁드립니다 ♥</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Survey />
+        <Modal.Body style={{ textAlign: 'center', padding: '20px 0' }}>
+          <div>
+            <Link to='/surveylist' onClick={() => {
+              localStorage.setItem('surveyCompleted', 'true');
+              handleClose();
+            }} style={{ fontSize: '25px' }}>설문조사 하러가기</Link>
+          </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <input
+              type="checkbox"
+              id="dontShowCheck"
+              checked={checked}
+              onChange={(e) => setChecked(e.target.checked)}
+              style={{ cursor: 'pointer' }}
+            />
+            <label htmlFor="dontShowCheck" style={{ fontSize: '14px', cursor: 'pointer', margin: 0 }}>
+              다시 보지 않기
+            </label>
+          </div>
+          <Button variant="secondary" onClick={handleModalClose}>
             Close
           </Button>
         </Modal.Footer>

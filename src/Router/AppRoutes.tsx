@@ -33,6 +33,10 @@ import MyPageStats from '../conts/chart_ui/MyPageStats'
 import AdminDashboard from '../conts/chart_ui/AdminDashboard'
 import QnaForm from '../conts/faq/QnaForm'
 import QnaList from '../conts/faq/QnaList'
+import SurveyClient from '../conts/survey copy/SurveyClient'
+import SurveyList from '../conts/survey copy/SurveyList'
+import SurveyAddForm from '../conts/survey copy/SurveyAddForm'
+import SurveyClientResult from '../conts/survey copy/SurveyClientResult'
 
 
 const AppRoutes: React.FC = () => {
@@ -67,17 +71,20 @@ const AppRoutes: React.FC = () => {
         { path: '/qnaform', element: <QnaForm /> },
         { path: '/test2', element: <MyPageStats /> },
         { path: '/test3', element: <AdminDashboard /> },
-        
+        { path: '/surveyclient/:num', element: <SurveyClient /> },
+        { path: '/surveylist', element: <SurveyList /> },
+        { path: '/surveyaddform', element: <SurveyAddForm /> },
+        { path: '/surveyresult/:num', element: <SurveyClientResult /> },
     ]
 
     return (
-            <Routes>
-                {
-                    routelist.map((route, i) => (
-                        <Route key={i}{...route} />
-                    ))
-                }
-            </Routes>
+        <Routes>
+            {
+                routelist.map((route, i) => (
+                    <Route key={i}{...route} />
+                ))
+            }
+        </Routes>
     )
 }
 

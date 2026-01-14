@@ -44,12 +44,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }, [member]);
     return (
 
-        <div style={{height:'100vh', display:'flex', flexDirection:'column'}}>
+        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             <header>
-                <div className="header">
+                <div className="header" style={{padding:'8px 0'}}>
                     <div className="container">
                         <div className="d-flex flex-wrap align-items-center justify-content-lg-start" style={{ justifyContent: 'center' }}>
-                            <a href="/"><img src="/image/header_1.png" alt="" style={{marginTop: '13px', width:'200px',marginRight:'450px'}}/></a>
+                            <a href="/"><img src="/image/header_1.png" alt="" style={{ marginTop: '13px', width: '200px', marginRight: '450px' }} /></a>
                             <ul className="nav col-12 col-lg-auto my-2 my-md-0" style={{ justifyContent: 'center', marginLeft: 10 }}>
                                 {/* <li>
                                     <a href="/test" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
@@ -66,6 +66,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                         테스트3
                                     </a>
                                 </li> */}
+
                                 <li>
                                     <a href="/" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bolder', paddingTop: '22px' }}>
                                         홈
@@ -75,8 +76,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                     <DropdownNav />
                                 </li>
                                 <li>
-                                    <a href="/fortune" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bold', paddingTop: '22px' }}>
-                                        오늘의 운세
+                                    <a href="/surveylist" className="nav-link text-white" style={{ font: 'icon', textDecoration: 'underline', textUnderlineOffset: '5px', fontWeight: 'bold', paddingTop: '22px' }}>
+                                        설문조사
                                     </a>
                                 </li>
                                 <li>
@@ -95,6 +96,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 {
                                     member && <><a href="/alarm"><img src="/home/alarm_1.png" alt="1" style={{ width: '45px', paddingLeft: '8px' }} /></a>
                                         <a href="/mypage"><img src={`${imageBasePath}${profileimage}`} alt="1" style={{ marginLeft: '13px', border: '3px solid #ddd', borderRadius: '50%', width: '45px' }} /></a>
+                                        &nbsp;&nbsp;
                                         <button type="button" className="login-btn" onClick={handleLogout}>Logout</button></>
                                 }
                             </div>
@@ -105,7 +107,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 </div>
             </header>
 
-            <main style={{flex:1, minHeight:0, overflow:'auto'}}>{children}</main>
+            <main style={{ flex: 1, minHeight: 0, overflow: 'auto' }}>{children}</main>
 
             <footer style={{ backgroundColor: '#fff', borderTop: '1px solid #eee' }}>
                 <div style={{ color: '#000', padding: '1px', borderRadius: '0 0 8px 8px', textAlign: 'center' }}>

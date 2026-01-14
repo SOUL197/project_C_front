@@ -12,12 +12,18 @@ import { Button, Modal } from 'react-bootstrap'
 import Mypageimage from './MypageImage'
 import Loginlog from '../login/Loginlog'
 import MyPageStats from '../chart_ui/MyPageStats'
+import MyDate from '../date/Mydate'
+import { useAuth } from '../../comp/AuthProvider'
+import axios from 'axios'
 
 const Mypagehome: React.FC = () => {
-  const navigate = useNavigate()
+  const { member } = useAuth();
+  const navigate = useNavigate();
+  const [profileimage, setProfileImage] = useState('');
   const [show, setShow] = useState(false);
   const [menu, setMenu] = useState('');
-  const [selectedMenu, setSelectedMenu] = useState<React.ReactElement>()
+  const [selectedMenu, setSelectedMenu] = useState<React.ReactElement>();
+  const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
 
   const renderContent = (menu: string) => {
     switch (menu) {
@@ -39,8 +45,23 @@ const Mypagehome: React.FC = () => {
         return <Mypageimage />
       case 'LoginLog':
         return <Loginlog />
+      case 'MyDate':
+        return <MyDate setShow={setShow} />
     }
   }
+
+  useEffect(() => {
+    const getprofileimage = async () => {
+      try {
+        const url = `${process.env.REACT_APP_BACK_END_URL}/matching/getimage`;
+        const resp = await axios.get(url, { withCredentials: true });
+        setProfileImage(resp.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getprofileimage();
+  }, []);
 
   useEffect(() => {
     setSelectedMenu(renderContent(menu));
@@ -55,7 +76,7 @@ const Mypagehome: React.FC = () => {
     <div>
       <section className={style.mypageContainer}>
         <div className={style.fading}>
-        <h3 className={style.title} >마이페이지</h3></div>
+          <h3 className={style.title} >{member?.nickname}님의 마이페이지</h3></div>
 
         {/* 상단 영역 */}
         <div className={style.topArea}>
@@ -64,11 +85,11 @@ const Mypagehome: React.FC = () => {
             <div className={style.profileSection}>
               <img
                 className={style.profileImg}
-                src="/imgs/Default_user.jpg"
+                src={`${imageBasePath}${profileimage}`} 
                 alt="user"
               />
               <button id='Image' className={style.addBtn} onClick={handleClick}>+</button>
-              <div className={style.username}>Sally</div>
+              <div className={style.username}>{member?.nickname}</div>
               <p>다들 좋은 하루 되세요</p>
             </div>
 
@@ -119,7 +140,7 @@ const Mypagehome: React.FC = () => {
             내 문의
           </button>
           <button id='LoginLog' className={style.menuBtn} onClick={handleClick}>로그인 기록</button>
-          <button className={style.danger}>회원 탈퇴</button>
+          <button id='MyDate' className={style.danger} onClick={handleClick}>Date</button>
         </div>
 
       </section>

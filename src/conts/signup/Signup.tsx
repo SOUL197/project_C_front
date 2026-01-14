@@ -40,7 +40,7 @@ const Signup: React.FC = () => {
         
         return newErrors;
     }
-
+    
     const dummyNickname = ['테스형', '테스', '엑스맨'];
     const dummyId = ['admin', 'tess', 'ictuser']
     const dummyEmail = ['admin@naver.com', 'tess@naver.com', 'ictuser@naver.com']
@@ -136,12 +136,12 @@ const Signup: React.FC = () => {
             <form className={style.form} onSubmit={singupSubmit}>
 
                 <label>이름</label>
-                    <input type="name" name="name" id="name" onChange={memberChange}/>
+                    <input type="name" name="name" id="name" onChange={memberChange} className={style.inputField}/>
                     {errors.name && <p className={style.error}>{errors.name}</p>}
 
                 <label>닉네임</label>
                     <div className={style.inputRow}>
-                        <input type="text" name="nickname" id="nickname" onChange={memberChange}/>
+                        <input type="text" name="nickname" id="nickname" onChange={memberChange} className={style.inputField}/>
                         <button type="button" className={style.checkButton} onClick={checkNickname}>중복 확인</button>
                     </div>
                     {errors.nickname && <p className={style.error}>{errors.nickname}</p>}
@@ -149,24 +149,24 @@ const Signup: React.FC = () => {
 
                 <label>아이디</label>
                     <div className={style.inputRow}>
-                        <input type="text" name="username" id="username" onChange={memberChange}/>
+                        <input type="text" name="username" id="username" onChange={memberChange} className={style.inputField}/>
                         <button type="button" className={style.checkButton} onClick={checkId}>중복 확인</button>
                     </div>
                     {errors.id && <p className={style.error}>{errors.id}</p>}
                     {errors.idCheck && <p className={style.error}>{errors.idCheck}</p>}
 
                 <label>비밀번호</label>
-                    <input type="password" name="password" id="password" onChange={memberChange}/>
+                    <input type="password" name="password" id="password" onChange={memberChange} className={style.inputField}/>
                     {errors.password && <p className={style.error}>{errors.password}</p>}
 
                 <label>비밀번호 확인</label>
-                    <input type="pwdcheck" name="pwdcheck" id="pwdcheck" onChange={memberChange}/>
+                    <input type="pwdcheck" name="pwdcheck" id="pwdcheck" onChange={memberChange} className={style.inputField}/>
                     {errors.pwdcheck && <p className={style.error}>{errors.pwdcheck}</p>}    
 
                 <label>이메일</label>
                     <div className={style.inputRow}>
-                        <input type="text" name="email" id="email" onChange={memberChange}/>
-                        <button type="button" className={style.checkButton} onClick={checkEmail}>중복 확인</button>
+                        <input type="text" name="email" id="email" onChange={memberChange} className={style.inputField}/>
+                        <button type="button" className={style.checkButton} onClick={checkEmail}>인증하기</button>
                     </div>
                     {errors.email && <p className={style.error}>{errors.email}</p>}
                     {errors.emailCheck && <p className={style.error}>{errors.emailCheck}</p>}
