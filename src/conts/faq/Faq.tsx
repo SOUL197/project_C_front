@@ -2,6 +2,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import style from '../upboard/upboard.module.css'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../comp/AuthProvider";
 
 interface FaqVO {
     num: number;
@@ -21,8 +22,9 @@ interface FaqVO {
     private MultipartFile mfile; */
 
 const FAQ: React.FC = () => {
+    const { member } = useAuth();
     //페이지 만들기,
-    const{num} = useParams<{num:string}>();
+    const { num } = useParams<{ num: string }>();
     const [faqList, setFaqList] = useState<FaqVO[]>([]);
 
     const [totalItems, setTotalItems] = useState(0);
@@ -30,10 +32,7 @@ const FAQ: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [startPage, setStartPage] = useState(1);
     const [endPage, setEndPage] = useState(1);
-
     const navigate = useNavigate();
-
-    
 
     //검색을 위한 useState 추가하기
     const [searchType, setSearchType] = useState('1');
@@ -42,14 +41,17 @@ const FAQ: React.FC = () => {
     //한 번에 보여줄 페이지 블록 수
     const pagePerBlcok = 5;
 
-
     const fetchfaqList = async (page: number) => {
         try {
             const urls = `${process.env.REACT_APP_BACK_END_URL}/faq/list`
-            const response = await axios.get(urls, 
-                {params: {cPage: page,
-                    searchType: searchType,
-                    searchValue: searchValue}});
+            const response = await axios.get(urls,
+                {
+                    params: {
+                        cPage: page,
+                        searchType: searchType,
+                        searchValue: searchValue
+                    }
+                });
             setFaqList(response.data.data);
             setTotalItems(response.data.totalItems);
             setTotalPages(response.data.totalPages);
@@ -72,21 +74,20 @@ const FAQ: React.FC = () => {
         fetchfaqList(1);
     }
 
-    const faqdel = async(targetNum: number)=>{
+    const faqdel = async (targetNum: number) => {
         if (window.confirm("정말 삭제하시겠습니까?")) {
-        try {
-            const url = `${process.env.REACT_APP_BACK_END_URL}/faq/delete?num=${targetNum}`;
-            await axios.get(url); 
-            
-            alert("삭제되었습니다.");
-            fetchfaqList(currentPage); 
-        } catch (error) {
-            console.error("삭제 실패:", error);
-            alert("삭제 중 오류가 발생했습니다.");
-        }
-    }
-    };
+            try {
+                const url = `${process.env.REACT_APP_BACK_END_URL}/faq/delete?num=${targetNum}`;
+                await axios.get(url);
 
+                alert("삭제되었습니다.");
+                fetchfaqList(currentPage);
+            } catch (error) {
+                console.error("삭제 실패:", error);
+                alert("삭제 중 오류가 발생했습니다.");
+            }
+        }
+    };
 
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
@@ -125,9 +126,9 @@ const FAQ: React.FC = () => {
                                             <td style={{ fontWeight: 'bold', height: '75px', color: 'lightblue' }} colSpan={2}>
                                                 {item.content}
                                                 {
-                                                    
+
                                                 }
-                                                <button className={style.button} style={{ border: 'none' }}  onClick={()=>faqdel(item.num)}>삭제</button>&nbsp;
+                                                <button className={style.button} style={{ border: 'none' }} onClick={() => faqdel(item.num)}>삭제</button>&nbsp;
                                             </td>
                                         </tr>
                                     )
@@ -202,7 +203,7 @@ const FAQ: React.FC = () => {
                             </Link>
                         </td>
                     </tr>
-                      <tr>
+                    <tr>
                         <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
                             <Link to="/qnaform" className={style.button}>1대1 문의하기
                             </Link>
@@ -212,10 +213,11 @@ const FAQ: React.FC = () => {
                     </tr>
                 </tfoot>
             </table>
-            <div style={{ textAlign: 'right' }}>
-                <Link to="/adminanswer" className={style.button}>admin</Link>
-            </div>
-           
+            {
+                member?.num === 0 && <div style={{ textAlign: 'right' }}>
+                    <Link to="/adminanswer" className={style.button}>admin</Link>
+                </div>
+            }
         </div>
     )
 }

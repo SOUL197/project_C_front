@@ -187,7 +187,7 @@ const LikeHome: React.FC = () => {
 
       {/*검색창*/}
       <div style={{ textAlign: 'center' }}>
-        <select value={searchType} onChange={(e) => { setSearchType(e.target.value) }}>
+        <select value={searchType} onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '7px', borderRadius: '5px' }} >
           <option value='1' >닉네임</option>
           <option value='2' >나이</option>
         </select>
@@ -199,6 +199,7 @@ const LikeHome: React.FC = () => {
           }}
           value={searchValue}
           placeholder='검색'
+          style={{ padding: '7px', borderRadius: '5px', border: '1px solid #000' }}
         />}
         {searchType === '2' && (
           <div style={{ display: 'inline-block' }}>
@@ -208,6 +209,7 @@ const LikeHome: React.FC = () => {
                 const val = e.target.value || null;
                 setPeriod(prev => ({ ...prev, start: val }));
               }}
+              style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
             >
               <option value="">출생년도</option>
               {YYYY.map(y => <option key={y} value={y}>{y}년</option>)}
@@ -221,6 +223,7 @@ const LikeHome: React.FC = () => {
                 const val = e.target.value || null;
                 setPeriod(prev => ({ ...prev, finish: val }));
               }}
+              style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
             >
               <option value="">출생년도</option>
               {YYYY.map(y => <option key={y} value={y}>{y}년</option>)}
@@ -236,8 +239,8 @@ const LikeHome: React.FC = () => {
           검색옵션
         </button>
         {/*세부검색*/}
-        {detailSearch && <div style={{ padding: '20px', backgroundColor: '#e9e9e9', borderRadius: '10px', marginBottom: '20px', width: '70%', margin: '0 auto', marginTop: '10px' }}>
-          <div style={{ marginBottom: '10px' }}>
+        {detailSearch && <div style={{ padding: '20px', backgroundColor: '#e9e9e9', borderRadius: '10px', marginBottom: '20px', width: '50%', margin: '0 auto', marginTop: '10px' }}>
+          <div style={{ marginBottom: '10px', borderRadius: '10px' }}>
             <label><input type="checkbox" checked={matchingTypeList.includes(1)}
               onChange={() => {
                 if (matchingTypeList.includes(1)) {
@@ -311,13 +314,13 @@ const LikeHome: React.FC = () => {
                 handleTypeToggle(9)
               }} /> 흡연 </label>
           </div>
-
+          {/*국적*/}
           <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             {matchingTypeList.includes(1) && (
               <select
                 onChange={(e) =>
                   setMatchingValue({ ...matchingValue, country: e.target.value || null })}
-                value={matchingValue.country || ""}
+                value={matchingValue.country || ""} style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
               >
                 <option value="">국적</option>
                 <option value="한국">한국</option>
@@ -325,13 +328,13 @@ const LikeHome: React.FC = () => {
                 <option value="일본">일본</option>
               </select>
             )}
-
+            {/*거주지*/}
             {matchingTypeList.includes(2) && (
               <>
                 <select value={city} onChange={(e) => {
                   setCity(e.target.value);
                   setMatchingValue({ ...matchingValue, address: e.target.value || null });
-                }}>
+                }} style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}>
                   <option value="">시 선택</option>
                   {Object.keys(addressData).map(city => <option key={city} value={city}>{city}</option>)}
                 </select>
@@ -342,6 +345,7 @@ const LikeHome: React.FC = () => {
                     ...matchingValue,
                     address: e.target.value ? `${city} ${e.target.value}` : city
                   })}
+                  style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                 >
                   <option value="">구/군 선택</option>
                   {city && addressData[city].map(d => <option key={d} value={d}>{d}</option>)}
@@ -350,7 +354,8 @@ const LikeHome: React.FC = () => {
             )}
             {/* 키 */}
             {matchingTypeList.includes(3) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, height: e.target.value ? HEIGHT[Number(e.target.value)] : null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, height: e.target.value ? HEIGHT[Number(e.target.value)] : null })}>
                 <option value="">키 선택</option>
                 {HEIGHT.map((h, i) => <option key={i} value={i}>{h.label}</option>)}
               </select>
@@ -358,7 +363,8 @@ const LikeHome: React.FC = () => {
 
             {/* 몸무게*/}
             {matchingTypeList.includes(4) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, weight: e.target.value ? WEIGHT[Number(e.target.value)] : null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, weight: e.target.value ? WEIGHT[Number(e.target.value)] : null })}>
                 <option value="">몸무게 선택</option>
                 {WEIGHT.map((w, i) => <option key={i} value={i}>{w.label}</option>)}
               </select>
@@ -366,7 +372,8 @@ const LikeHome: React.FC = () => {
 
             {/* 취미*/}
             {matchingTypeList.includes(5) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, hobby: e.target.value || null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, hobby: e.target.value || null })}>
                 <option value="">취미 선택</option>
                 {HOBBY.map(h => <option key={h} value={h}>{h}</option>)}
               </select>
@@ -374,7 +381,8 @@ const LikeHome: React.FC = () => {
 
             {/* MBTI*/}
             {matchingTypeList.includes(6) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, mbti: e.target.value || null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, mbti: e.target.value || null })}>
                 <option value="">MBTI 선택</option>
                 {MBTI.map(m => <option key={m} value={m}>{m}</option>)}
               </select>
@@ -382,7 +390,8 @@ const LikeHome: React.FC = () => {
 
             {/* 종교*/}
             {matchingTypeList.includes(7) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, religion: e.target.value || null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, religion: e.target.value || null })}>
                 <option value="">종교 선택</option>
                 {RELIGION.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
@@ -390,7 +399,8 @@ const LikeHome: React.FC = () => {
 
             {/* 음주*/}
             {matchingTypeList.includes(8) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, drinking: e.target.value || null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, drinking: e.target.value || null })}>
                 <option value="">음주 선택</option>
                 {DRINKING.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
@@ -398,7 +408,8 @@ const LikeHome: React.FC = () => {
 
             {/* 흡연*/}
             {matchingTypeList.includes(9) && (
-              <select onChange={(e) => setMatchingValue({ ...matchingValue, smoking: e.target.value || null })}>
+              <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                onChange={(e) => setMatchingValue({ ...matchingValue, smoking: e.target.value || null })}>
                 <option value="">흡연 여부</option>
                 {SMOKING.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
@@ -406,7 +417,6 @@ const LikeHome: React.FC = () => {
           </div>
         </div>}
       </div>
-
     </div>
   );
 };

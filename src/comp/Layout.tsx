@@ -46,7 +46,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
             <header>
-                <div className="header" style={{padding:'8px 0'}}>
+                <div className="header" style={{ padding: '8px 0' }}>
                     <div className="container">
                         <div className="d-flex flex-wrap align-items-center justify-content-lg-start" style={{ justifyContent: 'center' }}>
                             <a href="/"><img src="/image/header_1.png" alt="" style={{ marginTop: '13px', width: '200px', marginRight: '450px' }} /></a>
@@ -95,7 +95,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                 }
                                 {
                                     member && <><a href="/alarm"><img src="/home/alarm_1.png" alt="1" style={{ width: '45px', paddingLeft: '8px' }} /></a>
-                                        <a href="/mypage"><img src={`${imageBasePath}${profileimage}`} alt="1" style={{ marginLeft: '13px', border: '3px solid #ddd', borderRadius: '50%', width: '45px' }} /></a>
+                                        <a href="/mypage"><img src={`${imageBasePath}${profileimage}`} alt="1"
+                                            style={{
+                                                marginLeft: '13px', border: '3px solid #ddd', borderRadius: '50%', width: '45px', height: '45px', objectFit: 'cover'
+                                            }} /></a>
                                         &nbsp;&nbsp;
                                         <button type="button" className="login-btn" onClick={handleLogout}>Logout</button></>
                                 }

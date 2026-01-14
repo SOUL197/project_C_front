@@ -37,6 +37,7 @@ import SurveyClient from '../conts/survey copy/SurveyClient'
 import SurveyList from '../conts/survey copy/SurveyList'
 import SurveyAddForm from '../conts/survey copy/SurveyAddForm'
 import SurveyClientResult from '../conts/survey copy/SurveyClientResult'
+import RequireAuth from '../comp/RequiredAuth'
 
 
 const AppRoutes: React.FC = () => {
@@ -71,7 +72,7 @@ const AppRoutes: React.FC = () => {
         { path: '/qnaform', element: <QnaForm /> },
         { path: '/test2', element: <MyPageStats /> },
         { path: '/test3', element: <AdminDashboard /> },
-        { path: '/surveyclient/:num', element: <SurveyClient /> },
+        { path: '/surveyclient/:num', element: <RequireAuth><SurveyClient /></RequireAuth> },
         { path: '/surveylist', element: <SurveyList /> },
         { path: '/surveyaddform', element: <SurveyAddForm /> },
         { path: '/surveyresult/:num', element: <SurveyClientResult /> },
