@@ -9,18 +9,6 @@ interface Member {
     email: string;
 }
 
-interface AuthContextProps {
-    member: Member | null;
-    checkLogin: () => void;
-    isLoggedIn: boolean;
-    login: (id: string, pwd: string) => Promise<'success' | 'fail' | 'error'>;
-    logout: () => void;
-    updateMemberName: (nickname: string) => void;
-    updateMemberEmail: (email: string) => void;
-    getAge: (birth: string) => number;
-    profile: ProfileVO | undefined;
-}
-
 interface ProfileVO {
     MEMBERID: number;
     DRINKING: string;
@@ -40,10 +28,20 @@ interface ProfileVO {
     WEIGHT: number;
 }
 
+interface AuthContextProps {
+    member: Member | null;
+    checkLogin: () => void;
+    isLoggedIn: boolean;
+    login: (id: string, pwd: string) => Promise<'success' | 'fail' | 'error'>;
+    logout: () => void;
+    updateMemberName: (nickname: string) => void;
+    updateMemberEmail: (email: string) => void;
+    getAge: (birth: string) => number;
+    profile: ProfileVO | undefined;
+}
 // 컨텍스트 생성
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
-// 로그인 상태를 체크 해주는 함수
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [member, setMember] = useState<Member | null>(null);
     const [profile, setProfile] = useState<ProfileVO>();
@@ -61,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         return age;
     };
-
+    //프로필 가져오는 함수
     const likedetail = async (num: number) => {
         try {
             const url = `${process.env.REACT_APP_BACK_END_URL}/api/like/likedetail`;
@@ -71,9 +69,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             console.error(error);
         }
     }
-
+    // 로그인 상태를 체크 해주는 함수
     const checkLogin = async () => {
-
         // ${process.env.REACT_APP_BACK_END_URL}/api/login/session
         // withCredentials : true server와의 session 통신
         try {

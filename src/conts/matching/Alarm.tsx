@@ -23,6 +23,7 @@ const Alarm: React.FC = () => {
   const [dateprofile, setDateProfile] = useState<MemberProfile[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const { member } = useAuth();
+  const [refresh, setRefresh] = useState(0);
   const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
 
   //alarm 첫 화면 마운트 시
@@ -84,7 +85,7 @@ const Alarm: React.FC = () => {
     try {
       await axios.post(`${process.env.REACT_APP_BACK_END_URL}/api/like/respond`, { nickname, action }, { withCredentials: true });
       alert(`${action === 'accept' ? '수락' : '거절'} 처리됨`);
-      window.location.reload();
+      setRefresh(prev => prev + 1);
     } catch (error) {
       console.error(error);
     }
@@ -96,7 +97,7 @@ const Alarm: React.FC = () => {
       const resp = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/api/date/respond`, { nickname, action }, { withCredentials: true });
       const status = resp.data;
       alert(`${status === 'accepted' ? '수락처리됨' : action === 'reject' ? '거절처리됨' : `${member?.nickname}님 또는 상대방이 이미 다른 데이트를 진행 중입니다.`}`);
-      window.location.reload();
+      setRefresh(prev => prev + 1);
       setCategory('date');
     } catch (error) {
       console.error(error);

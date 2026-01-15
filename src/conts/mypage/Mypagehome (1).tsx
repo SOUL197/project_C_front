@@ -15,6 +15,7 @@ import MyPageStats from '../chart_ui/MyPageStats'
 import MyDate from '../date/Mydate'
 import { useAuth } from '../../comp/AuthProvider'
 import axios from 'axios'
+import QnaList from '../faq/QnaList'
 
 const Mypagehome: React.FC = () => {
   const { member } = useAuth();
@@ -47,6 +48,8 @@ const Mypagehome: React.FC = () => {
         return <Mypageimage />
       case 'LoginLog':
         return <Loginlog />
+      case 'Qna':
+        return <QnaList />
       case 'MyDate':
         return <MyDate setShow={setShow} />
     }
@@ -96,7 +99,7 @@ const Mypagehome: React.FC = () => {
             <div className={style.profileSection}>
               <img
                 className={style.profileImg}
-                src={`${imageBasePath}${profileimage}`}
+                src={`${imageBasePath}${profileimage}?t=${Date.now()}`}
                 alt="user"
               />
               <button id='Image' className={style.addBtn} onClick={handleClick}>+</button>
@@ -147,7 +150,7 @@ const Mypagehome: React.FC = () => {
           <button id='Like' onClick={handleClick} className={style.like}>
             Like
           </button>
-          <button id='FAQ' onClick={handleClick} className={style.menuBtn}>
+          <button id='Qna' onClick={handleClick} className={style.menuBtn}>
             내 문의
           </button>
           <button id='LoginLog' className={style.menuBtn} onClick={handleClick}>로그인 기록</button>

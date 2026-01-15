@@ -50,7 +50,9 @@ const Mypageimage: React.FC = () => {
       });
       if (resp.status === 200) {
         alert("정상적으로 이미지가 바뀌었습니다");
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
       }
       console.log(resp.data);
     } catch (error) {

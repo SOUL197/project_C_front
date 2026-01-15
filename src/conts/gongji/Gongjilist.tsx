@@ -13,7 +13,8 @@ interface GongjiVO {
 }
 
 const Gongjilist: React.FC = () => {
-    const { member } = useAuth();
+
+    const { member, logout } = useAuth();
     const [gongjiList, setGongjiList] = useState<GongjiVO[]>([]);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -146,17 +147,15 @@ const Gongjilist: React.FC = () => {
 
                             </nav>
 
-                            {/* UpBoardForm.tsx */}
-                            {
-                                member?.num === 0 && <Link to="/gongji/form" className={style.button}>
+                            {/* 어드민 전용 글쓰기*/}
+                            {member && member?.id === 'admin' && (
+                                <Link to="/gongji/form" className={style.button}>
                                     글쓰기
                                 </Link>
-                            }
+                            )}
                         </td>
 
                     </tr>
-
-
                     <tr>
                     </tr>
                 </tfoot>

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import style from '../upboard/upboard.module.css'
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../comp/AuthProvider";
 
 interface Qna_VO {
     qnum: number;
@@ -24,6 +25,8 @@ interface QnaQ_VO {
 }
 
 const QnaList: React.FC = () => {
+
+    const { member, logout } = useAuth();
     const [qnalist, setQnaList] = useState<Qna_VO[]>([]);
 
     const [totalItems, setTotalItems] = useState(0);
@@ -39,14 +42,26 @@ const QnaList: React.FC = () => {
     //한 번에 보여줄 페이지 블록 수
     const pagePerBlcok = 5;
 
-        const fetchfaqList = async (page: number) => {
+    const fetchfaqList = async (page: number) => {
         try {
-            const urls = `${process.env.REACT_APP_BACK_END_URL}/faq/list`
-            const response = await axios.get(urls, 
-                {params: {cPage: page,
-                    searchType: searchType,
-                    searchValue: searchValue}});
-            setQnaList(response.data.data);
+            const urls = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`
+            const response = await axios.get(urls,
+                {
+                    params: {
+                        cPage: page,
+                        searchType: searchType,
+                        searchValue: searchValue
+                    }
+                });
+            const rawData = (response.data.data);
+            //필터링
+            let filteredData = rawData;
+            if (member?.nickname !== 'admin') {
+                //어드민이 아니면 본인 글만 남김
+                filteredData = rawData.filter((item: Qna_VO) => item.qwriter === member?.nickname);
+            }
+            //필터링 끝
+            setQnaList(filteredData)
             setTotalItems(response.data.totalItems);
             setTotalPages(response.data.totalPages);
             setCurrentPage(response.data.currentPage);
@@ -57,9 +72,9 @@ const QnaList: React.FC = () => {
         }
     }
     useEffect(() => {
-            fetchfaqList(currentPage);
-        }, [currentPage]);
-        const pageChange = (page: number) => {
+        fetchfaqList(currentPage);
+    }, [currentPage]);
+    const pageChange = (page: number) => {
         setCurrentPage(page);
     }
 
@@ -84,14 +99,21 @@ const QnaList: React.FC = () => {
                     ...e, ...qnaa.data.data[i]
                 } as Qna_VO));
 
-                console.log(allqnalist);
-                setQnaList(allqnalist);
+                //관리자가 아니면 본인 글만 필터링
+                const finalData = member?.nickname === '운영자'
+                    ? allqnalist
+                    : allqnalist.filter((item: Qna_VO) => item.qwriter === member?.nickname);
+
+                console.log(finalData);
+                setQnaList(finalData);
             } catch (error) {
                 console.error(error);
             }
         }
-        qnalist();
-    }, []) //한 번만 실행
+        if (member) {
+            qnalist();
+        }
+    }, [member]); //한 번만 실행
 
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
@@ -110,37 +132,51 @@ const QnaList: React.FC = () => {
             <table className={style.boardTable} >
                 <thead>
                     <tr>
-                        <th colSpan={2} style={{ fontSize: 25 }}>문의내역</th>
+                        <th colSpan={5} style={{ fontSize: 25 }}>문의내역</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        (qnalist.map((e) => (
-                            <React.Fragment key={e.qnum}>
+                    {qnalist && qnalist.length > 0 ? (
+                        qnalist.map((e, index) => (
+                            <React.Fragment key={index}>
                                 <tr>
-                                    <td className={style.titleLink} onClick={() => { ctoggle(e.qnum) }} colSpan={2}>{e.qtitle}</td>
-                                    <td style={{ textAlign: 'center', width: '105px', border: 'none', visibility: e.acontent === '응답대기중' ? 'visible' : 'hidden', pointerEvents: e.acontent === '응답대기중' ? 'auto' : 'none' }}>
-                                        {e.acontent === '응답대기중' && <button className={style.abutton}>대기중</button>}
+                                    <td className={style.titleLink} style={{ width: '15%' }}>{e.qwriter}</td>
+
+                                    <td className={style.titleLink} onClick={() => { ctoggle(e.anum) }} colSpan={3}>
+                                        {e.qtitle}
+
+                                    </td>
+                                    <td style={{
+                                        textAlign: 'center',
+                                        width: '105px',
+                                        border: 'none',
+
+                                    }}>
+                                        {e.acontent === '응답대기중' &&
+                                            <button className={style.abutton}>대기중</button>}
                                     </td>
                                 </tr>
-                                {
-                                    toggle && number === e.qnum && (
-                                        <tr>
-                                            <td style={{ fontWeight: 'bold', height: '75px' }} colSpan={2}>
-                                               {e.acontent}
-                                            </td>
-                                        </tr>
-                                    )
-                                }
-                            </React.Fragment>)
-                        )
-                        )
-                    }
+                                {toggle && number === e.anum && (
+                                    <tr>
+                                        <td className={style.titleLink} style={{ width: '15%' }}>{e.awriter}</td>
+                                        <td style={{ fontWeight: 'bold', height: '75px' }} colSpan={2}>
+                                            {e.acontent}
+                                        </td>
+                                    </tr>
+                                )}
+                            </React.Fragment>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={3} style={{ textAlign: 'center' }}>문의 내역이 없습니다.</td>
+                        </tr>
+                    )}
                 </tbody>
                 <tfoot style={{ textAlign: 'right' }}>
-                     <tr>
+                    <tr>
                         <th colSpan={6} className="text-center align-middle">
                             <select onChange={(e) => { setSearchType(e.target.value) }}>
+
                                 <option value="1">작성자</option>
                                 <option value="2">제목</option>
                                 <option value="3">내용</option>
@@ -154,7 +190,7 @@ const QnaList: React.FC = () => {
                     </tr>
 
                     <tr>
-                        <td colSpan={6} style={{ textAlign: "center" }}>
+                        <td colSpan={5} style={{ textAlign: "center" }}>
                             <nav>
                                 <ul className="pagination justify-content-center">
                                     {startPage > 1 && (
@@ -184,7 +220,7 @@ const QnaList: React.FC = () => {
                                 </ul>
 
                             </nav>
-                            
+
                         </td>
 
                     </tr>

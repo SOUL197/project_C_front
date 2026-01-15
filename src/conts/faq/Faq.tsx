@@ -22,7 +22,9 @@ interface FaqVO {
     private MultipartFile mfile; */
 
 const FAQ: React.FC = () => {
-    const { member } = useAuth();
+
+    const { member, logout } = useAuth();
+
     //페이지 만들기,
     const { num } = useParams<{ num: string }>();
     const [faqList, setFaqList] = useState<FaqVO[]>([]);
@@ -32,7 +34,10 @@ const FAQ: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [startPage, setStartPage] = useState(1);
     const [endPage, setEndPage] = useState(1);
+
     const navigate = useNavigate();
+
+
 
     //검색을 위한 useState 추가하기
     const [searchType, setSearchType] = useState('1');
@@ -40,6 +45,7 @@ const FAQ: React.FC = () => {
 
     //한 번에 보여줄 페이지 블록 수
     const pagePerBlcok = 5;
+
 
     const fetchfaqList = async (page: number) => {
         try {
@@ -89,6 +95,7 @@ const FAQ: React.FC = () => {
         }
     };
 
+
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
     const ctoggle = (Num: number) => {
@@ -128,7 +135,10 @@ const FAQ: React.FC = () => {
                                                 {
 
                                                 }
-                                                <button className={style.button} style={{ border: 'none' }} onClick={() => faqdel(item.num)}>삭제</button>&nbsp;
+
+                                                {member && member?.num === 0 && (
+                                                    <button className={style.button} style={{ border: 'none' }} onClick={() => faqdel(item.num)}>삭제</button>
+                                                )}
                                             </td>
                                         </tr>
                                     )
@@ -144,7 +154,7 @@ const FAQ: React.FC = () => {
                     <tr>
                         <th colSpan={6} className="text-center align-middle">
                             <select onChange={(e) => { setSearchType(e.target.value) }}>
-                                <option value="1">작성자</option>
+
                                 <option value="2">제목</option>
                                 <option value="3">내용</option>
                             </select>
@@ -188,38 +198,39 @@ const FAQ: React.FC = () => {
 
                             </nav>
 
-                            {/* UpBoardForm.tsx */}
-                            {
-                                member?.num === 0 && <Link to="/faq/form" className={style.button}>
+                            {/* 어드민 전용 */}
+                            {member && member.num === 0 && (
+                                <Link to="/faq/form" className={style.button}>
                                     글쓰기
                                 </Link>
-                            }
+                            )}
+                        </td>
 
+                    </tr>
+
+
+                    <tr>
+                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                            <Link to="/myqna" className={style.button}>1대1 문의내역
+                            </Link>
                         </td>
                     </tr>
-                    {
-                        member && <><tr>
-                            <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                                <Link to="/myqna" className={style.button}>1대1 문의내역
-                                </Link>
-                            </td>
-                        </tr>
-                            <tr>
-                                <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                                    <Link to="/qnaform" className={style.button}>1대1 문의하기
-                                    </Link>
-                                </td>
-                            </tr></>
-                    }
+                    <tr>
+                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                            <Link to="/qnaform" className={style.button}>1대1 문의하기
+                            </Link>
+                        </td>
+                    </tr>
                     <tr>
                     </tr>
                 </tfoot>
             </table>
-            {
-                member?.num === 0 && <div style={{ textAlign: 'right' }}>
+            {/* 어드민 전용*/}
+            {member && member?.num === 0 && (
+                <div style={{ textAlign: 'right' }}>
                     <Link to="/adminanswer" className={style.button}>admin</Link>
                 </div>
-            }
+            )}
         </div>
     )
 }

@@ -233,7 +233,7 @@ const MatchingHome: React.FC = () => {
 
             {/*검색창*/}
             <div style={{ textAlign: 'center' }}>
-                <select value={searchType} onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '7px', borderRadius: '5px' }} >
+                <select value={searchType} onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' }} >
                     <option value='1' >닉네임</option>
                     <option value='2' >나이</option>
                 </select>
@@ -245,7 +245,7 @@ const MatchingHome: React.FC = () => {
                     }}
                     value={searchValue}
                     placeholder='검색'
-                    style={{ padding: '7px', borderRadius: '5px', border: '1px solid #000' }}
+                    style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
                 />}
                 {searchType === '2' && (
                     <div style={{ display: 'inline-block' }}>

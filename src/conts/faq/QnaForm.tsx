@@ -22,38 +22,38 @@ const QnaForm: React.FC = () => {
         qcontent: '',
     });
 
-    const {member} = useAuth();
-    useEffect(()=>{
-        if(member !== null) {
-            setFormData({...formData, member_num: member.num})
+    const { member } = useAuth();
+    useEffect(() => {
+        if (member !== null) {
+            setFormData({ ...formData, member_num: member.num, qwriter: member.nickname })
         }
-    },[member])
+    }, [member])
 
-  const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>{
-          const {name, value} = e.target
-          setFormData({ ...formData, [name]: value})
-      }
-const navigate = useNavigate();
+    const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target
+        setFormData({ ...formData, [name]: value })
+    }
+    const navigate = useNavigate();
 
-const myFormSubmit = async (e:React.FormEvent)=>{
+    const myFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         alert('1:1 문의가 등록되었습니다.')
-        const  qnadata = new FormData();
-        qnadata.append('qtitle',formData.qtitle);
-        qnadata.append('qwriter',formData.qwriter);
-        qnadata.append('qcontent',formData.qcontent);
-        qnadata.append('member_num',formData.member_num.toString());
+        const qnadata = new FormData();
+        qnadata.append('qtitle', formData.qtitle);
+        qnadata.append('qwriter', formData.qwriter);
+        qnadata.append('qcontent', formData.qcontent);
+        qnadata.append('member_num', formData.member_num.toString());
 
         try {
             console.log(`formData=?${qnadata}`);
             const response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/qna/addq`,
-                {method:'post',body:qnadata});
-                navigate('/myqna')
+                { method: 'post', body: qnadata });
+            navigate('/myqna')
         } catch (error) {
             console.log('전송 오류');
         }
 
-}
+    }
 
     return (
         <div className={style.container}>
@@ -69,24 +69,17 @@ const myFormSubmit = async (e:React.FormEvent)=>{
                             </td>
                         </tr>
 
-                            <tr>
-                            <th>작성자</th>
-                            <td>
-                                <input type="text" name="qwriter" id="qwriter" style={{ width: "95%" }} required
-                                    className={style.input} onChange={formChange} />
-                            </td>
 
-                        </tr>
 
                         <tr>
                             <th>내용</th>
                             <td>
                                 <textarea name="qcontent" id="qcontent"
                                     style={{ width: "95%", height: "150px", padding: "8px" }}
-                                onChange={formChange} required/>
+                                    onChange={formChange} required />
                             </td>
                         </tr>
-                        
+
                     </tbody>
                     <tfoot>
                         <tr>
