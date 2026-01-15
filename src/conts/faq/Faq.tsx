@@ -22,30 +22,18 @@ interface FaqVO {
     private MultipartFile mfile; */
 
 const FAQ: React.FC = () => {
-
-    const { member, logout } = useAuth();
-
+    const { member } = useAuth();
     //페이지 만들기,
-    const { num } = useParams<{ num: string }>();
     const [faqList, setFaqList] = useState<FaqVO[]>([]);
-
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [startPage, setStartPage] = useState(1);
     const [endPage, setEndPage] = useState(1);
 
-    const navigate = useNavigate();
-
-
-
     //검색을 위한 useState 추가하기
     const [searchType, setSearchType] = useState('1');
     const [searchValue, setSearchValue] = useState('');
-
-    //한 번에 보여줄 페이지 블록 수
-    const pagePerBlcok = 5;
-
 
     const fetchfaqList = async (page: number) => {
         try {
@@ -67,6 +55,7 @@ const FAQ: React.FC = () => {
         } catch (error) {
             console.error("실패" + error)
         }
+
     }
     useEffect(() => {
         fetchfaqList(currentPage);
@@ -95,7 +84,6 @@ const FAQ: React.FC = () => {
         }
     };
 
-
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
     const ctoggle = (Num: number) => {
@@ -115,7 +103,7 @@ const FAQ: React.FC = () => {
             <table className={style.boardTable} >
                 <thead>
                     <tr>
-                        <th colSpan={2} style={{ fontSize: 20, borderTop: '1px solid rgba(82, 194, 231, 0.445)', textAlign: 'center', color: 'lightpink' }}>FAQ</th>
+                        <th style={{ fontSize: 20, borderTop: '1px solid rgba(82, 194, 231, 0.445)', textAlign: 'center', color: 'lightpink' }}>FAQ</th>
                     </tr>
                 </thead>
 
@@ -124,21 +112,28 @@ const FAQ: React.FC = () => {
                         faqList.map((item) => (
                             <React.Fragment key={item.num}>
                                 <tr style={{ height: '60px' }}>
-                                    <td className={style.titleLink3} onClick={() => { ctoggle(item.num) }} colSpan={2}>{item.title}</td>
+                                    <td className={style.titleLink3} onClick={() => { ctoggle(item.num) }}>{item.title}</td>
                                 </tr>
-
                                 {
                                     toggle && number === item.num && (
                                         <tr>
-                                            <td style={{ fontWeight: 'bold', height: '75px', color: 'lightblue' }} colSpan={2}>
-                                                {item.content}
-                                                {
-
+                                            <td style={{ fontWeight: 'bold', height: '75px', color: 'lightblue', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <span></span>
+                                                <span style={{ marginLeft: '60px' }}>{item.content}</span>
+                                                {(member?.num || 0.5) <= 0 ? (
+                                                    <button className={style.button}
+                                                        style={{
+                                                            margin: '0',
+                                                            padding: '8px 15px',
+                                                            border: 'none',
+                                                            whiteSpace: 'nowrap'
+                                                        }}
+                                                        onClick={() => faqdel(item.num)}>삭제</button>) : <span style={{
+                                                            margin: '0',
+                                                            padding: '8px 28.5px',
+                                                            whiteSpace: 'nowrap'
+                                                        }}></span>
                                                 }
-
-                                                {member && member?.num === 0 && (
-                                                    <button className={style.button} style={{ border: 'none' }} onClick={() => faqdel(item.num)}>삭제</button>
-                                                )}
                                             </td>
                                         </tr>
                                     )
@@ -207,28 +202,23 @@ const FAQ: React.FC = () => {
                         </td>
 
                     </tr>
-
-
-                    <tr>
-                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/myqna" className={style.button}>1대1 문의내역
-                            </Link>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                    <tr style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                        <td style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
                             <Link to="/qnaform" className={style.button}>1대1 문의하기
                             </Link>
                         </td>
-                    </tr>
-                    <tr>
+                        <td style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                            <Link to="/myqna" className={style.button}>내 문의내역
+                            </Link>
+                        </td>
+
                     </tr>
                 </tfoot>
             </table>
             {/* 어드민 전용*/}
             {member && member?.num === 0 && (
                 <div style={{ textAlign: 'right' }}>
-                    <Link to="/adminanswer" className={style.button}>admin</Link>
+                    <Link to="/adminanswer" className={style.button}>1대1 문의 답변</Link>
                 </div>
             )}
         </div>

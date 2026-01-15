@@ -25,55 +25,71 @@ interface QnaQ_VO {
 }
 
 const QnaList: React.FC = () => {
-
-    const { member, logout } = useAuth();
+    const { member } = useAuth();
     const [qnalist, setQnaList] = useState<Qna_VO[]>([]);
-
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [startPage, setStartPage] = useState(1);
     const [endPage, setEndPage] = useState(1);
-
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     //검색을 위한 useState 추가하기
     const [searchType, setSearchType] = useState('1');
     const [searchValue, setSearchValue] = useState('');
 
-    //한 번에 보여줄 페이지 블록 수
-    const pagePerBlcok = 5;
-
     const fetchfaqList = async (page: number) => {
+        if (!member) return; // 유저 정보 없으면 중단
+
+        setIsLoading(true);
         try {
-            const urls = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`
-            const response = await axios.get(urls,
-                {
-                    params: {
-                        cPage: page,
-                        searchType: searchType,
-                        searchValue: searchValue
-                    }
-                });
-            const rawData = (response.data.data);
-            //필터링
-            let filteredData = rawData;
-            if (member?.nickname !== 'admin') {
-                //어드민이 아니면 본인 글만 남김
-                filteredData = rawData.filter((item: Qna_VO) => item.qwriter === member?.nickname);
-            }
-            //필터링 끝
-            setQnaList(filteredData)
-            setTotalItems(response.data.totalItems);
-            setTotalPages(response.data.totalPages);
-            setCurrentPage(response.data.currentPage);
-            setStartPage(response.data.startPage);
-            setEndPage(response.data.endPage);
+            // 질문 응답 한번에 가져옴
+            const urlqnaq = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`;
+            const urlqnaa = `${process.env.REACT_APP_BACK_END_URL}/qna/alist`;
+            const [qnaq, qnaa] = await Promise.all([
+                axios.get(urlqnaq, {
+                    params: { cPage: page, searchType, searchValue },
+                    withCredentials: true
+                }),
+                axios.get(urlqnaa, { withCredentials: true })
+            ]);
+
+            // data 병합
+            const mergedData = qnaq.data.data.map((q: QnaQ_VO) => {
+                const matchAnswer = qnaa.data.data.find((a: any) => a.anum === q.qnum);
+                return {
+                    ...q,
+                    ...matchAnswer
+                } as Qna_VO;
+            });
+            console.log(qnaq.data.data);
+            console.log(qnaa.data.data);
+            console.log(mergedData);
+            // 3. admin(num<=0) 은전부 아니면 자신 것만 
+            const finalData = (member.num || 0.5) <= 0
+                ? mergedData
+                : mergedData.filter((e: Qna_VO) => e.qwriter === member.nickname);
+
+            setQnaList(finalData);
+            console.log(finalData);
+            // 페이징
+            setTotalItems(qnaq.data.totalItems);
+            setTotalPages(qnaq.data.totalPages);
+            setCurrentPage(qnaq.data.currentPage);
+            setStartPage(qnaq.data.startPage);
+            setEndPage(qnaq.data.endPage);
         } catch (error) {
-            console.error("실패" + error)
+            console.error("데이터 로드 실패", error);
+        } finally {
+            setIsLoading(false);
         }
     }
+
     useEffect(() => {
-        fetchfaqList(currentPage);
-    }, [currentPage]);
+        if (member) {
+            fetchfaqList(currentPage);
+        }
+    }, [currentPage, member]);
+
     const pageChange = (page: number) => {
         setCurrentPage(page);
     }
@@ -81,39 +97,6 @@ const QnaList: React.FC = () => {
     const searchFunction = () => {
         fetchfaqList(1);
     }
-
-    useEffect(() => {
-        const qnalist = async () => {
-            try {
-                const urlqnaq = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`; //qna_q 게시판 글들을 가져오는 url
-                const urlqnaa = `${process.env.REACT_APP_BACK_END_URL}/qna/alist`; //qna_a 게시판 글들을 가져오는 url
-                const [qnaq, qnaa] = await Promise.all([ //qna_q 게시판과 qna_a 게시판 내용을 한번에 불러옴
-                    axios.get(urlqnaq, { withCredentials: true }),
-                    axios.get(urlqnaa, { withCredentials: true })
-                    // axios.get(urlqnaa,{params:{anum:'anum'},withCredentials:true}),
-                ]);
-                console.log(qnaq.data);
-                console.log(qnaa.data);
-
-                const allqnalist = qnaq.data.data.map((e: QnaQ_VO, i: number) => ({
-                    ...e, ...qnaa.data.data[i]
-                } as Qna_VO));
-
-                //관리자가 아니면 본인 글만 필터링
-                const finalData = member?.nickname === '운영자'
-                    ? allqnalist
-                    : allqnalist.filter((item: Qna_VO) => item.qwriter === member?.nickname);
-
-                console.log(finalData);
-                setQnaList(finalData);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        if (member) {
-            qnalist();
-        }
-    }, [member]); //한 번만 실행
 
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
@@ -141,19 +124,13 @@ const QnaList: React.FC = () => {
                             <React.Fragment key={index}>
                                 <tr>
                                     <td className={style.titleLink} style={{ width: '15%' }}>{e.qwriter}</td>
-
-                                    <td className={style.titleLink} onClick={() => { ctoggle(e.anum) }} colSpan={3}>
-                                        {e.qtitle}
-
-                                    </td>
-                                    <td style={{
-                                        textAlign: 'center',
-                                        width: '105px',
-                                        border: 'none',
-
-                                    }}>
-                                        {e.acontent === '응답대기중' &&
-                                            <button className={style.abutton}>대기중</button>}
+                                    <td className={style.titleLink} onClick={() => { ctoggle(e.anum) }} colSpan={3}
+                                        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                                    >
+                                        <span></span>
+                                        <span>{e.qtitle}</span>
+                                        {e.acontent === '응답대기중' ?
+                                            <button className={style.abutton}>대기중</button> : <span></span>}
                                     </td>
                                 </tr>
                                 {toggle && number === e.anum && (

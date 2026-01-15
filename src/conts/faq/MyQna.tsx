@@ -43,8 +43,8 @@ const MyQna: React.FC = () => {
                 </thead>
                 <tbody>
                     {
-                        (boardV.map((e) => (
-                            <React.Fragment key={e.num}>
+                        (boardV.map((e, i) => (
+                            <React.Fragment key={e.num || i}>
                                 <tr>
                                     <td className={style.titleLink} onClick={() => { ctoggle(e.num) }} colSpan={2}>{e.title}</td>
                                     <td style={{ textAlign: 'center', width: '105px', border: 'none', visibility: e.content === '' ? 'visible' : 'hidden', pointerEvents: e.content === '' ? 'auto' : 'none' }}>

@@ -27,6 +27,7 @@ const AdminAnswer: React.FC = () => {
 
     const [qnalist, setQnaList] = useState<Qna_VO[]>([]);
     const [answerContent, setAnswerContent] = useState<string>(""); // 입력 필드 값 저장
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -42,26 +43,47 @@ const AdminAnswer: React.FC = () => {
     const pagePerBlcok = 5;
 
     const fetchfaqList = async (page: number) => {
+        setIsLoading(true);
         try {
-            const urls = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`
-            const response = await axios.get(urls,
-                {
+            const urlqnaq = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`;
+            const urlqnaa = `${process.env.REACT_APP_BACK_END_URL}/qna/alist`;
+
+            // 검색/페이지 클릭 시에도 질문과 답변을 동시에 가져옴
+            const [qnaq, qnaa] = await Promise.all([
+                axios.get(urlqnaq, {
                     params: {
                         cPage: page,
                         searchType: searchType,
                         searchValue: searchValue
                     }
-                });
-            setQnaList(response.data.data);
-            setTotalItems(response.data.totalItems);
-            setTotalPages(response.data.totalPages);
-            setCurrentPage(response.data.currentPage);
-            setStartPage(response.data.startPage);
-            setEndPage(response.data.endPage);
+                }),
+                axios.get(urlqnaa, { withCredentials: true })
+            ]);
+
+            // 초기 useEffect와 동일하게 질문과 답변을 합쳐줌
+            const allqnalist = qnaq.data.data.map((e: QnaQ_VO, i: number) => ({
+                ...e,
+                ...qnaa.data.data[i]
+            } as Qna_VO));
+
+            setQnaList(allqnalist); // 이제 검색/페이징 후에도 답변이 포함된 리스트가 유지됨
+
+            setTotalItems(qnaq.data.totalItems);
+            setTotalPages(qnaq.data.totalPages);
+            setCurrentPage(qnaq.data.currentPage);
+            setStartPage(qnaq.data.startPage);
+            setEndPage(qnaq.data.endPage);
         } catch (error) {
-            console.error("실패" + error)
+            console.error("검색 실패" + error);
+        } finally {
+            setIsLoading(false);
         }
     }
+
+    useEffect(() => {
+        fetchfaqList(1);
+    }, []); //한 번만 실행
+
     useEffect(() => {
         fetchfaqList(currentPage);
     }, [currentPage]);
@@ -73,33 +95,6 @@ const AdminAnswer: React.FC = () => {
     const searchFunction = () => {
         fetchfaqList(1);
     }
-
-
-    useEffect(() => {
-        const qnalist = async () => {
-            try {
-                const urlqnaq = `${process.env.REACT_APP_BACK_END_URL}/qna/qlist`; //qna_q 게시판 글들을 가져오는 url
-                const urlqnaa = `${process.env.REACT_APP_BACK_END_URL}/qna/alist`; //qna_a 게시판 글들을 가져오는 url
-                const [qnaq, qnaa] = await Promise.all([ //qna_q 게시판과 qna_a 게시판 내용을 한번에 불러옴
-                    axios.get(urlqnaq, { withCredentials: true }),
-                    axios.get(urlqnaa, { withCredentials: true })
-                    // axios.get(urlqnaa,{params:{anum:'anum'},withCredentials:true}),
-                ]);
-                console.log(qnaq.data);
-                console.log(qnaa.data);
-
-                const allqnalist = qnaq.data.data.map((e: QnaQ_VO, i: number) => ({
-                    ...e, ...qnaa.data.data[i]
-                } as Qna_VO));
-
-                console.log(allqnalist);
-                setQnaList(allqnalist);
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        qnalist();
-    }, []) //한 번만 실행
 
     const [toggle, setToggle] = useState(false);
     const [number, setNumber] = useState(0);
@@ -143,53 +138,58 @@ const AdminAnswer: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        (qnalist.map((e, i) => (
-                            <React.Fragment key={e.anum}>
-                                <tr>
-                                    <td style={{ width: '85px' }}>
-                                        {e.qwriter}
-                                    </td>
-                                    <td className={style.titleLink}
-                                        style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-between', margin: '0 auto' }}
-                                        onClick={() => { ctoggle(e.anum) }}
-                                        colSpan={1}
-                                    >
-                                        <span ></span>
-                                        {e.qtitle}
-                                        {(!e.acontent || e.acontent === '응답대기중' ?
-                                            <button
-                                                className={style.abutton}
-                                                onClick={() => { ctoggle(e.anum) }}
-                                            >
-                                                대기중
-                                            </button> : <span style={{ marginLeft: '85px' }}></span>)}
-                                    </td>
-                                </tr>
-                                {
-                                    toggle && number === e.anum && (
-                                        <tr>
-                                            <td style={{ fontWeight: 'bold', height: '90px' }} colSpan={2}>
-                                                {e.acontent !== '응답대기중' ? (
-                                                    // 이미 답변이 있는 경우
-                                                    <div style={{ color: 'lightblue' }}>{e.acontent}</div>
-                                                ) : (
-                                                    // 답변이 없는 경우: 입력 폼 표시
-                                                    <div style={{ display: 'flex', gap: '10px' }}>
-                                                        <input
-                                                            type="text"
-                                                            style={{ flex: 1, height: 30, padding: '0 10px' }}
-                                                            placeholder="답변 내용을 입력하세요..."
-                                                            value={answerContent}
-                                                            onChange={(event) => setAnswerContent(event.target.value)} />
-                                                        <button type="submit" onClick={() => handleAnswerSubmit(e.anum)}>확인</button></div>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    )}
-                            </React.Fragment>)
-                        )
-                        )
+                    {isLoading ? (
+                        <tr>
+                            <td colSpan={2} style={{ textAlign: 'center', padding: '100px 0', color: '#ff6f91', fontWeight: 'bold' }}>
+                                데이터를 불러오는 중입니다...
+                            </td>
+                        </tr>
+                    ) : (qnalist.map((e, i) => (
+                        <React.Fragment key={e.anum || i}>
+                            <tr>
+                                <td style={{ width: '85px' }}>
+                                    {e.qwriter}
+                                </td>
+                                <td className={style.titleLink}
+                                    style={{ display: 'flex', textAlign: 'center', justifyContent: 'space-between', margin: '0 auto' }}
+                                    onClick={() => { ctoggle(e.anum) }}
+                                    colSpan={1}
+                                >
+                                    <span ></span>
+                                    {e.qtitle}
+                                    {(!e.acontent || e.acontent === '응답대기중' ?
+                                        <button
+                                            className={style.abutton}
+                                            onClick={() => { ctoggle(e.anum) }}
+                                        >
+                                            대기중
+                                        </button> : <span style={{ marginLeft: '85px' }}></span>)}
+                                </td>
+                            </tr>
+                            {
+                                toggle && number === e.anum && (
+                                    <tr>
+                                        <td style={{ fontWeight: 'bold', height: '90px' }} colSpan={2}>
+                                            {e.acontent !== '응답대기중' ? (
+                                                // 이미 답변이 있는 경우
+                                                <div style={{ color: 'lightblue' }}>{e.acontent}</div>
+                                            ) : (
+                                                // 답변이 없는 경우: 입력 폼 표시
+                                                <div style={{ display: 'flex', gap: '10px' }}>
+                                                    <input
+                                                        type="text"
+                                                        style={{ flex: 1, height: 30, padding: '0 10px' }}
+                                                        placeholder="답변 내용을 입력하세요..."
+                                                        value={answerContent}
+                                                        onChange={(event) => setAnswerContent(event.target.value)} />
+                                                    <button type="submit" onClick={() => handleAnswerSubmit(e.anum)}>확인</button></div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                )}
+                        </React.Fragment>)
+                    )
+                    )
                     }
                 </tbody>
                 <tfoot style={{ textAlign: 'right' }}>
@@ -227,9 +227,7 @@ const AdminAnswer: React.FC = () => {
                                                 </li>
                                             ))
                                     }
-                                    {/* 
-                      NextPage 출력하기 : totalPage 보다 endPage 적을 때 다음페이지가 있는 것으로 계산
-                      */}
+                                    {/* NextPage 출력하기 : totalPage 보다 endPage 적을 때 다음페이지가 있는 것으로 계산*/}
                                     {endPage < totalPages && (
                                         <li className='page-item'>
                                             <button className='page-link' onClick={() => { pageChange(endPage + 1) }}>다음</button>

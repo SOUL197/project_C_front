@@ -16,6 +16,7 @@ import MyDate from '../date/Mydate'
 import { useAuth } from '../../comp/AuthProvider'
 import axios from 'axios'
 import QnaList from '../faq/QnaList'
+import AdminAnswer from '../faq/AdminAnswer'
 
 const Mypagehome: React.FC = () => {
   const { member } = useAuth();
@@ -50,6 +51,8 @@ const Mypagehome: React.FC = () => {
         return <Loginlog />
       case 'Qna':
         return <QnaList />
+      case 'AdminA':
+        return <AdminAnswer />
       case 'MyDate':
         return <MyDate setShow={setShow} />
     }
@@ -115,10 +118,8 @@ const Mypagehome: React.FC = () => {
                 <div className={style.num}>15</div>
                 <div className={style.label}>내 게시물</div>
               </button>
-
               <button
                 className={style.statBtn}
-
               >
                 <div className={style.num}>{likes}</div>
                 <div className={style.label}>Like</div>
@@ -150,9 +151,14 @@ const Mypagehome: React.FC = () => {
           <button id='Like' onClick={handleClick} className={style.like}>
             Like
           </button>
-          <button id='Qna' onClick={handleClick} className={style.menuBtn}>
-            내 문의
-          </button>
+
+          {(member?.num || 0) <= 0 ?
+            <button id='AdminA' onClick={handleClick} className={style.menuBtn}>
+              1대1 문의 답변
+            </button> : <button id='Qna' onClick={handleClick} className={style.menuBtn}>
+              내 문의
+            </button>
+          }
           <button id='LoginLog' className={style.menuBtn} onClick={handleClick}>로그인 기록</button>
           <button id='MyDate' className={style.danger} onClick={handleClick}>Date</button>
         </div>

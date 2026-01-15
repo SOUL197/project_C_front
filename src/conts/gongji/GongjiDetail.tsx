@@ -16,7 +16,7 @@ interface GongjiVO {
 
 const GongjiDetail: React.FC = () => {
 
-  const { member, logout } = useAuth();
+  const { member} = useAuth();
   const { num } = useParams<{ num: string }>();
   const [gongjiList, setGongjiList] = useState<GongjiVO | null>(null);
 
@@ -29,7 +29,7 @@ const GongjiDetail: React.FC = () => {
   }
 
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const detailServer = async () => {
       const url = `${process.env.REACT_APP_BACK_END_URL}/gongji/detail?num=${num}`;
@@ -67,11 +67,11 @@ const GongjiDetail: React.FC = () => {
         <tfoot>
           <tr>
             <th colSpan={2} style={{ textAlign: 'center' }}>
+
               {/* 어드민 전용 */}
               {member && member?.num === 0 && (
                 <button className={Style.button} style={{ border: 'none' }} onClick={gongjidel}>삭제</button>)}
               <Link to="/gongji" className={Style.button}>목록</Link>
-
             </th>
           </tr>
         </tfoot>

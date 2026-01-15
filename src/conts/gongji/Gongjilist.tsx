@@ -14,19 +14,15 @@ interface GongjiVO {
 
 const Gongjilist: React.FC = () => {
 
-    const { member, logout } = useAuth();
+    const { member } = useAuth();
     const [gongjiList, setGongjiList] = useState<GongjiVO[]>([]);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
     const [startPage, setStartPage] = useState(1);
     const [endPage, setEndPage] = useState(1);
-
     const [searchType, setSearchType] = useState('1');
     const [searchValue, setSearchValue] = useState('');
-
-    const pagePerBlcok = 5;
-
 
     const fetchgongjiList = async (page: number) => {
         try {
@@ -61,17 +57,6 @@ const Gongjilist: React.FC = () => {
         fetchgongjiList(1);
     }
 
-    const [toggle, setToggle] = useState(false);
-    const [number, setNumber] = useState(0);
-    const ctoggle = (Num: number) => {
-        if (number === Num) {
-            setToggle(false);
-            setNumber(0);
-        } else {
-            setToggle(true);
-            setNumber(Num);
-        }
-    };
     return (
 
         <div className={style.container}>
@@ -93,8 +78,8 @@ const Gongjilist: React.FC = () => {
                             <tr key={item.num}>
                                 <td style={{ width: "120px", textAlign: 'center' }}>{item.num}</td>
                                 <td><Link to={`/gongji/detail/${item.num}`} className={style.titleLink2}>{item.title}</Link></td>
-                                <td style={{ width: "170px", textAlign: 'center' }}>{item.writer}</td>
-                                <td style={{ width: "170px", textAlign: 'center' }}>{item.gdate}</td>
+                                <td style={{ width: "130px", textAlign: 'center' }}>{item.writer}</td>
+                                <td style={{ width: "130px", textAlign: 'center' }}>{item.gdate}</td>
                             </tr>
                         ))
                     }
@@ -102,19 +87,21 @@ const Gongjilist: React.FC = () => {
                 <tfoot style={{ textAlign: 'right' }}>
                     <tr>
                         <th colSpan={6} className="text-center align-middle">
-                            <select onChange={(e) => { setSearchType(e.target.value) }}>
+                            <select onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' }}>
                                 <option value="1">작성자</option>
                                 <option value="2">제목</option>
                                 <option value="3">내용</option>
                             </select>
+                            &nbsp;
                             <input type='text'
                                 onChange={(e) => { setSearchValue(e.target.value) }}
+                                style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
                             />
+                            &nbsp;
                             <button className="btn btn-warning" onClick={searchFunction}>검색</button>
                         </th>
                         {/* 검색폼 추가 영역 */}
                     </tr>
-
                     <tr>
                         <td colSpan={6} style={{ textAlign: "center" }}>
                             <nav>
@@ -154,7 +141,6 @@ const Gongjilist: React.FC = () => {
                                 </Link>
                             )}
                         </td>
-
                     </tr>
                     <tr>
                     </tr>
