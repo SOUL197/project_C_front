@@ -189,26 +189,28 @@ const FAQ: React.FC = () => {
                             </nav>
 
                             {/* UpBoardForm.tsx */}
-                            <Link to="/faq/form" className={style.button}>
-                                글쓰기
-                            </Link>
-                        </td>
+                            {
+                                member?.num === 0 && <Link to="/faq/form" className={style.button}>
+                                    글쓰기
+                                </Link>
+                            }
 
-                    </tr>
-
-
-                    <tr>
-                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/myqna" className={style.button}>1대1 문의내역
-                            </Link>
                         </td>
                     </tr>
-                    <tr>
-                        <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/qnaform" className={style.button}>1대1 문의하기
-                            </Link>
-                        </td>
-                    </tr>
+                    {
+                        member && <><tr>
+                            <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                                <Link to="/myqna" className={style.button}>1대1 문의내역
+                                </Link>
+                            </td>
+                        </tr>
+                            <tr>
+                                <td colSpan={2} style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                                    <Link to="/qnaform" className={style.button}>1대1 문의하기
+                                    </Link>
+                                </td>
+                            </tr></>
+                    }
                     <tr>
                     </tr>
                 </tfoot>

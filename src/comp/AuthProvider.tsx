@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { createContext, useContext, useEffect, useState } from 'react'
 
 interface Member {
-    num:number;
+    num: number;
     username: string;
     nickname: string;
     id: string;
@@ -17,6 +17,27 @@ interface AuthContextProps {
     logout: () => void;
     updateMemberName: (nickname: string) => void;
     updateMemberEmail: (email: string) => void;
+    getAge: (birth: string) => number;
+    profile: ProfileVO | undefined;
+}
+
+interface ProfileVO {
+    MEMBERID: number;
+    DRINKING: string;
+    NUM: number;
+    PHONE: string;
+    HOBBY: string;
+    SMOKING: string;
+    HEIGHT: number;
+    MBTI: string;
+    NICKNAME: string;
+    COUNTRY: string;
+    RELIGION: string;
+    ADDRESS: string;
+    PROFILEIMAGES: string[];
+    GENDER: '남자' | '여자';
+    BIRTH: string;
+    WEIGHT: number;
 }
 
 // 컨텍스트 생성
@@ -25,6 +46,31 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 // 로그인 상태를 체크 해주는 함수
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [member, setMember] = useState<Member | null>(null);
+    const [profile, setProfile] = useState<ProfileVO>();
+
+    const getAge = (birth: string): number => {
+        if (!birth) return 0;
+        const birthDate = new Date(birth);
+        const today = new Date();
+
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+            age--;
+        }
+        return age;
+    };
+
+    const likedetail = async (num: number) => {
+        try {
+            const url = `${process.env.REACT_APP_BACK_END_URL}/api/like/likedetail`;
+            const resp = await axios.get(url, { params: { num: num } });
+            setProfile(resp.data); // setProfile 그대로 사용
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const checkLogin = async () => {
 
@@ -37,6 +83,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             if (res.data.nickname) {
                 setMember(res.data);// 데이터 저장
                 console.log(res.data);
+                likedetail(res.data.num);
             } else {
                 setMember(null);
                 console.log('data 없음')
@@ -84,7 +131,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const isLoggedIn = member !== null;
 
     return (
-        <AuthContext.Provider value={{ member, isLoggedIn, checkLogin, login, logout, updateMemberName, updateMemberEmail }}>
+        <AuthContext.Provider value={{ member, isLoggedIn, profile, checkLogin, login, logout, updateMemberName, updateMemberEmail, getAge }}>
             {children}
         </AuthContext.Provider>
     );

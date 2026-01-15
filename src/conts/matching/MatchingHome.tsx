@@ -107,7 +107,7 @@ const MatchingHome: React.FC = () => {
             const mylike = new Set(likeList.map((like: any) => like.NUM));
             const response = {
                 ...matchingresp.data,
-                data: matchingList.filter((m: any) => !mylike.has(m.NUM))
+                data: matchingList.filter((m: any) => !mylike.has(m.NUM) && m.NUM !== 0)
             }
             console.log(response.data);
             setMatchingList(response.data);

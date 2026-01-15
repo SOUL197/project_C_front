@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Style from '../upboard/upboard.module.css'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { useAuth } from '../../comp/AuthProvider';
 
-interface GongjiVO{
+interface GongjiVO {
   num: number;
   title: string;
   writer: string;
@@ -14,10 +15,11 @@ interface GongjiVO{
 
 
 const GongjiDetail: React.FC = () => {
-  const{num} = useParams<{num:string}>();
-  const [gongjiList,setGongjiList] = useState<GongjiVO|null>(null);
-  
-  const gongjidel = async()=>{
+  const { member } = useAuth();
+  const { num } = useParams<{ num: string }>();
+  const [gongjiList, setGongjiList] = useState<GongjiVO | null>(null);
+
+  const gongjidel = async () => {
     const url = `${process.env.REACT_APP_BACK_END_URL}/gongji/delete?num=${num}`
     await axios.get(url);
     if (window.confirm("삭제하겠습니까?")) {
@@ -27,16 +29,16 @@ const GongjiDetail: React.FC = () => {
 
   const navigate = useNavigate();
 
-  useEffect(()=>{
-    const detailServer = async()=>{
+  useEffect(() => {
+    const detailServer = async () => {
       const url = `${process.env.REACT_APP_BACK_END_URL}/gongji/detail?num=${num}`;
       const resp = await axios.get(url);
       setGongjiList(resp.data);
     }
     detailServer();
-  },[num]);
- 
-  
+  }, [num]);
+
+
   return (
     <div className={Style.container}>
       <h2 className={Style.title}></h2>
@@ -64,7 +66,10 @@ const GongjiDetail: React.FC = () => {
         <tfoot>
           <tr>
             <th colSpan={2} style={{ textAlign: 'center' }}>
-              <button className={Style.button} style={{ border: 'none' }} onClick={gongjidel}>삭제</button>&nbsp;
+              {
+                member?.num === 0 && <button className={Style.button} style={{ border: 'none' }} onClick={gongjidel}>삭제</button>
+              }
+              &nbsp;
               <Link to="/gongji" className={Style.button}>목록</Link>
             </th>
           </tr>

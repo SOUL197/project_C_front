@@ -13,15 +13,9 @@ interface MatchingVO {
 
 const MatchingDetail: React.FC = () => {
     const [matchingDetail, setMatchingDetail] = useState<MatchingVO>();
-    const { member } = useAuth();
+    const { member, profile, getAge } = useAuth();
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(true);
-    const [members, setMembers] = useState<any[]>([]);
-
-    const [incoming, setIncoming] = useState<any[]>([]);
-    const [friends, setFriends] = useState<any[]>([]);
-    const [outgoing, setOutgoing] = useState<any[]>([]);
-    const [rejected, setRejected] = useState<Set<string>>(new Set());
     const [refresh, setRefresh] = useState(0);
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
     const navigate = useNavigate();
@@ -64,8 +58,11 @@ const MatchingDetail: React.FC = () => {
             <br />
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
-                    {matchingDetail?.nickname}
+                    {matchingDetail?.nickname} {getAge(profile?.BIRTH || '')}세
                 </span>
+            </div>
+            <div style={{textAlign:'center', fontSize:'20px'}}>
+                <p>#{profile?.ADDRESS} 거주 #MBTI는 {profile?.MBTI}</p>
             </div>
             <div style={{ textAlign: 'center' }}>
                 <button className={styles.likebutton} onClick={sendRequest} style={{ fontSize: 'x-large', padding: '10px 20px' }}>Like</button>
@@ -75,7 +72,7 @@ const MatchingDetail: React.FC = () => {
                 <button className={styles.button} onClick={() => { navigate(-1) }}>돌아가기</button>
             </div>
             {
-                !loading&&<div>로딩 중 입니다...</div>
+                loading && <p>로딩중입니다...</p>
             }
         </div>
     )
