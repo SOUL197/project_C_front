@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './gallery.module.css';
 import axios from 'axios';
+import { useAuth } from '../../comp/AuthProvider';
 
 
 interface GalleryVO {
@@ -15,7 +16,13 @@ interface GalleryVO {
   GDATE?: string;
   IMAGENAME: string;    //json data는 대소문자 구분함.
 }
-const Gallery: React.FC = () => {
+
+interface MyPageProps {
+  isMyPage?: boolean;
+}
+
+const Gallery: React.FC<MyPageProps> = ({ isMyPage = false }) => {
+  const { member } = useAuth();
   const [galleryList, setGalleryList] = useState<GalleryVO[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -35,7 +42,11 @@ const Gallery: React.FC = () => {
       const response = await axios.get(urls,
         {
           params: {
-            cPage: page, searchType: searchType, searchValue: searchValue
+            cPage: page,
+            searchType: searchType,
+            searchValue: searchValue,
+            mypage: isMyPage ? true : false,
+            num: isMyPage ? member?.num : -1000
           }
         })
 
@@ -67,9 +78,14 @@ const Gallery: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.fading}>
-        <h3 className={styles.title} >자랑하기</h3></div>
+        {
+          isMyPage ? <h3 className={styles.title} >나의 자랑하기</h3> : <h3 className={styles.title} >자랑하기</h3>
+        }
+      </div>
       <div style={{ textAlign: 'right', marginBottom: '15px' }}>
-        <Link to="/gallery/write" className={styles.button}>글쓰기</Link>
+        {
+          !isMyPage && <Link to="/gallery/write" className={styles.button}>글쓰기</Link>
+        }
       </div>
       <div className={styles.grid}>
         {galleryList.map(item => (
@@ -88,14 +104,16 @@ const Gallery: React.FC = () => {
           <tr>
             <td style={{ width: "500px", textAlign: "center", margin: "10px", borderRadius: "8px" }}>
               <select onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' }}>
-                <option value="1">작성자</option>
+                {
+                  !isMyPage && <option value="1">작성자</option>
+                }
                 <option value="2">제목</option>
                 <option value="3">내용</option>
               </select>
               &nbsp;
-              <input type='text' onChange={(e) => { setSearchValue(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' ,border:'1px solid #000'}} />
+              <input type='text' onChange={(e) => { setSearchValue(e.target.value) }} style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }} />
               &nbsp;
-              
+
               <button className='btn btn-warning' onClick={searchFunction}>
                 검색
               </button>

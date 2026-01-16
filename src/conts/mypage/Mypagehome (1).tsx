@@ -27,6 +27,8 @@ const Mypagehome: React.FC = () => {
   const [show, setShow] = useState(false);
   const [menu, setMenu] = useState('');
   const [selectedMenu, setSelectedMenu] = useState<React.ReactElement>();
+  const [myupboard, SetMyUpBoard] = useState(0);
+  const [mygallery, SetMyGallery] = useState(0);
   const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
 
   const renderContent = (menu: string) => {
@@ -36,9 +38,9 @@ const Mypagehome: React.FC = () => {
       case 'Change Profile':
         return <Mypagedetail />
       case 'Gallery':
-        return <Gallery />
+        return <Gallery isMyPage={true} />
       case 'Community':
-        return <UpboardList />
+        return <UpboardList isMyPage={true} />
       case 'Like':
         return <LikeHome />
       case 'Notice':
@@ -59,26 +61,45 @@ const Mypagehome: React.FC = () => {
   }
 
   useEffect(() => {
+    if (!member?.num) return;
+
     const getprofileimage = async () => {
       try {
         const url = `${process.env.REACT_APP_BACK_END_URL}/matching/getimage`;
-        const urla = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
-        const urlb = `${process.env.REACT_APP_BACK_END_URL}/api/date/mydate`;
-        const [resp, respa, respb] = await Promise.all([
+        const likeurl = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
+        const dateurl = `${process.env.REACT_APP_BACK_END_URL}/api/date/mydate`;
+        const boardurl = `${process.env.REACT_APP_BACK_END_URL}/board/list`;
+        const galleryurl = `${process.env.REACT_APP_BACK_END_URL}/gallery/gallist`;
+        const [resp, likeresp, dateresp, boardresp, gallresp] = await Promise.all([
           axios.get(url, { withCredentials: true }),
-          axios.post(urla, { cPage: 1 }, { withCredentials: true }),
-          axios.get(urlb, { withCredentials: true })
+          axios.post(likeurl, { cPage: 1 }, { withCredentials: true }),
+          axios.get(dateurl, { withCredentials: true }),
+          axios.get(boardurl, {
+            params: {
+              mypage: true,
+              num: member?.num,
+            }, withCredentials: true
+          }),
+          axios.get(galleryurl, {
+            params: {
+              mypage: true,
+              num: member?.num,
+            }, withCredentials: true
+          })
         ]);
+        console.log('게시판 >' + boardresp.data.data.length + '갤러리 >' + gallresp.data.data.length);
         setProfileImage(resp.data);
-        setLikes(respa.data.data.length);
-        setDate(respb.data);
-        console.log(respb.data);
+        setLikes(likeresp.data.data.length);
+        setDate(dateresp.data);
+        SetMyUpBoard(boardresp.data.data.length);
+        SetMyGallery(gallresp.data.data.length);
+        console.log(dateresp.data);
       } catch (error) {
         console.error(error);
       }
     }
     getprofileimage();
-  }, []);
+  }, [member?.num]);
 
   useEffect(() => {
     setSelectedMenu(renderContent(menu));
@@ -115,7 +136,7 @@ const Mypagehome: React.FC = () => {
               <button
                 className={style.statBtn}
               >
-                <div className={style.num}>15</div>
+                <div className={style.num}>{mygallery + myupboard}</div>
                 <div className={style.label}>내 게시물</div>
               </button>
               <button

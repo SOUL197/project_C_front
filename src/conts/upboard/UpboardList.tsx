@@ -3,6 +3,7 @@ import style from './upboard.module.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { format } from 'path';
+import { useAuth } from '../../comp/AuthProvider';
 
 interface UpBoardVO {
   num: number;
@@ -16,8 +17,12 @@ interface UpBoardVO {
   bdate: string;
 }
 
-const UpboardList: React.FC = () => {
+interface MyPageProps {
+  isMyPage?: boolean;
+}
 
+const UpboardList: React.FC<MyPageProps> = ({ isMyPage = false }) => {
+  const { member } = useAuth();
   const [upboardlist, setUpboardList] = useState<UpBoardVO[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
@@ -39,7 +44,9 @@ const UpboardList: React.FC = () => {
           params: {
             cPage: page,
             searchType: searchType,
-            searchValue: searchValue
+            searchValue: searchValue,
+            mypage: isMyPage ? true : false,
+            num: isMyPage ? member?.num : -1000
           }
         })
 
@@ -72,7 +79,10 @@ const UpboardList: React.FC = () => {
 
     <div className={style.container}>
       <div className={style.fading}>
-        <h3 className={style.title} >자유게시판</h3></div>
+        {
+          isMyPage ? <h3 className={style.title} >내 작성글</h3> : <h3 className={style.title} >자유게시판</h3>
+        }
+      </div>
       <table className={style.boardTable}>
         <thead>
           <tr>
@@ -100,16 +110,18 @@ const UpboardList: React.FC = () => {
           <tr>
             <th colSpan={2} className='text-center align-midle'>
               <select onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' }}>
-                <option value="1">작성자</option>
+                {
+                  !isMyPage && <option value="1">작성자</option>
+                }
                 <option value="2">제목</option>
                 <option value="3">내용</option>
               </select>
               &nbsp;
-              <input 
-              type='text' 
-              onChange={(e) => { setSearchValue(e.target.value) }} 
-              style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
-              placeholder='검색'
+              <input
+                type='text'
+                onChange={(e) => { setSearchValue(e.target.value) }}
+                style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
+                placeholder='검색'
               />
               &nbsp;
               <button className='btn btn-warning' onClick={searchFunction}>
@@ -143,7 +155,10 @@ const UpboardList: React.FC = () => {
           </tr>
         </tfoot>
       </table>
-      <div style={{ textAlign: "right" }}><Link to="/community/upform" className={style.button}>글쓰기</Link></div>
+      {
+        !isMyPage && <div style={{ textAlign: "right" }}><Link to="/community/upform" className={style.button}>글쓰기</Link></div>
+      }
+
     </div>
 
   )

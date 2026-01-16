@@ -216,7 +216,7 @@ const FAQ: React.FC = () => {
                 </tfoot>
             </table>
             {/* 어드민 전용*/}
-            {member && member?.num === 0 && (
+            {(member?.num || 0.5) <= 0 && (
                 <div style={{ textAlign: 'right' }}>
                     <Link to="/adminanswer" className={style.button}>1대1 문의 답변</Link>
                 </div>
