@@ -10,7 +10,6 @@ import Gallery from '../conts/gallery/Gallery'
 import GalleryDetail from '../conts/gallery/GallerryDetail'
 import GalleryForm from '../conts/gallery/GalleryForm'
 import UpboardForm from '../conts/upboard/UpboardForm'
-import Chart from '../conts/chart_ui/Chart'
 import Fortune from '../conts/fortune/Fortune'
 import Signup from '../conts/signup/Signup'
 import Login from '../conts/login/Login'
@@ -23,12 +22,9 @@ import Mypagedetail from '../conts/mypage/Mypagedetail'
 import LikeHome from '../conts/Like/LikeHome'
 import LikeDetail from '../conts/Like/LikeDetail'
 import AdminAnswer from '../conts/faq/AdminAnswer'
-import MyQna from '../conts/faq/MyQna'
 import Mypagehome from '../conts/mypage/Mypagehome (1)'
 import FindId from '../conts/login/FindId'
 import FindPwd from '../conts/login/FindPwd'
-import TestChart from '../conts/chart_ui/TestChart'
-import TestChart2 from '../conts/chart_ui/TestChart2'
 import MyPageStats from '../conts/chart_ui/MyPageStats'
 import AdminDashboard from '../conts/chart_ui/AdminDashboard'
 import QnaForm from '../conts/faq/QnaForm'
@@ -38,6 +34,7 @@ import SurveyList from '../conts/survey copy/SurveyList'
 import SurveyAddForm from '../conts/survey copy/SurveyAddForm'
 import SurveyClientResult from '../conts/survey copy/SurveyClientResult'
 import RequireAuth from '../comp/RequiredAuth'
+import VisiorChart from '../conts/chart_ui/VisiorChart'
 
 
 const AppRoutes: React.FC = () => {
@@ -49,10 +46,10 @@ const AppRoutes: React.FC = () => {
         { path: '/community/uplist', element: <UpboardList /> },
         { path: '/community/updetail/:num', element: <RequireAuth><UpboardDetail /></RequireAuth> },
         { path: '/gallery', element: <Gallery /> },
-        { path: '/gallery/write', element: <RequireAuth><GalleryForm /></RequireAuth> },
-        { path: '/gallery/gdetail/:num', element: <RequireAuth><GalleryDetail /></RequireAuth> },
-        { path: '/community/upform', element: <RequireAuth><UpboardForm /></RequireAuth> },
-        { path: '/vchart', element: <TestChart2 /> },
+        { path: '/gallery/write', element: <GalleryForm /> },
+        { path: '/gallery/gdetail/:num', element: <GalleryDetail /> },
+        { path: '/community/upform', element: <UpboardForm /> },
+        { path: '/vchart', element: <VisiorChart /> },
         { path: '/fortune', element: <Fortune /> },
         { path: '/mypage', element: <RequireAuth><Mypagehome /></RequireAuth> },
         { path: '/mypage/detail', element: <RequireAuth><Mypagedetail /></RequireAuth> },
@@ -69,9 +66,10 @@ const AppRoutes: React.FC = () => {
         { path: '/like/detail/:num', element: <RequireAuth><LikeDetail /></RequireAuth> },
         { path: '/adminanswer', element: <AdminAnswer /> },
         { path: '/myqna', element: <QnaList /> },
-        { path: '/qnaform', element: <RequireAuth><QnaForm /></RequireAuth> },
-        { path: '/test2', element: <RequireAuth><MyPageStats /></RequireAuth> },
-        { path: '/test3', element: <RequireAuth><AdminDashboard /></RequireAuth> },
+        { path: '/qnaform', element: <QnaForm /> },
+        { path: '/test1', element: <VisiorChart /> },
+        { path: '/test2', element: <MyPageStats /> },
+        { path: '/test3', element: <AdminDashboard /> },
         { path: '/surveyclient/:num', element: <RequireAuth><SurveyClient /></RequireAuth> },
         { path: '/surveylist', element: <SurveyList /> },
         { path: '/surveyaddform', element: <RequireAuth><SurveyAddForm /></RequireAuth> },

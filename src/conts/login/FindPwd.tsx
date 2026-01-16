@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import style from "../signup/signup.module.css";
+import style from "./login.module.css";
 import SyncLoader from "react-spinners/SyncLoader";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -25,6 +25,7 @@ const FindPwd: React.FC = () => {
   useEffect(()=>{
     if(state!==null) {
         setId(state.id);
+        setEmail(state.email);
         setIsEmailVerified(state.emailVerify)
     }
   },[state])
@@ -130,11 +131,11 @@ const FindPwd: React.FC = () => {
       <form className={style.form} onSubmit={idCheck}>
 
         <label>아이디</label>
-            <div className={style.inputRow}>
-                <input type="name" name="id" id="id" onChange={(e) => {setId(e.target.value)}} />
+            <div className={style.inputGroup}>
+                <input type="name" name="id" id="id" onChange={(e) => {setId(e.target.value)}} className={style.inpuselectfield} />
             </div>
             {idMessage && <div>{idMessage}</div>}
-        <button type="submit" className={style.submitButton}>
+        <button type="submit" className={style.loginButton}>
           다음
         </button>
       </form>
@@ -146,10 +147,10 @@ const FindPwd: React.FC = () => {
         <p>이메일 인증을 완료해주세요.</p>
         <form className={style.form}>
             <label>이메일</label>
-                <div className={style.inputRow}>
+                <div className={style.inputGroup}>
                     <input type="email" name="email" id="email" onChange={(e) => {
                         setEmail(e.target.value);
-                    }}/>
+                    }} className={style.inpuselectfield}/>
                     <button type="button" className={style.checkButton} onClick={emailCheck}>
                         인증
                     </button>
@@ -162,11 +163,11 @@ const FindPwd: React.FC = () => {
                 {emailMessage && <div>{emailMessage}</div>}
 
             <label>인증번호</label>
-                <div className={style.inputRow}>
+                <div className={style.inputGroup}>
                     <input type="text" name="code" id="code"onChange={(e) => {
                         setCode(e.target.value);
-                    }}/>
-                    <button type="button" className={style.checkButton} onClick={checkEmailCode}>
+                    }} className={style.inpuselectfield}/>
+                    <button type="button" className={style.loginButton} onClick={checkEmailCode}>
                         확인
                     </button>
                 </div>
@@ -174,16 +175,16 @@ const FindPwd: React.FC = () => {
         </div>
       )}
       {(state !== null || isEmailVerified) && (
-        <div>
+        <div className={style.inputGroup}>
             <h2>새 비밀번호를 입력해주세요</h2>
             <form className={style.form} onSubmit={handleSubmit}>
                 <label>비밀번호</label>
-                    <input type="password" name="pwd" id="pwd" onChange={(e)=>{setPwd(e.target.value)}}/>
+                    <input type="password" name="pwd" id="pwd" onChange={(e)=>{setPwd(e.target.value)}} className={style.inpuselectfield}/>
 
                 <label>비밀번호 확인</label>
-                    <input type="password" name="pwdCheck" id="pwdCheck" onChange={(e)=>{setPassCheck(e.target.value)}}/>
+                    <input type="password" name="pwdCheck" id="pwdCheck" onChange={(e)=>{setPassCheck(e.target.value)}} className={style.inpuselectfield}/>
                     {passMessage && (<div>{passMessage}</div>)}
-                <button type='submit' className={style.submitButton}>변경</button>
+                <button type='submit' className={style.loginButton}>변경</button>
             </form>
         </div>
       )}

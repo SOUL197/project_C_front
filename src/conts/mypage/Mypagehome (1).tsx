@@ -17,6 +17,7 @@ import { useAuth } from '../../comp/AuthProvider'
 import axios from 'axios'
 import QnaList from '../faq/QnaList'
 import AdminAnswer from '../faq/AdminAnswer'
+import AdminDashboard from '../chart_ui/AdminDashboard'
 
 const Mypagehome: React.FC = () => {
   const { member } = useAuth();
@@ -34,7 +35,7 @@ const Mypagehome: React.FC = () => {
   const renderContent = (menu: string) => {
     switch (menu) {
       case 'Chart':
-        return <MyPageStats />
+        return <>{ (member?.num || 0) <= 0 ? (<AdminDashboard />) : (<MyPageStats />) }</>
       case 'Change Profile':
         return <Mypagedetail />
       case 'Gallery':

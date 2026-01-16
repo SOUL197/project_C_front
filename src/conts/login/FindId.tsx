@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import style from "../signup/signup.module.css";
+import style from "./login.module.css";
 import SyncLoader from "react-spinners/SyncLoader";
 import { useNavigate } from "react-router-dom";
 
@@ -97,15 +97,15 @@ const FindId: React.FC = () => {
       <form className={style.form} onSubmit={handleSubmit}>
 
         <label>이름</label>
-            <div className={style.inputRow}>
-                <input type="text" name="username" id="username" onChange={(e) => {setUsername(e.target.value)}} />
+            <div className={style.inputGroup}>
+                <input type="text" name="username" id="username" onChange={(e) => {setUsername(e.target.value)}} className={style.inpuselectfield} />
             </div>
 
         <label>이메일</label>
-        <div className={style.inputRow}>
+        <div className={style.inputGroup}>
           <input type="email" name="email" id="email" onChange={(e) => {
               setEmail(e.target.value);
-            }}/>
+            }} className={style.inpuselectfield} />
           <button type="button" className={style.checkButton} onClick={emailCheck}>
             인증
           </button>
@@ -118,16 +118,16 @@ const FindId: React.FC = () => {
         {emailMessage && <div>{emailMessage}</div>}
 
         <label>인증번호</label>
-        <div className={style.inputRow}>
+        <div className={style.inputGroup}>
           <input type="text" name="code" id="code"onChange={(e) => {
               setCode(e.target.value);
-            }}/>
+            }} className={style.inpuselectfield} />
           <button type="button" className={style.checkButton} onClick={checkEmailCode}>
             확인
           </button>
         </div>
         
-        <button type="submit" className={style.submitButton}>
+        <button type="submit" className={style.loginButton}>
           다음
         </button>
       </form>
@@ -144,10 +144,10 @@ const FindId: React.FC = () => {
                     }}>{id}</p>
                 </div>
                 <div style={{display:'flex', justifyContent:'space-evenly'}}>
-                <button onClick={()=> navigate('/findPwd',{state:{id:id, emailVerify:true}})} className={style.submitButton} style={{width:'45%', backgroundColor:'lightgray'}}>
+                <button onClick={()=> navigate('/findPwd',{state:{id:id, email:email, emailVerify:true}})} className={style.loginButton} style={{width:'45%', backgroundColor:'lightgray'}}>
                     비밀번호 찾기
                 </button>
-                <button onClick={()=> navigate('/login',{state:{id:id}})} className={style.submitButton} style={{width:'45%'}}>
+                <button onClick={()=> navigate('/login',{state:{id:id}})} className={style.loginButton} style={{width:'45%'}}>
                     로그인하러 가기
                 </button>
                 </div>

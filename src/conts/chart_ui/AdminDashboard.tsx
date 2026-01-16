@@ -29,27 +29,6 @@ const AdminDashboard: React.FC = () => {
     ],
   };
 
-  const cohortOption = {
-    tooltip: { trigger: 'axis' },
-    legend: {
-      data: ['1주차', '2주차', '3주차', '4주차'],
-    },
-    xAxis: {
-      type: 'category',
-      data: ['Week 0', 'Week 1', 'Week 2', 'Week 3', 'Week 4'],
-    },
-    yAxis: {
-      type: 'value',
-      max: 100,
-    },
-    series: [
-      { name: '1주차', type: 'line', data: [100, 62, 48, 40, 35] },
-      { name: '2주차', type: 'line', data: [100, 58, 45, 38, 32] },
-      { name: '3주차', type: 'line', data: [100, 55, 42, 34, 30] },
-      { name: '4주차', type: 'line', data: [100, 52, 40, 33, 28] },
-    ],
-  };
-
   const genderAgeOption = {
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
     legend: {
@@ -154,17 +133,12 @@ const AdminDashboard: React.FC = () => {
 
       <hr />
 
-      <h4>코호트 유지율</h4>
-      <ECharts option={cohortOption} style={{ height: 300 }} />
-
-      <hr />
-
       <h4>성별 / 연령 분포</h4>
       <ECharts option={genderAgeOption} style={{ height: 300 }} />
 
       <hr />
 
-      <h4>회원 전환율 추이</h4>
+      <h4>비회원 → 회원 전환율 추이</h4>
       <ECharts option={reportTrendOption} style={{ height: 260 }} />
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import ECharts from 'echarts-for-react';
 
-const TestChart2: React.FC = () => {
+const VisiorChart: React.FC = () => {
     const chartRef = useRef<any>(null);
     const [isDrilldown, setIsDrilldown] = useState(false);
 
@@ -214,4 +214,4 @@ const sectionStyle: React.CSSProperties = {
     marginBottom: 24,
 };
 
-export default TestChart2;
+export default VisiorChart;

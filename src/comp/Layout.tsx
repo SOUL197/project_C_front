@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import './headers.css'
 import DropdownNav from './DropdownNav'
 import DropdownNavService from './DropdownNavService'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import DropdownChart from '../conts/chart_ui/DropdownChart'
 import { useAuth } from './AuthProvider'
 import axios from 'axios'
@@ -17,9 +17,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     const [profileimage, setProfileImage] = useState('');
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
     const navigate = useNavigate();
+    const location = useLocation();
 
     const loginNav = () => {
-        navigate("/login")
+        navigate("/login", { state: { from: location } })
     }
     const handleLogout = async () => {
         await logout();
