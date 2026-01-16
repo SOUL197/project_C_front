@@ -126,8 +126,9 @@ const QnaList: React.FC = () => {
                                     <td className={style.titleLink} style={{ width: '15%' }}>{e.qwriter}</td>
                                     <td className={style.titleLink} onClick={() => { ctoggle(e.anum) }} colSpan={3}
                                         style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                                    >
-                                        <span></span>
+                                    >{
+                                            e.acontent === '응답대기중' ? <span style={{ width: '75px' }}></span> : <span></span>
+                                        }
                                         <span>{e.qtitle}</span>
                                         {e.acontent === '응답대기중' ?
                                             <button className={style.abutton}>대기중</button> : <span></span>}
@@ -152,15 +153,18 @@ const QnaList: React.FC = () => {
                 <tfoot style={{ textAlign: 'right' }}>
                     <tr>
                         <th colSpan={6} className="text-center align-middle">
-                            <select onChange={(e) => { setSearchType(e.target.value) }}>
+                            <select onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' }}>
 
                                 <option value="1">작성자</option>
                                 <option value="2">제목</option>
                                 <option value="3">내용</option>
                             </select>
+                            &nbsp;
                             <input type='text'
                                 onChange={(e) => { setSearchValue(e.target.value) }}
+                                style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
                             />
+                            &nbsp;
                             <button className="btn btn-warning" onClick={searchFunction}>검색</button>
                         </th>
                         {/* 검색폼 추가 영역 */}
