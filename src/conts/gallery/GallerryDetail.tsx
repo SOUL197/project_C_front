@@ -6,6 +6,7 @@ import styles from '../matching/MatchingHome.module.css'
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import GalleryComm from './GalleryComm';
+import { useAuth } from '../../comp/AuthProvider';
 
 
 interface GalleryItem {
@@ -13,6 +14,7 @@ interface GalleryItem {
   title: string;
   writer: string;
   contents: string;
+  member_num: number;
   reip: string;
   hit: string;
   elike: string;
@@ -22,11 +24,12 @@ interface GalleryItem {
 
 const GalleryDetail: React.FC = () => {
   const navigate = useNavigate();
+  const { member } = useAuth();
   const { num } = useParams<{ num: string }>();
   const [item, setItem] = useState<GalleryItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [elike, setElike] = useState<number>(0);
- 
+
   useEffect(() => {
     const fetchData = async () => {
       if (!num) {
@@ -52,16 +55,12 @@ const GalleryDetail: React.FC = () => {
     };
     fetchData();
   }, [num]);
-
-  
-
   const galleryDel = async () => {
-    const url = `${process.env.REACT_APP_BACK_END_URL}/gallery/galdel?num=${num}`
-    await axios.get(url);
     if (window.confirm("정말 삭제할까요?")) {
+      const url = `${process.env.REACT_APP_BACK_END_URL}/gallery/galdel?num=${num}`
+      await axios.get(url);
       navigate("/gallery");
     }
-
   }
   const LikeClick = async () => {
     if (!item) return;
@@ -75,14 +74,14 @@ const GalleryDetail: React.FC = () => {
 
       if (response.status === 200) {
         // 2. 서버 저장 성공 시에만 화면의 숫자를 올림
-        setElike( prev => (prev || 0) + 1);
+        setElike(prev => (prev || 0) + 1);
         alert("추천되었습니다!");
       }
     } catch (error) {
       console.error("추천 처리 중 오류 발생:", error);
       alert("추천을 처리할 수 없습니다.");
     }
-   
+
   };
 
   return (
@@ -102,11 +101,11 @@ const GalleryDetail: React.FC = () => {
             <td>{item?.writer}</td>
             <td>{item?.gdate}</td>
             <td>{item?.hit}</td>
-            <td><img src={`${process.env.REACT_APP_BACK_END_URL}/imgfile/elike.png` }
-              style={{ width: '30px', height: 'auto' }} onClick={LikeClick} alt='elike'/>{elike}</td>
+            <td><img src={`${process.env.REACT_APP_BACK_END_URL}/imgfile/elike.png`}
+              style={{ width: '30px', height: 'auto' }} onClick={LikeClick} alt='elike' />{elike}</td>
           </tr>
         </tbody></table>
-        <div className={style.detail} >{item?.contents}</div>
+      <div className={style.detail} >{item?.contents}</div>
 
       <div className={style.detail} >
 
@@ -123,14 +122,15 @@ const GalleryDetail: React.FC = () => {
         )}
       </div>
 
-
-      
       <div style={{ textAlign: 'center', margin: 20 }}>
         <button className={styles.likebutton} style={{ margin: 10 }} onClick={LikeClick}>추천</button>
         <button className={style.button} style={{ margin: 10 }} onClick={() => { navigate('/gallery') }}>목록</button>
-        <button className={style.button} style={{ margin: 10 }} onClick={galleryDel}>삭제</button>
+        {
+          (member?.num === item?.member_num || (member?.num ?? 0.5) <= 0) &&
+          <button className={style.button} style={{ margin: 10 }} onClick={galleryDel}>삭제</button>
+        }
       </div>
-      <hr/>
+      <hr />
       <GalleryComm num={num} />
     </div>
   );
