@@ -10,11 +10,12 @@ interface GalleryVO {
   TITLE: String;
   WRITER: String;
   CONTENTS: string;
+  MEMBER_NUM?: number;
   REIP?: string;
   HIT?: string;
   ELIKE?: string;
   GDATE?: string;
-  IMAGENAME: string;    //json data는 대소문자 구분함.
+  IMAGENAME: string;   //json data는 대소문자 구분함.
 }
 
 interface MyPageProps {
@@ -74,7 +75,6 @@ const Gallery: React.FC<MyPageProps> = ({ isMyPage = false }) => {
     fetchGalleryList(1);
   };
 
-
   return (
     <div className={styles.container}>
       <div className={styles.fading}>
@@ -84,7 +84,7 @@ const Gallery: React.FC<MyPageProps> = ({ isMyPage = false }) => {
       </div>
       <div style={{ textAlign: 'right', marginBottom: '15px' }}>
         {
-          !isMyPage && <Link to="/gallery/write" className={styles.button}>글쓰기</Link>
+          member && !isMyPage && <Link to="/gallery/write" className={styles.button}>글쓰기</Link>
         }
       </div>
       <div className={styles.grid}>

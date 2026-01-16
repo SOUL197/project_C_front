@@ -38,6 +38,7 @@ interface AuthContextProps {
     updateMemberEmail: (email: string) => void;
     getAge: (birth: string) => number;
     profile: ProfileVO | undefined;
+    isLoading: boolean;
 }
 // 컨텍스트 생성
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
@@ -45,6 +46,7 @@ const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [member, setMember] = useState<Member | null>(null);
     const [profile, setProfile] = useState<ProfileVO>();
+    const [isLoading, setIsLoading] = useState(true);
 
     const getAge = (birth: string): number => {
         if (!birth) return 0;
@@ -88,6 +90,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } catch (error) {
             setMember(null);
             console.error(error);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -128,7 +132,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const isLoggedIn = member !== null;
 
     return (
-        <AuthContext.Provider value={{ member, isLoggedIn, profile, checkLogin, login, logout, updateMemberName, updateMemberEmail, getAge }}>
+        <AuthContext.Provider value={{ member, isLoggedIn, profile, checkLogin, login, logout, updateMemberName, updateMemberEmail, getAge, isLoading }}>
             {children}
         </AuthContext.Provider>
     );

@@ -148,14 +148,17 @@ const FAQ: React.FC = () => {
 
                     <tr>
                         <th colSpan={6} className="text-center align-middle">
-                            <select onChange={(e) => { setSearchType(e.target.value) }}>
+                            <select onChange={(e) => { setSearchType(e.target.value) }} style={{ padding: '5px', borderRadius: '5px' }}>
 
                                 <option value="2">제목</option>
                                 <option value="3">내용</option>
                             </select>
+                            &nbsp;
                             <input type='text'
                                 onChange={(e) => { setSearchValue(e.target.value) }}
+                                style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
                             />
+                            &nbsp;
                             <button className="btn btn-warning" onClick={searchFunction}>검색</button>
                         </th>
                         {/* 검색폼 추가 영역 */}
@@ -202,17 +205,19 @@ const FAQ: React.FC = () => {
                         </td>
 
                     </tr>
-                    <tr style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                        <td style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/qnaform" className={style.button}>1대1 문의하기
-                            </Link>
-                        </td>
-                        <td style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
-                            <Link to="/myqna" className={style.button}>내 문의내역
-                            </Link>
-                        </td>
+                    {
+                        member && <tr style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                            <td style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                                <Link to="/qnaform" className={style.button}>1대1 문의하기
+                                </Link>
+                            </td>
+                            <td style={{ border: 'none', borderTop: '1px solid rgba(82, 194, 231, 0.445)' }}>
+                                <Link to="/myqna" className={style.button}>내 문의내역
+                                </Link>
+                            </td>
 
-                    </tr>
+                        </tr>
+                    }   
                 </tfoot>
             </table>
             {/* 어드민 전용*/}

@@ -8,11 +8,11 @@ import { useAuth } from '../../comp/AuthProvider';
 interface UpBoardVO {
   num?: number;
   title: string;
-  writer: string;
+  writer?: string;
   content: string;
   imgn?: string;
   hit?: number;
-  elike?:number;
+  elike?: number;
   reip?: string;
   bdate?: string;
   mfile: File | null;
@@ -23,7 +23,6 @@ const UpboardForm: React.FC = () => {
 
   const [formData, setFormData] = useState<UpBoardVO>({
     title: '',
-    writer: '',
     num: 0,
     content: '',
     mfile: null as File | null
@@ -32,11 +31,11 @@ const UpboardForm: React.FC = () => {
 
   const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
 
-  const {member} = useAuth();
-  
-  useEffect(()=>{
-    setFormData({...formData, num: member?.num})
-  },[member]);
+  const { member } = useAuth();
+
+  useEffect(() => {
+    setFormData({ ...formData, num: member?.num })
+  }, [member]);
 
   const formChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 
@@ -59,17 +58,14 @@ const UpboardForm: React.FC = () => {
     }
   }
 
-
   const navigate = useNavigate();
 
   //change이후 입력값을 axios를 사용해서 전송
   const myFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();  //폼 전송을 막기
-
     const data = new FormData();
-    //
     data.append('title', formData.title);
-    data.append('writer', formData.writer);
+    data.append('writer', member?.nickname || 'default');
     data.append('content', formData.content);
     if (formData.num !== undefined) {
       data.append('member_num', formData.num.toString());
@@ -78,7 +74,7 @@ const UpboardForm: React.FC = () => {
     if (formData.mfile) {
       data.append('mfile', formData.mfile);
       try {
-        const url =`${process.env.REACT_APP_BACK_END_URL}/board/add`;
+        const url = `${process.env.REACT_APP_BACK_END_URL}/board/add`;
         await axios.post(url, data, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
@@ -105,12 +101,12 @@ const UpboardForm: React.FC = () => {
                   style={{ width: "95%" }} required />
               </td>
             </tr>
-            <tr>
+            {/* <tr>
               <th>작성자</th>
               <td>
                 <input type="text" name="writer" id="writer" className={style.input} onChange={formChange}
                   style={{ width: "95%" }} required />  </td>
-            </tr>
+            </tr> */}
             <tr>
               <th>내용</th>
               <td>

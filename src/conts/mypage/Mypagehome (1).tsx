@@ -61,7 +61,7 @@ const Mypagehome: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!member?.num) return;
+    if (!member) return;
 
     const getprofileimage = async () => {
       try {
@@ -99,7 +99,7 @@ const Mypagehome: React.FC = () => {
       }
     }
     getprofileimage();
-  }, [member?.num]);
+  }, [member]);
 
   useEffect(() => {
     setSelectedMenu(renderContent(menu));

@@ -10,6 +10,7 @@ interface UpBoardVO {
   title: string;
   writer: string;
   content: string;
+  member_num: number;
   imgn: string;
   hit: number;
   elike: number;
@@ -156,7 +157,7 @@ const UpboardList: React.FC<MyPageProps> = ({ isMyPage = false }) => {
         </tfoot>
       </table>
       {
-        !isMyPage && <div style={{ textAlign: "right" }}><Link to="/community/upform" className={style.button}>글쓰기</Link></div>
+        member && !isMyPage && <div style={{ textAlign: "right" }}><Link to="/community/upform" className={style.button}>글쓰기</Link></div>
       }
 
     </div>
