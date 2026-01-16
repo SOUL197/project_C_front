@@ -60,7 +60,7 @@ const MatchingHome: React.FC = () => {
 
     const RELIGION = ['무교', '기독교', '불교', '천주교', '원불교', '이슬람', '기타'];
 
-    const DRINKING = ['소주', '맥주', '양주', '고량주'];
+    const DRINKING = ['안마심', '소주', '맥주', '양주', '고량주'];
 
     const SMOKING = ['비흡연', '흡연'];
 
@@ -109,7 +109,7 @@ const MatchingHome: React.FC = () => {
                 ...matchingresp.data,
                 data: matchingList.filter((m: any) => !mylike.has(m.NUM) && m.NUM !== 0)
             }
-            
+
             console.log(response.data);
             setMatchingList(response.data);
             setTotalItems(response.totalItems);
