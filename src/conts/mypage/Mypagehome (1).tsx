@@ -3,7 +3,6 @@ import style from './mypage.module.css'
 import { useNavigate } from 'react-router-dom'
 import Mypagedetail from './Mypagedetail'
 import Gallery from '../gallery/Gallery'
-import Chart from '../chart_ui/Chart'
 import UpboardList from '../upboard/UpboardList'
 import LikeHome from '../Like/LikeHome'
 import Gongjilist from '../gongji/Gongjilist'
@@ -106,7 +105,11 @@ const Mypagehome: React.FC = () => {
     setSelectedMenu(renderContent(menu));
   }, [menu])
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setShow(false)
+    setMenu('')
+    setSelectedMenu(undefined)
+  };
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setShow(true)
     setMenu(e.currentTarget.id)

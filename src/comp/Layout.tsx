@@ -3,7 +3,6 @@ import './headers.css'
 import DropdownNav from './DropdownNav'
 import DropdownNavService from './DropdownNavService'
 import { useLocation, useNavigate } from 'react-router-dom'
-import DropdownChart from '../conts/chart_ui/DropdownChart'
 import { useAuth } from './AuthProvider'
 import axios from 'axios'
 

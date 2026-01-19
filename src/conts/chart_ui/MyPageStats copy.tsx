@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ECharts from 'echarts-for-react';
-import axios from 'axios';
-import { useAuth } from '../../comp/AuthProvider';
 
 const MyPageStats: React.FC = () => {
-  const {member} = useAuth();
-  const [likeCount, setLikeCount] = useState();
-  const [matchCount, setMatchCount] = useState();
-  const [dateCount, setDateCount] = useState();
 
-  const url = `${process.env.REACT_APP_BACK_END_URL}/chart`;
-  const privateStats = async () => {
-    const resp = await axios.get(`${url}/userStats`,{
-      params: {nickname: member?.nickname, num: member?.num}
-    });
-    setLikeCount(resp.data.likeCount);
-    setMatchCount(resp.data.setMatchCount)
-    console.log(resp.data);
-  }
-
-  useEffect(()=>{
-    privateStats();
-  },[])
+  const kpiStyle: React.CSSProperties = {
+    flex: 1,
+    padding: '16px',
+    border: '1px solid #ddd',
+    borderRadius: 8,
+    textAlign: 'center',
+  };
 
   const weeklyMatchOption = {
     tooltip: { trigger: 'axis' },
@@ -114,9 +102,13 @@ const MyPageStats: React.FC = () => {
     <div style={{ padding: 24 }}>
 
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
+        {/* <div style={kpiStyle}>
+          <h4>내 조회 수</h4>
+          <strong>1,284</strong>
+        </div> */}
         <div style={kpiStyle}>
           <h4>받은 좋아요</h4>
-          <strong>{likeCount}</strong>
+          <strong>120</strong>
         </div>
         <div style={kpiStyle}>
           <h4>매칭 수</h4>
@@ -145,14 +137,6 @@ const MyPageStats: React.FC = () => {
       <ECharts option={responseRateOption} style={{ height: 400 }} />
     </div>
   );
-};
-
-const kpiStyle: React.CSSProperties = {
-    flex: 1,
-    padding: '16px',
-    border: '1px solid #ddd',
-    borderRadius: 8,
-    textAlign: 'center',
 };
 
 export default MyPageStats;

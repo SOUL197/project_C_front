@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import styles from './MatchingHome.module.css'
-import Chart from '../chart_ui/Chart';
 import { Button, Modal } from 'react-bootstrap';
 import Map from '../map/Map';
 import axios from 'axios';
