@@ -62,7 +62,7 @@ const MatchingHome: React.FC = () => {
 
     const DRINKING = ['안마심', '소주', '맥주', '양주', '고량주'];
 
-    const SMOKING = ['비흡연', '흡연'];
+    const SMOKING = ['비흡연', '일주일에 3번 이하', '일주일에 5번 이하', '매일'];
 
     const YYYY: string[] = useMemo(() => {
         const currentYear = new Date().getFullYear();

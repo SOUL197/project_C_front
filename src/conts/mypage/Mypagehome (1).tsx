@@ -35,9 +35,9 @@ const Mypagehome: React.FC = () => {
   const renderContent = (menu: string) => {
     switch (menu) {
       case 'Chart':
-        return <>{ (member?.num || 0) <= 0 ? (<AdminDashboard />) : (<MyPageStats />) }</>
+        return <>{(member?.num || 0) <= 0 ? (<AdminDashboard />) : (<MyPageStats />)}</>
       case 'Change Profile':
-        return <Mypagedetail />
+        return <Mypagedetail setShow={setShow} />
       case 'Gallery':
         return <Gallery isMyPage={true} />
       case 'Community':

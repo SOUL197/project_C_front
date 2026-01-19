@@ -3,8 +3,12 @@ import style from './mypagedetail.module.css'
 import axios from 'axios';
 import { useAuth } from '../../comp/AuthProvider';
 
-const Mypagedetail: React.FC = () => {
-    const { member } = useAuth();
+interface ModalProps {
+    setShow: (show: boolean) => void;
+}
+
+const Mypagedetail: React.FC<ModalProps> = ({ setShow }) => {
+    const { member, profile } = useAuth();
     const [form, setForm] = useState({
         memberid: 0,
         gender: "",
@@ -216,6 +220,7 @@ const Mypagedetail: React.FC = () => {
         await submitData();
 
         console.log("저장된 프로필 정보:", form);
+        setShow(false);
     };
 
 

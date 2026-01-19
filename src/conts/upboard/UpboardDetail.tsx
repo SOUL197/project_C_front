@@ -93,7 +93,7 @@ const UpboardDetail: React.FC = () => {
             </tr>
           </tbody></table>
       </div>
-      <div className={style.boardTable} style={{ height: "auto", textAlign: "center" }}>
+      <div className={style.boardTable} style={{ height: "auto", textAlign: "center", border: 'none ' }}>
         {upboard?.imgn && (
           <img src={`${imageBasePath}${upboard.imgn}`} alt={upboard.title}
             className='img-fluid mt-2' />

@@ -85,20 +85,22 @@ const GalleryDetail: React.FC = () => {
   };
 
   return (
-    <div className={style.container}>
+    <div className={style.container} style={{ maxWidth: '1000px' }}>
 
       <table className={style.boardTable} width={"auto"}>
         <thead>
           <tr className={style.th}>
-            <th>쓴이</th>
-            <th>Date</th>
-            <th>조회수</th>
-            <th>추천</th>
+            <th>작성자</th>
+            <th>제목</th>
+            <th style={{ width: '175px' }}>Date</th>
+            <th style={{ width: '80px' }}>조회수</th>
+            <th style={{ width: '80px' }}>추천</th>
           </tr>
         </thead>
         <tbody>
           <tr >
             <td>{item?.writer}</td>
+            <td>{item?.title}</td>
             <td>{item?.gdate}</td>
             <td>{item?.hit}</td>
             <td><img src={`${process.env.REACT_APP_BACK_END_URL}/imgfile/elike.png`}
