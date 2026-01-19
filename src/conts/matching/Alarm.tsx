@@ -79,7 +79,7 @@ const Alarm: React.FC = () => {
       }
     }
     fetchData();
-  }, [category, member]);
+  }, [category, member, refresh]);
 
   const likeResponse = async (nickname: string, action: string) => {
     try {

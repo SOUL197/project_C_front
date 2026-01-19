@@ -15,6 +15,7 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const { member, logout } = useAuth();
     const [profileimage, setProfileImage] = useState('');
+    const [alarm, setAlarm] = useState(0);
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
     const navigate = useNavigate();
     const location = useLocation();
@@ -41,8 +42,25 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 console.error(error);
             }
         }
+
+        const getalarm = async () => {
+            try {
+                const likeurl = `${process.env.REACT_APP_BACK_END_URL}/api/like/checklike`;
+                const dateurl = `${process.env.REACT_APP_BACK_END_URL}/api/date/checkdate`;
+                const [likeresp, dateresp] = await Promise.all([axios.get(likeurl, { withCredentials: true }),
+                axios.get(dateurl, { withCredentials: true })
+                ])
+                const alarm = likeresp.data + dateresp.data;
+                setAlarm(alarm);
+                console.log(alarm);
+            } catch (error) {
+                console.error('getalarm Error : ' + error);
+            }
+        }
         getprofileimage();
+        getalarm();
     }, [member]);
+    
     return (
 
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -95,7 +113,31 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                                     !member && <button type="button" className="login-btn" onClick={loginNav}>Login</button>
                                 }
                                 {
-                                    member && <><a href="/alarm"><img src="/home/alarm_1.png" alt="1" style={{ width: '45px', paddingLeft: '8px' }} /></a>
+                                    member && <>
+                                        <a href="/alarm" style={{ position: 'relative', display: 'inline-block' }}>
+                                            <img src="/home/alarm_1.png" alt="1" style={{ width: '45px', paddingLeft: '8px' }} />
+                                            {alarm > 0 && (
+                                                <span style={{
+                                                    position: 'absolute',
+                                                    top: '-2px',
+                                                    right: '-5px',
+                                                    backgroundColor: 'red',
+                                                    color: 'white',
+                                                    fontSize: '11px',
+                                                    fontWeight: 'bold',
+                                                    minWidth: '18px',
+                                                    height: '18px',
+                                                    borderRadius: '50%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    border: '2px solid white',
+                                                    zIndex: 10
+                                                }}>
+                                                    {alarm > 99 ? '99+' : alarm}
+                                                </span>
+                                            )}
+                                        </a>
                                         <a href="/mypage"><img src={`${imageBasePath}${profileimage}`} alt="1"
                                             style={{
                                                 marginLeft: '13px', border: '3px solid #ddd', borderRadius: '50%', width: '45px', height: '45px', objectFit: 'cover'
