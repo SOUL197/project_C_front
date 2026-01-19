@@ -178,11 +178,11 @@ const AdminAnswer: React.FC = () => {
                                                 <div style={{ display: 'flex', gap: '10px' }}>
                                                     <input
                                                         type="text"
-                                                        style={{ flex: 1, height: 30, padding: '0 10px' }}
+                                                        style={{ flex: 1, height: '40px', borderRadius: '8px', border: '1px solid #000' }}
                                                         placeholder="답변 내용을 입력하세요..."
                                                         value={answerContent}
                                                         onChange={(event) => setAnswerContent(event.target.value)} />
-                                                    <button type="submit" onClick={() => handleAnswerSubmit(e.anum)}>확인</button></div>
+                                                    <button type="submit" className="btn btn-primary btn-sm w-auto py-1" onClick={() => handleAnswerSubmit(e.anum)}>확인</button></div>
                                             )}
                                         </td>
                                     </tr>

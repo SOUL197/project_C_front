@@ -1,29 +1,46 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useAuth } from "../../comp/AuthProvider";
 
 interface LoginLog {
-  lognum: number;
-  idn: number;
-  reip: string;
-  uagent: string;
-  status: string;
-  sstime: string;
+  ROW_NUM: number;
+  IDN: number;
+  REIP: string;
+  UAGENT: string;
+  STATUS: string;
+  SSTIME: string;
 }
 
 const LoginLog: React.FC = () => {
+  const { member } = useAuth();
   const [logs, setLogs] = useState<LoginLog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalItems, setTotalItems] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [startPage, setStartPage] = useState(1);
+  const [endPage, setEndPage] = useState(1);
 
   useEffect(() => {
-    fetchLoginLogs();
-  }, []);
+    fetchLoginLogs(currentPage);
+  }, [currentPage]);
 
-  const fetchLoginLogs = async () => {
+  const pageChange = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  const fetchLoginLogs = async (page: number) => {
     try {
       setLoading(true);
-      const response = await axios.get<LoginLog[]>(`${process.env.REACT_APP_BACK_END_URL}/api/login/loginlog`, { withCredentials: true });
-      setLogs(response.data);
+      const response = await axios.get(`${process.env.REACT_APP_BACK_END_URL}/api/login/loginlog`, { params: { cPage: page }, withCredentials: true });
+      setLogs(response.data.data);
+      setTotalItems(response.data.totalItems);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage);
+      setStartPage(response.data.startPage);
+      setEndPage(response.data.endPage);
     } catch (err) {
       console.error(err);
       setError("로그인 로그를 불러오는데 실패했습니다.");
@@ -58,25 +75,65 @@ const LoginLog: React.FC = () => {
               </td>
             </tr>
           ) : (
-            logs.map((log) => (
-              <tr key={log.lognum}>
-                <td>{log.lognum}</td>
-                <td>{log.idn}</td>
-                <td>{log.reip}</td>
-                <td>{log.uagent}</td>
+            logs.map((log, i) => (
+              <tr key={log.ROW_NUM}>
+                <td>{i + 1}</td>
+                <td>{member?.id}</td>
+                <td>{log.REIP}</td>
+                <td>{log.UAGENT}</td>
                 <td
                   style={{
-                    color: log.status === "로그인" ? "green" : "gray",
+                    color: log.STATUS === "login" ? "green" : "gray",
                     fontWeight: "bold",
                   }}
                 >
-                  {log.status}
+                  {log.STATUS}
                 </td>
-                <td>{new Date(log.sstime).toLocaleString()}</td>
+                <td>{new Date(log.SSTIME).toLocaleString()}</td>
               </tr>
             ))
           )}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={6}>
+              <div>
+                <nav>
+                  <ul className='pagination justify-content-center'>
+                    {currentPage > 1 && (
+                      <li className='page-item'>
+                        <button className='page-link' onClick={() => {
+                          pageChange(currentPage - 1)
+                        }}>이전</button>
+                      </li>
+
+
+                    )}
+                    {
+                      Array.from({ length: endPage - startPage + 1 }, (xx, i) => i + startPage)
+                        .map((page) => (
+                          <li key={page} className={`page-item ${page ===
+                            currentPage ? 'active' : ''}`}>
+                            <button className='page-link' onClick={() => {
+                              pageChange(page)
+                            }}>{page}</button>
+                          </li>
+
+                        ))
+                    }
+                    {currentPage < totalPages && (
+                      <li className='page-item'>
+                        <button className='page-link' onClick={() => {
+                          pageChange(currentPage + 1)
+                        }}>다음 </button>
+                      </li>
+                    )}
+                  </ul>
+                </nav>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
       </table>
     </div>
   );

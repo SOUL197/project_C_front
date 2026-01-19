@@ -138,7 +138,7 @@ const Mypagedetail: React.FC = () => {
                     setForm(prev => ({
                         ...prev,
                         ...safeParsed,
-                        hobby: parsed.hobby ? parsed.hobby.split(",") : [],
+                        hobby: parsed.hobby === 'blank' ? [] : parsed.hobby ? parsed.hobby.split(",") : [],
                     }));
                 }
             } catch (err) {
@@ -293,14 +293,16 @@ const Mypagedetail: React.FC = () => {
                         </tr>
                         <tr>
                             <th>키</th>
-                            <td><input type="number" name="height" onChange={handleChange} value={form.height ?? ""} style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }} />
-                                cm
+                            <td><input type="number" name="height" onChange={handleChange} value={form.height ?? ""}
+                                style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000', marginRight: '5px' }} />
+                                <span className='fs-5'>cm</span>
                             </td>
                         </tr>
                         <tr>
                             <th>체중</th>
-                            <td><input type="number" name="weight" onChange={handleChange} value={form.weight ?? ""} style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }} />
-                                kg
+                            <td><input type="number" name="weight" onChange={handleChange} value={form.weight ?? ""}
+                                style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000', marginRight: '5px' }} />
+                                <span className='fs-5'>kg</span>
                             </td>
                         </tr>
                         <tr>
@@ -393,7 +395,7 @@ const Mypagedetail: React.FC = () => {
                     <tfoot>
                         <tr>
                             <th colSpan={2}>
-                                <button type="submit" className={style.button}>정보 수정</button>
+                                <button type="submit" className={style.button + " btn btn-primary btn-sm w-auto py-2 mt-2"}>정보 수정</button>
                             </th>
                         </tr>
                     </tfoot>

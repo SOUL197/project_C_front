@@ -12,7 +12,7 @@ interface MatchingVO {
 }
 
 const MatchingHome: React.FC = () => {
-    const { member } = useAuth();
+    const { member, getAge } = useAuth();
     const [matchingList, setMatchingList] = useState<MatchingVO[]>([]);
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
@@ -166,19 +166,6 @@ const MatchingHome: React.FC = () => {
         sessionStorage.setItem('matchingSearchData', JSON.stringify(searchData));
         fetchMatchingList(1);
     }
-
-    const getAge = (birth: string): number => {
-        const birthDate = new Date(birth);
-        const today = new Date();
-
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    };
 
     return (
         <div className={styles.container}>
@@ -360,8 +347,16 @@ const MatchingHome: React.FC = () => {
                                 }
                                 handleTypeToggle(9)
                             }} /> 흡연 </label>
+                        &nbsp;&nbsp;
+                        <label><input type="checkbox" checked={matchingTypeList.includes(10)}
+                            onChange={() => {
+                                if (matchingTypeList.includes(10)) {
+                                    setMatchingValue(({ gender, ...rest }: any) => rest)
+                                }
+                                handleTypeToggle(10)
+                            }} /> 성별 </label>
                     </div>
-                    {/*국적*/}
+                    {/* 국적 */}
                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                         {matchingTypeList.includes(1) && (
                             <select
@@ -375,7 +370,7 @@ const MatchingHome: React.FC = () => {
                                 <option value="일본">일본</option>
                             </select>
                         )}
-                        {/*거주지*/}
+                        {/* 거주지 */}
                         {matchingTypeList.includes(2) && (
                             <>
                                 <select value={city} onChange={(e) => {
@@ -408,7 +403,7 @@ const MatchingHome: React.FC = () => {
                             </select>
                         )}
 
-                        {/* 몸무게*/}
+                        {/* 몸무게 */}
                         {matchingTypeList.includes(4) && (
                             <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                                 onChange={(e) => setMatchingValue({ ...matchingValue, weight: e.target.value ? WEIGHT[Number(e.target.value)] : null })}>
@@ -417,7 +412,7 @@ const MatchingHome: React.FC = () => {
                             </select>
                         )}
 
-                        {/* 취미*/}
+                        {/* 취미 */}
                         {matchingTypeList.includes(5) && (
                             <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                                 onChange={(e) => setMatchingValue({ ...matchingValue, hobby: e.target.value || null })}>
@@ -426,7 +421,7 @@ const MatchingHome: React.FC = () => {
                             </select>
                         )}
 
-                        {/* MBTI*/}
+                        {/* MBTI */}
                         {matchingTypeList.includes(6) && (
                             <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                                 onChange={(e) => setMatchingValue({ ...matchingValue, mbti: e.target.value || null })}>
@@ -435,7 +430,7 @@ const MatchingHome: React.FC = () => {
                             </select>
                         )}
 
-                        {/* 종교*/}
+                        {/* 종교 */}
                         {matchingTypeList.includes(7) && (
                             <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                                 onChange={(e) => setMatchingValue({ ...matchingValue, religion: e.target.value || null })}>
@@ -444,7 +439,7 @@ const MatchingHome: React.FC = () => {
                             </select>
                         )}
 
-                        {/* 음주*/}
+                        {/* 음주 */}
                         {matchingTypeList.includes(8) && (
                             <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                                 onChange={(e) => setMatchingValue({ ...matchingValue, drinking: e.target.value || null })}>
@@ -453,12 +448,23 @@ const MatchingHome: React.FC = () => {
                             </select>
                         )}
 
-                        {/* 흡연*/}
+                        {/* 흡연 */}
                         {matchingTypeList.includes(9) && (
                             <select style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
                                 onChange={(e) => setMatchingValue({ ...matchingValue, smoking: e.target.value || null })}>
                                 <option value="">흡연 여부</option>
                                 {SMOKING.map(s => <option key={s} value={s}>{s}</option>)}
+                            </select>
+                        )}
+                        {/* 성별 */}
+                        {matchingTypeList.includes(10) && (
+                            <select
+                                style={{ padding: '7px', border: '1px solid #ccc', borderRadius: '4px', flex: 1 }}
+                                onChange={(e) => setMatchingValue({ ...matchingValue, gender: e.target.value || null })}
+                            >
+                                <option value="">성별 선택</option>
+                                <option value="남자">남자</option>
+                                <option value="여자">여자</option>
                             </select>
                         )}
                     </div>
