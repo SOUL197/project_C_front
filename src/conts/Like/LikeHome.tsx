@@ -62,9 +62,9 @@ const LikeHome: React.FC = () => {
 
   const RELIGION = ['무교', '기독교', '불교', '천주교', '원불교', '이슬람', '기타'];
 
-  const DRINKING = ['소주', '맥주', '양주', '고량주'];
+  const DRINKING = ['안마심', '소주', '맥주', '양주', '고량주'];
 
-  const SMOKING = ['비흡연', '흡연'];
+  const SMOKING = ['비흡연', '일주일에 3번 이하', '일주일에 5번 이하', '매일'];
   // Year data
   const YYYY: string[] = useMemo(() => {
     const currentYear = new Date().getFullYear();
@@ -79,34 +79,34 @@ const LikeHome: React.FC = () => {
   };
 
   // 리스트 갱신하는 함수
-    const fetchLikeList = async (page: number) => {
-      const matchingdata = {
-        cPage: page,
-        matchingTypeList: matchingTypeList,
-        matchingValue: matchingValue,
-        searchType: searchType,
-        searchValue: searchValue,
-        period: period,
-      }
-      try {
-        const urls = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
-        const response = await axios.post(urls, matchingdata, {
-          headers: {
-            'Content-Type': 'application/json'
-          }, withCredentials: true
-        })
-        console.log(response.data);
-        console.log(response.data.currentPage);
-        setLikeList(response.data.data);
-        setTotalItems(response.data.totalItems);
-        setTotalPages(response.data.totalPages);
-        setCurrentPage(response.data.currentPage);
-        setStartPage(response.data.startPage);
-        setEndPage(response.data.endPage);
-      } catch (error) {
-        console.log("데이터 가져오기 실패: " + error);
-      }
+  const fetchLikeList = async (page: number) => {
+    const matchingdata = {
+      cPage: page,
+      matchingTypeList: matchingTypeList,
+      matchingValue: matchingValue,
+      searchType: searchType,
+      searchValue: searchValue,
+      period: period,
     }
+    try {
+      const urls = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
+      const response = await axios.post(urls, matchingdata, {
+        headers: {
+          'Content-Type': 'application/json'
+        }, withCredentials: true
+      })
+      console.log(response.data);
+      console.log(response.data.currentPage);
+      setLikeList(response.data.data);
+      setTotalItems(response.data.totalItems);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage);
+      setStartPage(response.data.startPage);
+      setEndPage(response.data.endPage);
+    } catch (error) {
+      console.log("데이터 가져오기 실패: " + error);
+    }
+  }
 
   // 검색시 1페이지로
   const searchFunction = () => {

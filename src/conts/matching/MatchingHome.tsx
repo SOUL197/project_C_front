@@ -29,6 +29,7 @@ const MatchingHome: React.FC = () => {
 
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
 
+    //매칭을 위한 다양한 속성의 data들 모음
     const addressData: { [key: string]: string[] } = {
         '서울': ['강남구', '강동구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구',
             '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'],
@@ -63,18 +64,20 @@ const MatchingHome: React.FC = () => {
     const DRINKING = ['안마심', '소주', '맥주', '양주', '고량주'];
 
     const SMOKING = ['비흡연', '일주일에 3번 이하', '일주일에 5번 이하', '매일'];
-
+    // 출생 년도 검색을 위한 데이터 형성
     const YYYY: string[] = useMemo(() => {
         const currentYear = new Date().getFullYear();
         return Array.from({ length: 70 }, (_, i) => String(currentYear - (i)));
     }, []);
 
+    // 체크박스 선택 및 해제시 각 검색 조건들의 MatchingType들을 실시간 반영하기 위한 함수
     const handleTypeToggle = (type: number) => {
         setMatchingTypeList(prev =>
             (prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type])
         );
     };
 
+    // 매칭 리스트 갱신 함수 및 detail 이동 후 home으로 돌아올 시 검색조건 유지를 위한 sessionstorage 활용으로 UX 강화
     const fetchMatchingList = async (page: number) => {
         const saved = sessionStorage.getItem('matchingSearchData');
         const p = saved ? JSON.parse(saved) : null;
@@ -87,6 +90,7 @@ const MatchingHome: React.FC = () => {
             period: p ? p.period : period,
         }
         try {
+            //매칭 데이터에서 Like된 사람들을 빼기 위함
             const matchingurls = `${process.env.REACT_APP_BACK_END_URL}/matching/matchinglist`
             const likeurls = `${process.env.REACT_APP_BACK_END_URL}/api/like/mylike`;
             const [matchingresp, likeresp] = await Promise.all([

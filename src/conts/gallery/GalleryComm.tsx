@@ -28,16 +28,15 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
   const [startPage, setStartPage] = useState(1);
   const [endPage, setEndPage] = useState(1);
   const [imoticon, setImoticon] = useState(false);
-  const [writer, setWriter] = useState("");
   const [content, setContent] = useState("");
 
-  const [member_num,setMember_num] = useState(0);
-  const {member} = useAuth();
-  useEffect(()=>{
-    if(member !== null) {
+  const [member_num, setMember_num] = useState(0);
+  const { member } = useAuth();
+  useEffect(() => {
+    if (member !== null) {
       setMember_num(member.num);
     }
-  },[member])
+  }, [member])
 
   const imotV = [
     { num: 1, img: `${process.env.REACT_APP_BACK_END_URL}/imgfile/1.png` },
@@ -80,13 +79,13 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
   }
   const commentSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!content || !writer) {
+    if (!content || !member?.nickname) {
       alert("작성자와 내용을 입력하세요")
       return;
     }
     const commentData = {
       gallery_num: num,
-      gwriter: writer,
+      gwriter: member?.nickname,
       member_num: member_num.toString(),
       gcontent: content
     }
@@ -94,7 +93,6 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
       await axios.post(`${process.env.REACT_APP_BACK_END_URL}/gallery/addcomm`, commentData,
         { headers: { 'Content-Type': 'application/json' } })
       //입력 후 초기화 및 댓글 리스트 다시 실행    
-      setWriter("");
       setContent("");
       getComments();
     } catch (error) {
@@ -138,7 +136,7 @@ const GalleryComm: React.FC<GalleryCommProps> = ({ num }) => {
       <h4>Comments</h4>
       <form className='mb-3' onSubmit={commentSubmit}>
         <div className='mb-2'>
-          <input type='text' placeholder='작성자' className='form-control' onChange={(e) => setWriter(e.target.value)} value={writer} />
+          <input type='text' placeholder='작성자' className='form-control' value={member?.nickname} disabled />
         </div>
         <div className='mb-2 position-relative'>
           {/* 1. 이모티콘 팝업창 (입력창 위로 뜨게 설정) */}

@@ -65,7 +65,7 @@ const QnaList: React.FC = () => {
             console.log(qnaa.data.data);
             console.log(mergedData);
             // 3. admin(num<=0) 은전부 아니면 자신 것만 
-            const finalData = (member.num || 0.5) <= 0
+            const finalData = (member.num ?? 0.5) <= 0
                 ? mergedData
                 : mergedData.filter((e: Qna_VO) => e.qwriter === member.nickname);
 
