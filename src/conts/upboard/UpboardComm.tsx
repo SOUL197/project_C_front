@@ -98,14 +98,17 @@ const UpboardComm: React.FC<UpboardCommProps> = ({ num }) => {
   const pageChange = (page: number) => {
     setCurrentPage(page);
   }
-  const navigate = useNavigate();
-  const delcomment = async (num: number) => {
+
+  const delcomment = async (comm_num: number) => {
     if (!window.confirm("정말 삭제할까요?")) {
       return;
     }
     try {
-      const urls = `${process.env.REACT_APP_BACK_END_URL}/board/delcomm?num=${num}`
-      await axios.get(urls);
+      const url = `${process.env.REACT_APP_BACK_END_URL}/board/delcomm`;
+      await axios.post(url, {
+        comm_num: comm_num,
+        board_num: num
+      });
       fetchboardcomm(currentPage);
     } catch (error) {
       console.error(error);
@@ -131,12 +134,12 @@ const UpboardComm: React.FC<UpboardCommProps> = ({ num }) => {
         {
           comments && comments.map((vo) => (
             <div key={vo.comm_num} className='list-group-item'>
-              <li className='list-group-item' style={{ textAlign: "left",padding:'15px'}}>{vo.bcontent}
-                <div style={{ fontSize: '0.85em', color: '#666'}}>
+              <li className='list-group-item' style={{ textAlign: "left", padding: '15px' }}>{vo.bcontent}
+                <div style={{ fontSize: '0.85em', color: '#666' }}>
                   {vo.bwriter} | {vo.bcdate}
                   {
-                    (member?.num === vo.member_num || (member?.num || 0.5) <= 0) &&
-                    <button className='btn btn-sm btn-warning ms-2' style={{marginBottom:'10px'}} onClick={() => { delcomment(vo.comm_num) }}>삭제</button>
+                    (member?.num === vo.member_num || (member?.num ?? 0.5) <= 0) &&
+                    <button className='btn btn-sm btn-warning ms-2' style={{ marginBottom: '10px' }} onClick={() => { delcomment(vo.comm_num) }}>삭제</button>
                   }
                 </div></li>
             </div>

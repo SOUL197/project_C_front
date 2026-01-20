@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
         return age;
     };
+    
     //프로필 가져오는 함수
     const likedetail = async (num: number) => {
         try {

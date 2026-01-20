@@ -53,7 +53,6 @@ const AppRoutes: React.FC = () => {
         { path: '/vchart', element: <VisiorChart /> },
         { path: '/fortune', element: <Fortune /> },
         { path: '/mypage', element: <RequireAuth><Mypagehome /></RequireAuth> },
-        { path: '/mypage/detail', element: <RequireAuth><Mypagedetail /></RequireAuth> },
         { path: '/signup', element: <Signup /> },
         { path: '/findId', element: <FindId /> },
         { path: '/findPwd', element: <FindPwd /> },

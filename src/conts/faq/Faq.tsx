@@ -120,7 +120,7 @@ const FAQ: React.FC = () => {
                                             <td style={{ fontWeight: 'bold', height: '75px', color: 'lightblue', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <span></span>
                                                 <span style={{ marginLeft: '60px' }}>{item.content}</span>
-                                                {(member?.num || 0.5) <= 0 ? (
+                                                {(member?.num ?? 0.5) <= 0 ? (
                                                     <button className={style.button}
                                                         style={{
                                                             margin: '0',
@@ -221,7 +221,7 @@ const FAQ: React.FC = () => {
                 </tfoot>
             </table>
             {/* 어드민 전용*/}
-            {(member?.num || 0.5) <= 0 && (
+            {(member?.num ?? 0.5) <= 0 && (
                 <div style={{ textAlign: 'right' }}>
                     <Link to="/adminanswer" className={style.button}>1대1 문의 답변</Link>
                 </div>

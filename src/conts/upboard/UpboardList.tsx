@@ -16,6 +16,7 @@ interface UpBoardVO {
   elike: number;
   reip: string;
   bdate: string;
+  comm_count: string;
 }
 
 interface MyPageProps {
@@ -34,23 +35,21 @@ const UpboardList: React.FC<MyPageProps> = ({ isMyPage = false }) => {
   // 검색을 위한 useState를 추가
   const [searchType, setSearchType] = useState('1');
   const [searchValue, setSearchValue] = useState('');
-  const pagePerBlock = 5;
-  const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/gallery/`;
   const fetchUpboardList = async (page: number) => {
     try {
       //@RequestParam Map<String, String> paramMap
       const urls = `${process.env.REACT_APP_BACK_END_URL}/board/list`;
-      const response = await axios.get<any>(urls,
+      const response = await axios.get(urls,
         {
           params: {
             cPage: page,
             searchType: searchType,
             searchValue: searchValue,
-            mypage: isMyPage ? true : false,
-            num: isMyPage ? member?.num : -1000
+            mypage: isMyPage,
+            ...(isMyPage && { num: member?.num })
           }
-        })
 
+        })
       console.log(response.data.data);
       setUpboardList(response.data.data);
       setTotalItems(response.data.totalItems);
@@ -84,7 +83,7 @@ const UpboardList: React.FC<MyPageProps> = ({ isMyPage = false }) => {
           isMyPage ? <h3 className={style.title} >내 작성글</h3> : <h3 className={style.title} >자유게시판</h3>
         }
       </div>
-      <table className={style.boardTable}>
+      <table className={style.boardTable} style={{ textAlign: 'center' }}>
         <thead>
           <tr>
             <th>번호</th>
@@ -99,7 +98,7 @@ const UpboardList: React.FC<MyPageProps> = ({ isMyPage = false }) => {
             upboardlist.map((item) => (
               <tr key={item.num}>
                 <td style={{ width: "70px" }}>{item.num}</td>
-                <td><Link to={`/community/updetail/${item.num}`} className={style.titleLink} style={{ color: "black" }}>{item.title}</Link></td>
+                <td><Link to={`/community/updetail/${item.num}`} className={style.titleLink} style={{ color: "black" }}>{item.title} [{item.comm_count}]</Link></td>
                 <td style={{ width: "120px" }}>{item.writer}</td>
                 <td style={{ width: "80px" }}>{item.hit}</td>
                 <td style={{ width: "80px" }}>{item.elike}

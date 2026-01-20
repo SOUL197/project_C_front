@@ -5,21 +5,33 @@ import axios from 'axios';
 import { useAuth } from '../../comp/AuthProvider';
 
 interface MatchingVO {
-    num: number;
-    nickname: string;
-    birth: string;
-    profileimage: string;
+    NUM: number;
+    NICKNAME: string;
+    GENDER: string;
+    BIRTH: string;
+    PHONE: string;
+    ADDRESS: string;
+    COUNTRY: string;
+    MBTI: string;
+    HEIGHT: number;
+    WEIGHT: number;
+    SMOKING: string;
+    DRINKING: string;
+    RELIGION: string;
+    HOBBY: string;
+    PROFILEIMAGE: string[];
 }
 
 const MatchingDetail: React.FC = () => {
     const [matchingDetail, setMatchingDetail] = useState<MatchingVO>();
-    const { member, profile, getAge } = useAuth();
+    const { member, getAge } = useAuth();
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(true);
     const [refresh, setRefresh] = useState(0);
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
     const navigate = useNavigate();
 
+    
     useEffect(() => {
         const fetchData = async () => {
             if (!id) {
@@ -41,10 +53,10 @@ const MatchingDetail: React.FC = () => {
             }
         }
         fetchData();
-    }, [id]);
+    }, [id, refresh]);
 
     const sendRequest = async () => {
-        const receiverId = matchingDetail?.nickname;
+        const receiverId = matchingDetail?.NICKNAME;
         await axios.post(`${process.env.REACT_APP_BACK_END_URL}/api/like/request`, { receiverId }, { withCredentials: true });
         alert("Like 신청 완료");
         setRefresh(prev => prev + 1);
@@ -53,16 +65,16 @@ const MatchingDetail: React.FC = () => {
     return (
         <div style={{ marginBottom: 80 }}>
             <div className={styles.card} style={{ width: '500px', height: '600px', margin: '0 auto', textAlign: 'center' }}>
-                <img src={imageBasePath + matchingDetail?.profileimage} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={imageBasePath + matchingDetail?.PROFILEIMAGE} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <br />
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#333' }}>
-                    {matchingDetail?.nickname} {getAge(profile?.BIRTH || '')}세
+                    {matchingDetail?.NICKNAME} {getAge(matchingDetail?.BIRTH || '')}세
                 </span>
             </div>
-            <div style={{textAlign:'center', fontSize:'20px'}}>
-                <p>#{profile?.ADDRESS} 거주 #MBTI는 {profile?.MBTI}</p>
+            <div style={{ textAlign: 'center', fontSize: '20px' }}>
+                <p>#{matchingDetail?.ADDRESS} 거주 #MBTI는 {matchingDetail?.MBTI}</p>
             </div>
             <div style={{ textAlign: 'center' }}>
                 <button className={styles.likebutton} onClick={sendRequest} style={{ fontSize: 'x-large', padding: '10px 20px' }}>Like</button>

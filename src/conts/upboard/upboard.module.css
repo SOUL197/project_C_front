@@ -12,7 +12,10 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  border-radius: 8px;
+  border-radius: 15px;
+  border: 1px solid #fff;
+  border-collapse: separate;
+  border-spacing: 0;
   overflow: hidden;
 }
 
@@ -44,7 +47,8 @@
   transition: color 0.3s, text-decoration 0.3s;
 }
 
-.boardTable th, .boardTable td {
+.boardTable th,
+.boardTable td {
   border: 1px solid rgba(82, 194, 231, 0.445);
   padding: 12px;
   font-size: 16px;
@@ -85,12 +89,10 @@
   letter-spacing: 0.12em;
   text-align: center;
 
-  background: linear-gradient(
-    90deg,
-    #f4b6c2,
-    #e9788f,
-    #d6455d
-  );
+  background: linear-gradient(90deg,
+      #f4b6c2,
+      #e9788f,
+      #d6455d);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -107,21 +109,21 @@
   transform: translateX(-50%);
   width: 120px;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(233, 120, 143, 0.8),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(233, 120, 143, 0.8),
+      transparent);
 }
 
 @keyframes softGlow {
   0% {
     text-shadow: 0 0 6px rgba(233, 120, 143, 0.25);
   }
+
   50% {
     text-shadow: 0 0 14px rgba(233, 120, 143, 0.45);
   }
+
   100% {
     text-shadow: 0 0 6px rgba(233, 120, 143, 0.25);
   }

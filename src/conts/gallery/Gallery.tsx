@@ -92,7 +92,8 @@ const Gallery: React.FC<MyPageProps> = ({ isMyPage = false }) => {
           <Link to={`/gallery/gdetail/${item.NUM}`} key={item.NUM} style={{ textDecoration: 'none' }}>
             <div className={styles.card}>
               <img src={`${imageBasePath}${item.IMAGENAME}`} alt={item.IMAGENAME} />
-              <div className={styles.cardTitle}>{item.TITLE}&nbsp;&nbsp;[{item.HIT}]</div>
+              <div style={{ fontSize: '20px', margin: '10px 0', fontWeight: 'bold', color: '#2C3E50' }}>{item.TITLE}</div>
+              <div>조회수 : {item.HIT}&nbsp;&nbsp; 추천: {item.ELIKE}</div>
             </div>
           </Link>
         ))}
