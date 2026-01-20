@@ -69,7 +69,7 @@ const MatchingDetail: React.FC = () => {
             </div>
             <br />
             <div style={{ textAlign: 'center' }}>
-                <button className={styles.button} onClick={() => { navigate(-1) }}>돌아가기</button>
+                <button className={styles.backbutton} onClick={() => { navigate(-1) }}>돌아가기</button>
             </div>
             {
                 loading && <p>로딩중입니다...</p>

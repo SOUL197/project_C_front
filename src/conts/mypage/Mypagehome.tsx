@@ -17,7 +17,6 @@ import { useAuth } from '../../comp/AuthProvider'
 import axios from 'axios'
 import QnaList from '../faq/QnaList'
 import AdminAnswer from '../faq/AdminAnswer'
-import AdminDashboard from '../chart_ui/AdminDashboard'
 
 const Mypagehome: React.FC = () => {
   const { member } = useAuth();
@@ -35,9 +34,9 @@ const Mypagehome: React.FC = () => {
   const renderContent = (menu: string) => {
     switch (menu) {
       case 'Chart':
-        return <>{ (member?.num || 0) <= 0 ? (<AdminDashboard />) : (<MyPageStats />) }</>
+        return <MyPageStats />
       case 'Change Profile':
-        return <Mypagedetail />
+        return <Mypagedetail onSuccess={handleClose} />;
       case 'Gallery':
         return <Gallery isMyPage={true} />
       case 'Community':
@@ -62,7 +61,7 @@ const Mypagehome: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!member) return;
+    if (!member?.num) return;
 
     const getprofileimage = async () => {
       try {
@@ -100,7 +99,7 @@ const Mypagehome: React.FC = () => {
       }
     }
     getprofileimage();
-  }, [member]);
+  }, [member?.num]);
 
   useEffect(() => {
     setSelectedMenu(renderContent(menu));
@@ -182,7 +181,7 @@ const Mypagehome: React.FC = () => {
             </button>
           }
           <button id='LoginLog' className={style.menuBtn} onClick={handleClick}>로그인 기록</button>
-          <button id='MyDate' className={style.danger} onClick={handleClick}>Date</button>
+          <button id='MyDate' className={style.date} onClick={handleClick}>Date</button>
         </div>
 
       </section>

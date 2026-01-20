@@ -2,6 +2,7 @@
 PS C:\Users\ict\web\react> yarn create react-app myreact1112 --template=typescript
 cd my+tab
 yarn start
+yarn install
 
 //라우팅을 위한 모듈 
 yarn add react-router-dom

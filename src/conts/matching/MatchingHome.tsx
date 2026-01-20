@@ -233,7 +233,7 @@ const MatchingHome: React.FC = () => {
                     }}
                     value={searchValue}
                     placeholder='검색'
-                    style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000' }}
+                    style={{ padding: '5px', borderRadius: '5px', border: '1px solid #000000' }}
                 />}
                 {searchType === '2' && (
                     <div style={{ display: 'inline-block' }}>
@@ -366,8 +366,9 @@ const MatchingHome: React.FC = () => {
                             >
                                 <option value="">국적</option>
                                 <option value="한국">한국</option>
-                                <option value="미국">미국</option>
-                                <option value="일본">일본</option>
+                                    <option value="중국">중국</option>
+                                    <option value="일본">일본</option>
+                                    <option value="미국">미국</option>
                             </select>
                         )}
                         {/* 거주지 */}
