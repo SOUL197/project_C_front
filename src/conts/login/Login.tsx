@@ -116,7 +116,6 @@ const Login: React.FC = () => {
             setErrors({
                 pwd: '아이디나 비밀번호가 틀렸습니다.',
             });
-            
         } else {
             alert('서버 오류');
         }

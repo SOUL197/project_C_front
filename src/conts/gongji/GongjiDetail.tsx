@@ -16,7 +16,7 @@ interface GongjiVO {
 
 const GongjiDetail: React.FC = () => {
 
-  const { member} = useAuth();
+  const { member } = useAuth();
   const { num } = useParams<{ num: string }>();
   const [gongjiList, setGongjiList] = useState<GongjiVO | null>(null);
 
@@ -29,7 +29,7 @@ const GongjiDetail: React.FC = () => {
   }
 
   const navigate = useNavigate();
-  
+
   useEffect(() => {
     const detailServer = async () => {
       const url = `${process.env.REACT_APP_BACK_END_URL}/gongji/detail?num=${num}`;
@@ -46,19 +46,19 @@ const GongjiDetail: React.FC = () => {
       <table className={Style.boardTable}>
         <tbody>
           <tr>
-            <th>제목</th>
+            <th style={{ width: '200px', textAlign: 'center' }}>제목</th>
             <td>
               {gongjiList?.title}
             </td>
           </tr>
           <tr>
-            <th>작성자</th>
+            <th style={{ textAlign: 'center' }}>작성자</th>
             <td>
               {gongjiList?.writer}
             </td>
           </tr>
           <tr style={{ height: '400px' }}>
-            <th>내용</th>
+            <th style={{ textAlign: 'center' }}>내용</th>
             <td>
               {gongjiList?.content}
             </td>

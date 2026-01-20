@@ -110,8 +110,8 @@ const Alarm: React.FC = () => {
       <h2 style={{ textAlign: 'center', marginBottom: '30px' }}>{member?.nickname}님의 Alarm</h2>
       {/*Like 요청 Date 요청 구분하여 볼 수 있게 함*/}
       <div style={{ textAlign: 'center', fontSize: '30px', height: '50px' }}>
-        <button className={styles.button} id='like' type='button' onClick={() => { setCategory('like') }}>Like 요청</button>
-        <button className={styles.button} id='date' type='button' onClick={() => { setCategory('date') }}>Date 요청</button>
+        <button className='btn btn-outline-primary btn-lg mx-2 px-4' id='like' type='button' onClick={() => { setCategory('like') }}>Like 요청</button>
+        <button className='btn btn-outline-primary btn-lg mx-2 px-4' id='date' type='button' onClick={() => { setCategory('date') }}>Date 요청</button>
       </div>
 
       {
