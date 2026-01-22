@@ -10,8 +10,8 @@ const VisiorChart: React.FC = () => {
     visitorsStats();
   },[])
 
-  const [totalUsers,setTotalUsers] = useState(12480);
-  const [activeUsers,setActiveUsers] = useState(3421);
+  const [totalUsers,setTotalUsers] = useState(0);
+  const [activeUsers,setActiveUsers] = useState(0);
   const [genderData, setGenderData] = useState<{value: number, name: string}[]>([]);
   const [addrXData, setAddrXData] = useState<string[]>([]);
   const [addrSeries, setAddrSeries] = useState();

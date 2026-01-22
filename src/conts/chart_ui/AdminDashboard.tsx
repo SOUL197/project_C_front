@@ -1,16 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ECharts from 'echarts-for-react';
+import axios from 'axios';
 
 const AdminDashboard: React.FC = () => {
+  const [dau, setDau] = useState(0);
+  const [mau, setMau] = useState(0);
+  const [funnelData, setFunnelData] = useState();
+  const [maleAgeData, setMaleAgeData] = useState<number[]>([0,0,0,0]);
+  const [femaleAgeData, setFemaleAgeData] = useState<number[]>([0,0,0,0]);
+  const [conversionRate, setConversionRate] = useState();
+  const [churnRateData, setChurnRateData] = useState<{ week: string; rate: number }[]>([]);
 
-  const kpiStyle: React.CSSProperties = {
-    flex: 1,
-    padding: '16px',
-    border: '1px solid #ddd',
-    borderRadius: 8,
-    textAlign: 'center',
-    background: '#fafafa',
-  };
+  const url = `${process.env.REACT_APP_BACK_END_URL}/chart`;
+  const adminStats = async () => {
+    const resp = await axios.get(`${url}/adminStats`);
+    console.log(resp.data);
+    setDau(resp.data.dau);
+    setMau(resp.data.mau);
+    const conFunnel = resp.data.funnel.map((item:any)=>{
+      return {value: item.COUNT, name: item.STAGE}
+    })
+    setFunnelData(conFunnel);
+    const conMale = [0,0,0,0];
+    const conFemale = [0,0,0,0]
+    resp.data.genderAge.forEach((item:any)=>{
+      const ageIndex: Record<string,number> = {
+        '20대': 0, '30대': 1, '40대': 2, '50대+': 3, 
+      }
+      const idx = ageIndex[item.AGE_GROUP]
+      if(item.GENDER === '남자') {
+        conMale[idx] += item.COUNT;
+      } else {
+        conFemale[idx] += item.COUNT;
+      }
+    })
+    setMaleAgeData(conMale);
+    setFemaleAgeData(conFemale);
+    setConversionRate(resp.data.conversionRate);
+    setChurnRateData(resp.data.churnRate);
+  }
+  useEffect(()=>{
+    adminStats();
+  },[]);
 
   const funnelOption = {
     tooltip: { trigger: 'item' },
@@ -18,13 +49,9 @@ const AdminDashboard: React.FC = () => {
       {
         type: 'funnel',
         width: '60%',
-        data: [
-          { value: 5000, name: '가입' },
-          { value: 3200, name: '좋아요' },
-          { value: 1800, name: '첫 매칭' },
-          { value: 620, name: '데이트' },
-        ],
-        left: '20%'
+        data: funnelData,
+        left: '20%',
+        sort: 'none'
       },
     ],
   };
@@ -46,13 +73,13 @@ const AdminDashboard: React.FC = () => {
         name: '남성',
         type: 'bar',
         stack: 'total',
-        data: [1200, 900, 400, 150],
+        data: maleAgeData,
       },
       {
         name: '여성',
         type: 'bar',
         stack: 'total',
-        data: [1400, 1100, 500, 200],
+        data: femaleAgeData,
       },
     ],
   };
@@ -70,7 +97,7 @@ const AdminDashboard: React.FC = () => {
     },
     xAxis: {
       type: 'category',
-      data: ['1주', '2주', '3주', '4주', '5주'],
+      data: churnRateData.map(item => item.week),
     },
     yAxis: {
       type: 'value',
@@ -85,7 +112,7 @@ const AdminDashboard: React.FC = () => {
         name: '이탈률',
         type: 'line',
         smooth: true,
-        data: [30, 25, 36, 48, 17],
+        data: churnRateData.map(item => item.rate),
         areaStyle: {
           opacity: 0.15,
         },
@@ -115,7 +142,7 @@ const AdminDashboard: React.FC = () => {
         type: 'gauge',
         progress: { show: true },
         axisLine: { lineStyle: { width: 5 } },
-        data: [{ value: 35, name: '전환율 (%)' }],
+        data: [{ value: conversionRate, name: '전환율 (%)' }],
       },
     ],
   };
@@ -126,21 +153,21 @@ const AdminDashboard: React.FC = () => {
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
         <div style={kpiStyle}>
           <h4>DAU</h4>
-          <strong>3,420</strong>
+          <strong>{dau}</strong>
         </div>
         <div style={kpiStyle}>
           <h4>MAU</h4>
-          <strong>24,800</strong>
+          <strong>{mau}</strong>
         </div>
         <div style={kpiStyle}>
-          <h4>사용자 참여도</h4>
-          <strong>13.8%</strong>
+          <h4>페이지 활성도</h4>
+          <strong>{Math.round(dau/mau*100*100)/100}%</strong>
         </div>
       </div>
 
       <hr />
 
-      <h4>가입 → 데이트 성사 퍼널</h4>
+      <h4>가입 → 데이트 성사</h4>
       <ECharts option={funnelOption} style={{ height: 300 }} />
 
       <hr />
@@ -159,6 +186,15 @@ const AdminDashboard: React.FC = () => {
       <ECharts option={conversionOption} style={{ height: 300 }} />
     </div>
   );
+};
+
+const kpiStyle: React.CSSProperties = {
+    flex: 1,
+    padding: '16px',
+    border: '1px solid #ddd',
+    borderRadius: 8,
+    textAlign: 'center',
+    background: '#fafafa',
 };
 
 export default AdminDashboard;

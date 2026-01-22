@@ -2,22 +2,13 @@ import React from 'react';
 import ECharts from 'echarts-for-react';
 
 const MyPageStats: React.FC = () => {
-
-  const kpiStyle: React.CSSProperties = {
-    flex: 1,
-    padding: '16px',
-    border: '1px solid #ddd',
-    borderRadius: 8,
-    textAlign: 'center',
-  };
-
   const weeklyMatchOption = {
     tooltip: { trigger: 'axis' },
     xAxis: {
       type: 'category',
       data: ['월', '화', '수', '목', '금', '토', '일'],
     },
-    yAxis: { type: 'value' },
+    yAxis: { type: 'value', minInterval: 1 },
     series: [
       {
         type: 'line',
@@ -102,10 +93,6 @@ const MyPageStats: React.FC = () => {
     <div style={{ padding: 24 }}>
 
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
-        {/* <div style={kpiStyle}>
-          <h4>내 조회 수</h4>
-          <strong>1,284</strong>
-        </div> */}
         <div style={kpiStyle}>
           <h4>받은 좋아요</h4>
           <strong>120</strong>
@@ -123,7 +110,7 @@ const MyPageStats: React.FC = () => {
 
       <hr />
 
-      <h4>좋아요 → 매칭 퍼널</h4>
+      <h4>좋아요 → 매칭</h4>
       <ECharts option={funnelOption} style={{ height: 260 }} />
 
       <hr />
@@ -137,6 +124,14 @@ const MyPageStats: React.FC = () => {
       <ECharts option={responseRateOption} style={{ height: 400 }} />
     </div>
   );
+};
+
+const kpiStyle: React.CSSProperties = {
+    flex: 1,
+    padding: '16px',
+    border: '1px solid #ddd',
+    borderRadius: 8,
+    textAlign: 'center',
 };
 
 export default MyPageStats;

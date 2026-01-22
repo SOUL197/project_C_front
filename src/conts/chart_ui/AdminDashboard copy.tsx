@@ -2,16 +2,6 @@ import React from 'react';
 import ECharts from 'echarts-for-react';
 
 const AdminDashboard: React.FC = () => {
-
-  const kpiStyle: React.CSSProperties = {
-    flex: 1,
-    padding: '16px',
-    border: '1px solid #ddd',
-    borderRadius: 8,
-    textAlign: 'center',
-    background: '#fafafa',
-  };
-
   const funnelOption = {
     tooltip: { trigger: 'item' },
     series: [
@@ -19,12 +9,13 @@ const AdminDashboard: React.FC = () => {
         type: 'funnel',
         width: '60%',
         data: [
-          { value: 5000, name: '가입' },
-          { value: 3200, name: '좋아요' },
-          { value: 1800, name: '첫 매칭' },
-          { value: 620, name: '데이트' },
+          { value: 5000, name: '가입자 수' },
+          { value: 3200, name: '좋아요 받은 사용자 수' },
+          { value: 1800, name: '매칭 경험 사용자 수' },
+          { value: 620, name: '데이트 경험 사용자 수' },
         ],
-        left: '20%'
+        left: '20%',
+        sort: 'none'
       },
     ],
   };
@@ -70,7 +61,7 @@ const AdminDashboard: React.FC = () => {
     },
     xAxis: {
       type: 'category',
-      data: ['1주', '2주', '3주', '4주', '5주'],
+      data: ['5주 전', '4주 전', '3주 전', '2주 전', '1주 전'],
     },
     yAxis: {
       type: 'value',
@@ -133,14 +124,14 @@ const AdminDashboard: React.FC = () => {
           <strong>24,800</strong>
         </div>
         <div style={kpiStyle}>
-          <h4>사용자 참여도</h4>
+          <h4>페이지 활성도</h4>
           <strong>13.8%</strong>
         </div>
       </div>
 
       <hr />
 
-      <h4>가입 → 데이트 성사 퍼널</h4>
+      <h4>가입 → 데이트 성사</h4>
       <ECharts option={funnelOption} style={{ height: 300 }} />
 
       <hr />
@@ -159,6 +150,15 @@ const AdminDashboard: React.FC = () => {
       <ECharts option={conversionOption} style={{ height: 300 }} />
     </div>
   );
+};
+
+const kpiStyle: React.CSSProperties = {
+    flex: 1,
+    padding: '16px',
+    border: '1px solid #ddd',
+    borderRadius: 8,
+    textAlign: 'center',
+    background: '#fafafa',
 };
 
 export default AdminDashboard;

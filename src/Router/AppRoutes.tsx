@@ -28,6 +28,7 @@ import FindId from '../conts/login/FindId'
 import FindPwd from '../conts/login/FindPwd'
 import MyPageStats from '../conts/chart_ui/MyPageStats'
 import AdminDashboard from '../conts/chart_ui/AdminDashboard'
+import VisiorChart from '../conts/chart_ui/VisiorChart'
 import QnaForm from '../conts/faq/QnaForm'
 import QnaList from '../conts/faq/QnaList'
 import SurveyClient from '../conts/survey copy/SurveyClient'
@@ -35,8 +36,6 @@ import SurveyList from '../conts/survey copy/SurveyList'
 import SurveyAddForm from '../conts/survey copy/SurveyAddForm'
 import SurveyClientResult from '../conts/survey copy/SurveyClientResult'
 import RequireAuth from '../comp/RequiredAuth'
-import VisiorChart from '../conts/chart_ui/VisiorChart'
-
 
 const AppRoutes: React.FC = () => {
     const routelist = [
@@ -67,9 +66,6 @@ const AppRoutes: React.FC = () => {
         { path: '/adminanswer', element: <AdminAnswer /> },
         { path: '/myqna', element: <RequireAuth><QnaList /></RequireAuth> },
         { path: '/qnaform', element: <RequireAuth><QnaForm /></RequireAuth> },
-        { path: '/test1', element: <VisiorChart /> },
-        { path: '/test2', element: <RequireAuth><MyPageStats /></RequireAuth> },
-        { path: '/test3', element: <AdminDashboard /> },
         { path: '/surveyclient/:num', element: <RequireAuth><SurveyClient /></RequireAuth> },
         { path: '/surveylist', element: <SurveyList /> },
         { path: '/surveyaddform', element: <RequireAuth><SurveyAddForm /></RequireAuth> },

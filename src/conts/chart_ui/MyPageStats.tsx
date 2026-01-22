@@ -8,6 +8,10 @@ const MyPageStats: React.FC = () => {
   const [likeCount, setLikeCount] = useState();
   const [matchCount, setMatchCount] = useState();
   const [dateCount, setDateCount] = useState();
+  const [weekData,setWeekData] = useState<number[]>([]);
+  const [heatmapData, setHeatmapData] = useState();
+  const [responseRate, setResponseRate] = useState<number>(0);
+  const [avgResponseRate, setAvgResponseRate] = useState<number>(0);
 
   const url = `${process.env.REACT_APP_BACK_END_URL}/chart`;
   const privateStats = async () => {
@@ -15,7 +19,28 @@ const MyPageStats: React.FC = () => {
       params: {nickname: member?.nickname, num: member?.num}
     });
     setLikeCount(resp.data.likeCount);
-    setMatchCount(resp.data.setMatchCount)
+    setMatchCount(resp.data.matchCount);
+    setDateCount(resp.data.dateCount);
+    const conWeekData = [0, 0, 0, 0, 0, 0, 0];
+    resp.data.weeklyMatch.forEach((item:any) => {
+      const date = new Date(item.DAY);
+      const jsDay = date.getDay(); // 0(일) ~ 6(토)
+
+      // 월(0) ~ 일(6) 로 변환
+      const weekIndex = jsDay === 0 ? 6 : jsDay - 1;
+
+      conWeekData[weekIndex] = item.COUNT;
+    });
+    setWeekData(conWeekData);
+    const conHeatData = resp.data.activityHeatmap.map((item:any) => {
+      const yIndex = Number(item.WEEKDAY) - 2;   // heatmap 월=0 & weekday 월=2
+      const xIndex = getTimeIndex(Number(item.HOUR));
+
+      return [xIndex, yIndex, item.CNT];
+    });
+    setHeatmapData(conHeatData);
+    setResponseRate(resp.data.responseRate);
+    setAvgResponseRate(resp.data.avgResponseRate);
     console.log(resp.data);
   }
 
@@ -23,17 +48,31 @@ const MyPageStats: React.FC = () => {
     privateStats();
   },[])
 
+  const getTimeIndex = (hour:number) => {
+    if (hour < 3) return 0;
+    if (hour < 6) return 1;
+    if (hour < 9) return 2;
+    if (hour < 12) return 3;
+    if (hour < 15) return 4;
+    if (hour < 18) return 5;
+    if (hour < 21) return 6;
+    return 7;
+  }
+
   const weeklyMatchOption = {
     tooltip: { trigger: 'axis' },
     xAxis: {
       type: 'category',
       data: ['월', '화', '수', '목', '금', '토', '일'],
     },
-    yAxis: { type: 'value' },
+    yAxis: {
+      type: 'value',
+      minInterval: 1,
+    },
     series: [
       {
         type: 'line',
-        data: [1, 0, 2, 1, 3, 2, 4],
+        data: weekData,
         smooth: true,
       },
     ],
@@ -46,9 +85,9 @@ const MyPageStats: React.FC = () => {
         type: 'funnel',
         width: '60%',
         data: [
-          { value: 120, name: '받은 좋아요' },
-          { value: 70, name: '매칭 성사' },
-          { value: 35, name: '데이팅(만남)' },
+          { value: likeCount, name: '받은 좋아요' },
+          { value: matchCount, name: '매칭 성사' },
+          { value: dateCount, name: '데이팅(만남)' },
         ],
         left: '20%'
       },
@@ -76,12 +115,7 @@ const MyPageStats: React.FC = () => {
     series: [
       {
         type: 'heatmap',
-        data: [
-          [0, 0, 2], [1, 0, 1], [2, 0, 0],
-          [3, 1, 5], [4, 1, 3],
-          [5, 2, 6], [6, 2, 4],
-          [7, 6, 8],
-        ],
+        data: heatmapData,
       },
     ],
   };
@@ -100,12 +134,12 @@ const MyPageStats: React.FC = () => {
       {
         name: '나',
         type: 'bar',
-        data: [82],
+        data: [Math.round(responseRate*100)/100],
       },
       {
         name: '전체 평균',
         type: 'bar',
-        data: [64],
+        data: [Math.round(avgResponseRate*100)/100],
       },
     ],
   };
@@ -120,7 +154,7 @@ const MyPageStats: React.FC = () => {
         </div>
         <div style={kpiStyle}>
           <h4>매칭 수</h4>
-          <strong>35</strong>
+          <strong>{matchCount}</strong>
         </div>
       </div>
 
@@ -131,7 +165,7 @@ const MyPageStats: React.FC = () => {
 
       <hr />
 
-      <h4>좋아요 → 매칭 퍼널</h4>
+      <h4>좋아요 → 매칭</h4>
       <ECharts option={funnelOption} style={{ height: 260 }} />
 
       <hr />
