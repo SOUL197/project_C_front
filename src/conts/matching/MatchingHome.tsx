@@ -128,6 +128,7 @@ const MatchingHome: React.FC = () => {
         }
     }
 
+    // 뒤로가기 시 검색정보 세션스토리지에서 가져와서 유지
     useEffect(() => {
         const saved = sessionStorage.getItem('matchingSearchData');
         if (saved) {
@@ -145,12 +146,12 @@ const MatchingHome: React.FC = () => {
             fetchMatchingList(1);
         }
     }, []);
-
+    // 페이지 이동 함수
     const pageChange = (page: number) => {
         if (page < 1 || page > totalPages) return;
         fetchMatchingList(page);
     };
-
+    // 아무 조건 없이 검색시 초기화 아니라면 그 정보를 세션스토리지에 저장
     const searchFunction = () => {
         if (!searchValue.trim() && matchingTypeList.length === 0) {
             sessionStorage.removeItem('matchingSearchData');
@@ -370,9 +371,9 @@ const MatchingHome: React.FC = () => {
                             >
                                 <option value="">국적</option>
                                 <option value="한국">한국</option>
-                                    <option value="중국">중국</option>
-                                    <option value="일본">일본</option>
-                                    <option value="미국">미국</option>
+                                <option value="중국">중국</option>
+                                <option value="일본">일본</option>
+                                <option value="미국">미국</option>
                             </select>
                         )}
                         {/* 거주지 */}

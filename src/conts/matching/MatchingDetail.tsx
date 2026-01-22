@@ -27,11 +27,10 @@ const MatchingDetail: React.FC = () => {
     const { member, getAge } = useAuth();
     const { id } = useParams<{ id: string }>();
     const [loading, setLoading] = useState(true);
-    const [refresh, setRefresh] = useState(0);
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
     const navigate = useNavigate();
 
-    
+    //id parameter에 따른 각자의 상세정보 데이터를 불러옴
     useEffect(() => {
         const fetchData = async () => {
             if (!id) {
@@ -53,13 +52,13 @@ const MatchingDetail: React.FC = () => {
             }
         }
         fetchData();
-    }, [id, refresh]);
+    }, [id]);
 
+    // Like 요청 보내기
     const sendRequest = async () => {
         const receiverId = matchingDetail?.NICKNAME;
         await axios.post(`${process.env.REACT_APP_BACK_END_URL}/api/like/request`, { receiverId }, { withCredentials: true });
         alert("Like 신청 완료");
-        setRefresh(prev => prev + 1);
     }
 
     return (

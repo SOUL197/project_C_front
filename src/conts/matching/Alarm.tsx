@@ -86,6 +86,7 @@ const Alarm: React.FC = () => {
       const status = resp.data;
       alert(`${status === 'accepted' ? '수락처리됨' : action === 'reject' ? '거절처리됨' : `${member?.nickname}님 또는 상대방이 이미 다른 데이트를 진행 중입니다.`}`);
       setRefresh(prev => prev + 1);
+      setShow(false);
       setCategory('date');
     } catch (error) {
       console.error(error);
@@ -148,6 +149,7 @@ const Alarm: React.FC = () => {
             <div style={{ textAlign: 'center' }}>
               {/*Like 요청 수락 및 거절 */}
               <button className={styles.likebutton} onClick={() => { likeResponse(e.NICKNAME, 'accept') }}>좋아요</button>
+              &nbsp;&nbsp;
               <button className={styles.dislikebutton} onClick={() => { likeResponse(e.NICKNAME, 'reject') }}>싫어요</button>
             </div></React.Fragment>
           ))

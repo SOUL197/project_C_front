@@ -34,7 +34,7 @@ const MyDate: React.FC<MyDateProps> = ({ setShow }) => {
     }, []);
 
     const CancelDate = async (nickname: string) => {
-        if (!window.confirm("정말로 이 데이트를 취소하시겠습니까?")) return;
+        if (!window.confirm("정말로 이 데이트를 종료하시겠습니까?")) return;
         try {
             const resp = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/api/date/respond`,
                 { nickname: nickname, action: 'reject' },

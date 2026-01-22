@@ -80,7 +80,7 @@ const LikeDetail: React.FC = () => {
     navigate(-1);
   }
 
-  // 지도 및 위치 저장 함수
+  // 지도 및 위치 저장
   const [address, setAddress] = useState<string>('');
   const [detailaddr, setDetailAddr] = useState<string>();
   useEffect(() => {
@@ -91,11 +91,14 @@ const LikeDetail: React.FC = () => {
         center: new naver.maps.LatLng(37.5666103, 126.9783882),
         zoom: 14,
       };
+      //지도 불러오기
       const map = new naver.maps.Map('map', mapOptions);
+      //지도 마커
       const marker = new naver.maps.Marker({
         position: mapOptions.center,
         map: map
       });
+      //reversegeocoding을 사용한 지도 위치에 따른 주소 찾기
       naver.maps.Event.addListener(map, 'click', (e: any) => {
         const clickedLatLng = e.coord;
         marker.setPosition(clickedLatLng);

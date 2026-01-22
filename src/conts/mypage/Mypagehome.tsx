@@ -60,7 +60,7 @@ const Mypagehome: React.FC = () => {
   }
 
   useEffect(() => {
-    if (!member?.num) return;
+    if (!member) return;
 
     const getprofileimage = async () => {
       try {
@@ -98,7 +98,7 @@ const Mypagehome: React.FC = () => {
       }
     }
     getprofileimage();
-  }, [member?.num]);
+  }, [member]);
 
   useEffect(() => {
     setSelectedMenu(renderContent(menu));
@@ -134,7 +134,7 @@ const Mypagehome: React.FC = () => {
               <p>다들 좋은 하루 되세요</p>
             </div>
 
-            {/* 통계 버튼 */}
+            {/* 통계 */}
             <div className={style.statsRow}>
               <button
                 className={style.statBtn}
@@ -176,7 +176,7 @@ const Mypagehome: React.FC = () => {
             Like
           </button>
 
-          {(member?.num || 0) <= 0 ?
+          {(member?.num ?? 0.5) <= 0 ?
             <button id='AdminA' onClick={handleClick} className={style.menuBtn}>
               1대1 문의 답변
             </button> : <button id='Qna' onClick={handleClick} className={style.menuBtn}>
