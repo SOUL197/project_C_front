@@ -6,12 +6,10 @@
   letter-spacing: 0.12em;
   text-align: center;
 
-  background: linear-gradient(
-    90deg,
-    #f4b6c2,
-    #e9788f,
-    #d6455d
-  );
+  background: linear-gradient(90deg,
+      #fde0e6,
+      #f7bac6,
+      #fc9fae);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -28,24 +26,216 @@
   transform: translateX(-50%);
   width: 120px;
   height: 2px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(233, 120, 143, 0.8),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(233, 120, 143, 0.8),
+      transparent);
 }
 
 @keyframes softGlow {
   0% {
     text-shadow: 0 0 6px rgba(233, 120, 143, 0.25);
   }
+
   50% {
     text-shadow: 0 0 14px rgba(233, 120, 143, 0.45);
   }
+
   100% {
     text-shadow: 0 0 6px rgba(233, 120, 143, 0.25);
   }
+}
+
+.container {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #fff6f8 0%, #ffffff 60%);
+  padding: 60px 20px;
+  font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+}
+
+.form {
+  position: relative;
+  overflow: hidden;
+  max-width: 760px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+  border-radius: 16px;
+  box-shadow:
+    0 0 90px rgba(255, 255, 255, 0.5),
+    0 0 80px rgba(255, 255, 255, 0.35);
+  animation: glow 3s ease-in-out infinite;
+  backdrop-filter: blur(0px);
+  animation: glow 3.0s linear infinite;
+}
+
+.formBody {
+  width: 60%;
+  display: flex;
+  margin-right: 150px;
+  flex-direction: column;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 45px rgba(251, 254, 255, 0.9);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(227, 250, 255, 0.3);
+  }
+}
+
+.form:hover {
+  background: linear-gradient(
+    124.47deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.08)
+  );
+  backdrop-filter: brightness(1.05) saturate(120%);
+  border-radius: 16px;
+  box-shadow: 0 0 80px rgba(221, 245, 250, 0.6),
+    0 0 80px rgba(206, 241, 248, 0.6);
+  animation: afterglow 3.0s ease-in-out infinite;
+}
+
+@keyframes afterglow {
+  0% {
+    box-shadow: 0 4px 20px rgb(236, 248, 253);
+  }
+  50% {
+    box-shadow: 0 4px 45px rgb(246, 244, 255);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgb(255, 244, 247);
+  }
+}
+
+.form:hover::after {
+  opacity: 1;
+}
+
+.input {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 18px;
+}
+
+.input th {
+  width: 140px;
+  text-align: left;
+  vertical-align: top;
+  padding-top: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #555;
+}
+
+.input td {
+  font-size: 14px;
+  color: #333;
+}
+
+.input input[type="text"],
+.input input[type="date"],
+.input input[type="tel"],
+.input input[type="number"],
+.input select {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: 12px;
+  border: 1px solid #e4e4e7;
+  background: #fff;
+  text-align: center;
+  font-size: 20px;
+  transition: all 0.25s ease;
+}
+
+.input input:focus,
+.input select:focus {
+  outline: none;
+  border-color: #f3a6b8;
+  box-shadow: 0 0 0 3px rgba(243, 166, 184, 0.25);
+}
+
+.genderbtn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  margin: 0 15px;
+  font-size: 14px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.genderbtn:hover {
+  background: #fff0f3;
+  border-color: #f3a6b8;
+  color: #d85c78;
+}
+
+.activeBtn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #f6a8c1, #f38aa8);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 8px 20px rgba(243, 138, 168, 0.35);
+}
+
+.input label {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 16px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: #444;
+  cursor: pointer;
+}
+
+.input input[type="checkbox"],
+.input input[type="radio"] {
+  accent-color: #f38aa8;
+  margin-right: 6px;
+}
+
+.input td > label {
+  background: #fff7f9;
+  padding: 6px 12px;
+  border-radius: 10px;
+}
+
+.input select + select {
+  margin-left: 10px;
+}
+
+.input td span {
+  margin-left: 6px;
+  color: #888;
+}
+
+tfoot th {
+  padding-top: 30px;
+  text-align: center;
+}
+
+.form tfoot th {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.button {
+    font-weight: 600;
+    display: inline-block; 
 }
 
 .btn {

@@ -31,6 +31,7 @@ const MatchingDetail: React.FC = () => {
     const imageBasePath = `${process.env.REACT_APP_BACK_END_URL}/imgfile/profileimage/`;
     const navigate = useNavigate();
 
+    
     useEffect(() => {
         const fetchData = async () => {
             if (!id) {
@@ -52,7 +53,7 @@ const MatchingDetail: React.FC = () => {
             }
         }
         fetchData();
-    }, [id]);
+    }, [id, refresh]);
 
     const sendRequest = async () => {
         const receiverId = matchingDetail?.NICKNAME;
@@ -80,7 +81,7 @@ const MatchingDetail: React.FC = () => {
             </div>
             <br />
             <div style={{ textAlign: 'center' }}>
-                <button className={styles.button} onClick={() => { navigate(-1) }}>돌아가기</button>
+                <button className={styles.backbutton} onClick={() => { navigate(-1) }}>돌아가기</button>
             </div>
             {
                 loading && <p>로딩중입니다...</p>

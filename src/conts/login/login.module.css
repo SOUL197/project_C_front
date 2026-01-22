@@ -1,14 +1,70 @@
 /* login.module.css */
 
-.signupContainer {
-    max-width: 450px;
-    margin: 50px auto;
-    padding: 30px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    background-color: aliceblue;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+.page {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(circle at top, #ffffff24, #ffffff76 40%, #f5fdfd 70%);
 }
+
+.loginContainer {
+  width: 480px;
+  padding: 56px 48px;
+  border-radius: 28px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.92),
+    rgba(255, 255, 255, 0.82)
+  );
+
+  box-shadow:
+    0 40px 80px rgb(232, 249, 255),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(220, 247, 254, 0.6);
+
+  animation: fadeUp 0.6s ease-out;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loginContainer h2 {
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 40px;
+
+  background: linear-gradient(
+    135deg,
+    #38f8ef6f, /* sky */
+    #60e8fa6d, /* mint */
+    #8bbbfa71  /* fresh */
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
 
 .form {
     display: flex;
@@ -22,21 +78,25 @@
     gap: 8px;
 }
 
-/* input, select {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    flex: 1;
-} */
-
 .inpuselectfield {
-    padding: 8px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    flex: 1;
+  width: 100%;
+  height: 48px;
+  padding: 0 14px;
+
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+
+  font-size: 15px;
+  transition: all 0.25s ease;
 }
+
+.inpuselectfield:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
 
 .checkButton {
     padding: 8px;
@@ -70,19 +130,104 @@
     text-align: center;
 }
 
+
 .loginButton {
-    padding: 12px;
-    background-color: deepskyblue;
-    color: white;
-    font-weight: bold;
-    border: none;
-    border-radius: 6px;
-    font-size: 18px;
-    cursor: pointer;
+  position: relative;
+  padding: 15px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background: linear-gradient(45deg, #ff009d, #3363ff);
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  overflow: hidden; /* 반짝임이 버튼 밖으로 나가지 않게 설정 */
+  transition: transform 0.2s;
+  box-shadow: 0 0 20px rgb(189, 248, 255);
+}
+
+.loginButton::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(45deg);
+  transition: 0.5s;
+  animation: shimmer 2.5s infinite linear;
 }
 
 .loginButton:hover {
-    background-color: rgba(0, 191, 255, 0.254);
+  transform: scale(1.05);
+  box-shadow: 0 0 30px rgba(255, 214, 225, 0.8);
+}
+
+@keyframes shimmer {
+  0% { transform: translate(-150%, -150%) rotate(45deg); }
+  100% { transform: translate(150%, 150%) rotate(45deg); }
+}
+
+
+:root {
+  --neon-color: #00ffb3; /* 밝은 청록색 */
+  --neon-light: #d4fff2;
+  --glow-spread: 100px;
+  --glow-intensity: 10;
+}
+
+.pwdlessButton {
+    position: relative;
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  color: var(--neon-light);
+  background: #111; /* 어두운 배경 */
+  border: 2px solid var(--neon-color);
+  border-radius: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  /* 기본 그림자 효과 */
+  box-shadow: 0 0 var(--glow-spread) rgba(0, 255, 179, var(--glow-intensity)),
+              0 0 calc(var(--glow-spread) * 2) rgba(0, 255, 179, var(--glow-intensity) * 0.5);
+  text-shadow: 0 0 5px var(--neon-color); /* 텍스트 그림자 */
+  transition: all 0.3s ease;
+  z-index: 1;
+  position: relative; /* 가상 요소 위치 기준 */
+    overflow: hidden;
+}
+
+.pwdlessButton:hover {
+  color: #fff;
+  /* 호버 시 그림자 강화 */
+  box-shadow: 0 0 calc(var(--glow-spread) * 2) rgba(0, 255, 179, var(--glow-intensity)),
+              0 0 calc(var(--glow-spread) * 4) rgba(0, 255, 179, var(--glow-intensity) * 0.7),
+              0 0 calc(var(--glow-spread) * 6) rgba(0, 255, 179, var(--glow-intensity) * 0.3);
+  text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-color);
+}
+
+/* 동적인 반짝임 효과를 위한 가상 요소 (::before) 및 애니메이션 */
+/* CodePen 예시에서는 SVG를 사용하지만, 여기서는 단순화된 CSS shine 효과를 포함합니다. */
+.pwdlessButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: all 0.7s ease;
+  /* 마우스 호버 시 빛이 지나가는 효과 */
+}
+
+.pwdlessButton:hover::before {
+  left: 100%;
 }
 
 .pwdlessButton {
@@ -101,16 +246,50 @@
 }
 
 .signupButton {
-    padding: 12px;
-    background-color: rgb(254, 182, 224);
+    padding: 12px 24px;
+    /* 1. 보석 같은 그라데이션 배경 */
+    background: linear-gradient(45deg, #ff9a9e 0%, #fecfef 50%, #fe91ca 100%);
     color: white;
     font-weight: bold;
     border: none;
-    border-radius: 6px;
+    border-radius: 50px; /* 더 둥글게 만들어 귀여움 강조 */
     font-size: 18px;
     cursor: pointer;
+    
+    /* 2. 눈부신 광택과 그림자 효과 */
+    box-shadow: 0 4px 15px rgba(254, 182, 224, 0.4), 
+                inset 0 -2px 5px rgba(0, 0, 0, 0.1),
+                inset 0 2px 5px rgba(255, 255, 255, 0.8);
+    
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 3. 반짝이는 글리터 애니메이션 효과 */
+.signupButton::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 10%, rgba(255,255,255,0.4) 20%, transparent 30%, rgba(255,255,255,0.7) 40%, transparent 50%);
+    background-size: 1px 1px; /* 반짝이 입자 크기 */
+    opacity: 0.5;
+    transform: rotate(30deg);
+    animation: glitter 300s infinite linear;
+    pointer-events: none;
 }
 
 .signupButton:hover {
-    background-color: rgba(253, 196, 229, 0.455);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(254, 182, 224, 0.6);
+    filter: brightness(1.1);
+}
+
+@keyframes glitter {
+    0% { transform: translate(-10%, -10%) rotate(0deg); }
+    100% { transform: translate(10%, 10%) rotate(10deg); }
 }

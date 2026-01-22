@@ -1,9 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 
-
 export const AddressMap = ({ address }: { address: string }) => {
   const mapRef = useRef<HTMLDivElement>(null);
-
+  //address 값이 바뀔 때마다 geocoding으로 위치를 구한 뒤 marker를 찍음
   useEffect(() => {
     const { naver } = window as any;
     if (!naver || !mapRef.current) return;
@@ -12,12 +11,10 @@ export const AddressMap = ({ address }: { address: string }) => {
       if (status === naver.maps.Service.Status.OK) {
         const { x, y } = response.v2.addresses[0];
         const location = new naver.maps.LatLng(y, x);
-        
         const map = new naver.maps.Map(mapRef.current!, {
           center: location,
           zoom: 15
         });
-
         new naver.maps.Marker({ position: location, map });
       }
     });

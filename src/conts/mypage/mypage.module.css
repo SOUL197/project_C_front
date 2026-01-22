@@ -74,7 +74,7 @@
 }
 
 .menuItem {
-  font-size: 16px;
+  font-size: 17px;
   color: #555;
   cursor: pointer;
   padding: 6px 10px;
@@ -92,12 +92,51 @@
 .mypageContainer {
   margin: 0px auto;
   text-align: center;
-  background: rgb(255, 255, 255);
   padding: 40px 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   max-width: 1400px;
   min-height: 800px;
+
+  background: linear-gradient(
+    124.47deg,
+    rgba(255, 255, 255, 0.08),
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.08)
+  );
+  backdrop-filter: brightness(1.05) saturate(120%);
+  border-radius: 16px;
+  box-shadow: 0 0 80px rgba(221, 245, 250, 0.6),
+    0 0 80px rgba(206, 241, 248, 0.6);
+  animation: afterglow 3.0s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 4px 45px rgba(251, 254, 255, 0.9);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(227, 250, 255, 0.3);
+  }
+}
+
+@keyframes afterglow {
+  0% {
+    box-shadow: 0 4px 20px rgb(236, 248, 253);
+  }
+  50% {
+    box-shadow: 0 4px 45px rgb(246, 244, 255);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgb(255, 244, 247);
+  }
+}
+
+.form:hover::after {
+  opacity: 1;
 }
 
 .topArea {
@@ -126,6 +165,28 @@
   object-fit: cover;
   border: 3px solid #ddd;
 }
+
+.username {
+  margin-top: 14px;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+
+  background: linear-gradient(90deg, #c2f4ff, #d2caf9);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 6px 16px rgba(212, 212, 212, 0.35);
+}
+
+.profileSection p {
+  margin-top: 8px;
+  font-size: 15px;
+  color: #777;
+  line-height: 1.6;
+}
+
 
 .addBtn {
   position: absolute;
@@ -206,7 +267,7 @@
 
 .label {
   margin-top: 6px;
-  font-size: 14px;
+  font-size: 17px;
   color: #666;
 }
 
@@ -234,7 +295,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .menuBtn::before {
@@ -275,7 +336,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 
@@ -285,9 +346,9 @@
   padding: 15px 30px;
   background: linear-gradient(
     90deg,
-    #fd799c,
-    #fe87b3,
-    #f584c8
+    #fd799cad,
+    #fe87b3b7,
+    #f584c8cb
   );
   color: white;
   border: none;
@@ -297,7 +358,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 .like::before {
@@ -321,19 +382,24 @@
 }
 
 .like:hover {
-  background : radial-gradient(#fd799c72,#fe87b379,#f584c871);
+  background: linear-gradient(
+    90deg,
+    #ff5784,
+    #fd5e98,
+    #fe62c0
+  );
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-.danger {
+.date {
   position: relative;
   overflow: hidden;
   padding: 15px 30px;
   background: linear-gradient(
     90deg,
-    #edebeb,
-    #dddcdc,
-    #d5d4d4
+    #c2e9fb,
+    #a1c4fd86,
+    #aca1fd86
   );
   color: white;
   border: none;
@@ -343,10 +409,10 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
 }
 
-.danger::before {
+.date::before {
   content: '';
   position: absolute;
   top: 0;
@@ -362,19 +428,19 @@
   transition: all 0.5s;
 }
 
-.danger:hover::before {
+.date:hover::before {
   left: 100%;
 }
 
-.danger:hover {
+.date:hover {
   position: relative;
   overflow: hidden;
   padding: 15px 30px;
   background: linear-gradient(
     90deg,
-    #f3f3f37b,
-    #e1e1e174,
-    #dad9d977
+    #3bb2f69b,
+    #4a6deda9,
+    #7c3aedaa  
   );
   color: rgb(255, 255, 255);
   border: none;
@@ -384,7 +450,7 @@
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 17px;
 }
 
 td{

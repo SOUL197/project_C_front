@@ -1,117 +1,305 @@
+/* 전체 컨테이너 */
 .container {
-  max-width: 1400px;
-  height: auto;
-  margin: auto;
+    max-width: 1000px;
+    height: 780px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    font-family: 'Noto Sans KR', sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #f8ffff);
+    border-radius: 30px;
+    border: 1px solid rgb(191, 239, 255);
 }
 
+/* 제목 */
 .title {
+  font-size: 2.5rem; /* 크기를 살짝 키워 시원하게 */
   text-align: center;
-  font-size: 28px;
-  padding-top: 10px;
-  margin: 5px auto;
+  font-weight: 800 !important;
+  margin-bottom: 100px;
+  
+  /* 상큼한 캔디 컬러 그라데이션 텍스트 */
+  background: linear-gradient(120deg, #ffe6f0 0%, #70c1ffa2 50%, #ff7eb4a5 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* 부드럽게 색상이 흐르는 애니메이션 */
+  animation: shine-text 4s linear infinite, floating 3s ease-in-out infinite;
+  
+  /* 유리알처럼 맑은 느낌을 주는 연한 그림자 */
+  filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.1));
+  letter-spacing: -1.5px;
 }
 
+/* 텍스트 색상이 흐르는 효과 */
+@keyframes shine-text {
+  to { background-position: 200% center; }
+}
+
+/* 통통 튀는 듯 부드러운 위아래 움직임 */
+@keyframes floating {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+/* 제목 밑에 아주 연한 무지개 빛 라인 하나 추가 (선택사항) */
+.title::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff7eb480, #70c1ff76);
+  margin: 10px auto 0;
+  border-radius: 10px;
+  opacity: 0.6;
+}
+
+/* 카드 그리드 */
 .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 60px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
 }
 
+/* 카드 */
 .card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-  background: white;
-  transition: transform 0.3s;
-}
-
-.card:hover {
-  transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(3px); /* 투명하고 흐릿한 효과 */
+    -webkit-backdrop-filter: blur(3px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+    cursor: pointer;
+    position: relative;
 }
 
 .card img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
+.card:hover img {
+    transform: scale(1.05);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* 카드 텍스트 */
 .cardtitle {
-  padding: 10px;
+    padding: 12px 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: #444;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+/* 페이징 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+    list-style: none;
+    padding: 0;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.page-link:hover {
+    background: #ffe8d6;
+    border-color: #f5a623;
+    color: #333;
+}
+
+.page-item.active .page-link {
+    background: #ffb74d;
+    color: white;
+    border-color: #ffb74d;
+}
+
+/* 검색창 */
+input[type="text"], select {
+    outline: none;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+input[type="text"]:focus, select:focus {
+    border-color: #ffb74d;
+    box-shadow: 0 0 6px rgba(255, 183, 77, 0.5);
+}
+
+/* 버튼 */
+
+/* 차가운 얼음 결정 버튼 */
+.backbutton {
+  position: relative;
+  background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); /* 얼음 같은 연하늘색 */
+  color: #ffffff; /* 글자는 진한 블루로 가독성 확보 */
+  padding: 8px 20px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 20px;
   font-weight: bold;
-  text-align: center;
-}
-
-.button {
-  background-color: dodgerblue;
-  color: white;
-  padding: 3px 14px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  text-decoration: none;
-  font-size: 25px;
   margin: 0 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(161, 196, 253, 0.5);
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
-.button:hover {
-  background-color: deepskyblue;
+.backbutton:hover {
+  background: linear-gradient(135deg, #c2e9fb6f 0%, #a1c4fd6c 100%);
+  box-shadow: 0 0 25px rgba(194, 233, 251, 0.8);
+  transform: translateY(-2px);
+  color: #00336676;
 }
 
+/* 버튼 내부의 차가운 광택 효과 */
+.backbutton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transition: all 0.5s;
+}
+
+.backbutton:hover::before {
+  left: 100%;
+}
+
+
+/* 버튼 기본: 눈부시게 빛나는 스타일 */
 .likebutton {
-  background-color: green;
+  position: relative;
+  background: linear-gradient(45deg, #ff758c, #ff7eb3); /* 상큼한 핑크 그라데이션 */
   color: white;
-  border-radius: 25px;
-  padding: 10px 20px;
+  border-radius: 30px;
+  padding: 12px 25px;
   border: none;
   cursor: pointer;
-  text-decoration: none;
+  font-weight: bold;
+  font-size: 1.1rem;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px rgba(255, 117, 140, 0.5), 0 0 30px rgba(255, 126, 179, 0.3);
+  animation: breathing-glow 1.5s infinite alternate; /* 스스로 빛나는 애니메이션 */
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
+/* 광채가 숨쉬는 듯한 효과 */
+@keyframes breathing-glow {
+  from { box-shadow: 0 0 10px rgba(255, 117, 140, 0.4); transform: scale(1); }
+  to { box-shadow: 0 0 15px rgba(255, 117, 140, 0.8), 0 0 20px rgba(255, 126, 179, 0.5); transform: scale(1.03); }
+}
+
+/* 버튼 내부를 훑고 지나가는 빛 줄기 */
+.likebutton::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: rgba(255, 255, 255, 0.6);
+  transform: rotate(30deg);
+  transition: none;
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0% { left: -60%; }
+  20% { left: 120%; }
+  100% { left: 120%; }
+}
 .likebutton:hover {
-  background-color: rgb(24, 165, 158);
+  background: linear-gradient(45deg, #ff758c16, #ff7eb41b); /* 상큼한 핑크 그라데이션 */
+  color: rgb(255, 122, 151);
 }
 
 .dislikebutton {
-  background-color: rgb(128, 0, 53);
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  text-decoration: none;
+    background: #ffb74d;
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    transition: background 0.3s ease;
 }
 
 .dislikebutton:hover {
-  background-color: rgba(238, 4, 62, 0.829);
+    background: #ffa726;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
+.btn-outline-dark {
+    border-color: #ddd;
+    color: #ced7ff;
+    background: #fff;
 }
 
-.input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
+.btn-outline-dark:hover {
+    background: #ffecb3;
+    border-color: #ffb74d;
+    color: #333333;
 }
 
-.detail {
-  text-align: center;
+/* 상세검색 박스 */
+.detail-search {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.08);
 }
 
-.detail img {
-  width: 400px;
-  max-width: 90%;
-  height: auto;
-  border-radius: 10px;
-  margin-top: 20px;
+.detail-search select {
+    margin-bottom: 10px;
 }
 
-.error {
-  color: red;
-  font-size: 13px;
-  margin: 0;
+/* 체크박스 레이블 */
+label {
+    font-size: 0.95rem;
+    color: #555;
+    margin-right: 12px;
+    cursor: pointer;
 }

@@ -116,7 +116,6 @@ const Login: React.FC = () => {
             setErrors({
                 pwd: '아이디나 비밀번호가 틀렸습니다.',
             });
-            
         } else {
             alert('서버 오류');
         }
@@ -294,7 +293,8 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className={style.signupContainer}>
+        <div className={style.page}>
+        <div className={style.loginContainer}>
             <h2 style={{ marginBottom: 4 }}>Login</h2>
 
             <form className={style.form} onSubmit={(e) => {
@@ -336,7 +336,10 @@ const Login: React.FC = () => {
                     {qr !== undefined && 
                             <div style={{ marginTop: 20, textAlign: 'center' }}>
                                 <img src={qr} alt='QR 이미지' style={{ maxWidth: 180, mixBlendMode: 'multiply' }} />
-                                <p style={{marginTop: 10, fontWeight: 500, fontSize: '14px', lineHeight: '20px'}} >
+                                <p style={{marginTop: 20, padding: 20, borderRadius: 16,
+ fontWeight: 500, fontSize: '14px', lineHeight: '20px', background: '#f8fafc',
+    boxShadow: 'inset 0 0 0 1px #e5e7eb'
+}} >
                                     Passwordless X1280 어플리케이션 설치 후 QR 코드를 스캔해주세요.
                                 </p>
                                 <b>
@@ -374,6 +377,7 @@ const Login: React.FC = () => {
                     }
                 </div>
             </form>
+        </div>
         </div>
     );
 };

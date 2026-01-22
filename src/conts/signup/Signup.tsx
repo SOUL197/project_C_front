@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import style from './signup.module.css'
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -24,7 +24,18 @@ const Signup: React.FC = () => {
         email: '',
     });
 
+    const regex = {
+        username: /^[가-힣a-zA-Z]{1,30}$/,               // 한글 or 영문만
+        nickname: /^[가-힣a-zA-Z0-9]{1,10}$/,                      // 최대 10자
+        id: /^[a-z0-9]{5,20}$/,                     // 영문 소문자 + 숫자 (5~20)
+        pwd: /^[A-Za-z0-9^$*.[\]{}()?\-"!@#%&/,><':;|_~`+=]{8,30}$/,
+        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,        // 일반 이메일
+    };
+
     const [code, setCode] = useState('');
+
+    const [usernameMessage, setUsernameMessage] = useState('');
+    const [isUsernameValid, setIsUsernameValid] = useState(false);
 
     const [nicknameMessage, setNicknameMessage] = useState('');
     const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
@@ -35,6 +46,8 @@ const Signup: React.FC = () => {
     const [pwdConfirm, setPwdConfirm] = useState('');
     const [pwdMessage, setPwdMessage] = useState('');
     const [isPwdMatched, setIsPwdMatched] = useState(false);
+    const [pwdConfirmTouched, setPwdConfirmTouched] = useState(false);
+    const [pwdErrorMessage, setPwdErrorMessage] = useState('');
 
     const [emailMessage, setEmailMessage] = useState('');
     const [isEmailAvailable, setIsEmailAvailable] = useState(false);
@@ -51,9 +64,26 @@ const Signup: React.FC = () => {
         const { name, value } = e.target;
         setForm({ ...form, [name]: value });
 
+        if (name === 'username') {
+            if (!value) {
+                setUsernameMessage('');
+                setIsUsernameValid(false);
+            } else if (!regex.username.test(value)) {
+                setUsernameMessage('이름에는 공백이나 숫자, 특수문자를 사용할 수 없습니다.');
+                setIsUsernameValid(false);
+            } else {
+                setUsernameMessage('');
+                setIsUsernameValid(true);
+            }
+        }
+
         if (name === 'nickname') { setNicknameMessage(''); setIsNicknameAvailable(false); }
         if (name === 'id') { setIdMessage(''); setIsIdAvailable(false); }
-        if (name === 'pwd') { setPwdMessage(''); }
+        if (name === 'pwd') {
+            setPwdConfirmTouched(false);
+            setPwdErrorMessage('');
+            setPwdMessage('');
+        }
         if (name === 'email') { setEmailMessage(''); setIsEmailAvailable(false); }
         if (name === 'code') { setCodeMessage(''); setIsCodeAvailable(false); }
     };
@@ -61,6 +91,12 @@ const Signup: React.FC = () => {
     const nicknameCheck = async () => {
         if (!form.nickname.trim()) {
             setNicknameMessage('닉네임을 입력해 주세요.');
+            setIsNicknameAvailable(false);
+            return;
+        }
+
+        if (!regex.nickname.test(form.nickname)) {
+            setNicknameMessage('닉네임은 공백/특수문자 없이 10자 이내여야 합니다.');
             setIsNicknameAvailable(false);
             return;
         }
@@ -88,6 +124,12 @@ const Signup: React.FC = () => {
             return;
         }
 
+        if (!regex.id.test(form.id)) {
+            setIdMessage("아이디는 5~20자의 영문 소문자와 숫자만 가능합니다.");
+            setIsIdAvailable(false);
+            return;
+        }
+
         try {
             const res = await axios.get(`${urls}/member/idCheck?id=${form.id}`);
             if (res.data === 0) {
@@ -103,6 +145,38 @@ const Signup: React.FC = () => {
             console.error(err);
         }
     };
+
+    const pwdRules = {
+        lowercase: /[a-z]/,
+        uppercase: /[A-Z]/,
+        number: /[0-9]/,
+        special: /[^A-Za-z0-9]/,
+    };
+
+    const pwdChecks = {
+        lowercase: pwdRules.lowercase.test(form.pwd),
+        uppercase: pwdRules.uppercase.test(form.pwd),
+        number: pwdRules.number.test(form.pwd),
+        special: pwdRules.special.test(form.pwd),
+        length: form.pwd.length >= 8,
+    };
+
+    const validatePassword = () => {
+        if (!form.pwd) return '';
+
+        if (form.pwd.length > 30) {
+            return '비밀번호는 30자를 초과할 수 없습니다.';
+        }
+
+        if (!isPwdValid) {
+            return '비밀번호 조건을 모두 만족해야 합니다.';
+        }
+
+        return '';
+    };
+
+
+    const isPwdValid = Object.values(pwdChecks).every(Boolean);
 
     const handlePwdConfirmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -123,10 +197,34 @@ const Signup: React.FC = () => {
         }
     };
 
+    useEffect(() => {
+        if (!form.pwd) {
+            setPwdErrorMessage('');
+            return;
+        }
+
+        if (form.pwd.length > 30) {
+            setPwdErrorMessage('비밀번호는 30자를 초과할 수 없습니다.');
+            return;
+        }
+
+        if (!isPwdValid) {
+            setPwdErrorMessage('비밀번호 조건을 모두 만족해야 합니다.');
+        } else {
+            setPwdErrorMessage('');
+        }
+    }, [form.pwd]);
+
     const emailCheck = async () => {
 
         if (!form.email.trim()) {
             setEmailMessage('이메일을 입력해 주세요.');
+            setIsEmailAvailable(false);
+            return;
+        }
+
+        if (!regex.email.test(form.email)) {
+            setEmailMessage("이메일 주소가 정확한지 확인해 주세요.");
             setIsEmailAvailable(false);
             return;
         }
@@ -184,9 +282,40 @@ const Signup: React.FC = () => {
         }
     };
 
+    const canSubmitSignup = () => {
+
+        if (!isUsernameValid) return false;
+
+        if (!isNicknameAvailable) return false;
+
+        if (!isIdAvailable) return false;
+
+        if (!isPwdValid) return false;
+        if (form.pwd.length > 30) return false;
+        if (!isPwdMatched) return false;
+
+        if (!isEmailAvailable) return false;
+        if (!isCodeAvailable) return false;
+
+        return true;
+    };
+
+
+
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (!isUsernameValid) return;
+        if (!isNicknameAvailable) return;
+        if (!isIdAvailable) return;
+        if (!isPwdValid || !isPwdMatched) return;
+        if (!isEmailAvailable || !isCodeAvailable) return;
+
+        if (!canSubmitSignup()) {
+            alert('입력값을 다시 확인해 주세요.');
+            return;
+        }
 
         try {
             const formdata = new FormData()
@@ -204,13 +333,28 @@ const Signup: React.FC = () => {
             console.error('회원가입 오류', error);
             alert('회원가입 실패');
         }
+
+        if (!regex.pwd.test(form.pwd)) {
+        alert("비밀번호는 8~30자의 영문, 숫자, 특수문자를 사용해 주세요.");
+        return;
+        }
+
+        if (!isPwdValid) {
+        alert("비밀번호 조건을 모두 만족해야 합니다.");
+        return;
+        }
+
+        if (!isPwdMatched) {
+        alert("비밀번호 확인이 일치하지 않습니다.");
+        return;
+        }
     }
 
 
     return (
         <div className={style.signupContainer}>
             <form onSubmit={handleSubmit} className={style.form}>
-                <h2>회 원 가 입</h2>
+                <h2 className={style.title}>회 원 가 입</h2>
                 <div className={style.formBody}>
 
                     {/* 이름 */}
@@ -219,11 +363,15 @@ const Signup: React.FC = () => {
                         <input
                             type="text"
                             name="username"
+                            placeholder="한글 또는 영문만 입력"
                             value={form.username}
                             onChange={handleChange}
                             required
                             className={style.inputselectfield}
                         />
+                        {usernameMessage && (
+                            <p className={style.error}>{usernameMessage}</p>
+                        )}
                     </div>
 
 
@@ -234,6 +382,7 @@ const Signup: React.FC = () => {
                             <input
                                 type="text"
                                 name="nickname"
+                                placeholder="한글 또는 영문만 최대 10글자"
                                 value={form.nickname}
                                 onChange={handleChange}
                                 required
@@ -252,6 +401,7 @@ const Signup: React.FC = () => {
                             <input
                                 type="text"
                                 name="id"
+                                placeholder="영문 소문자, 숫자 (5~20자)"
                                 value={form.id}
                                 onChange={handleChange}
                                 required
@@ -269,11 +419,31 @@ const Signup: React.FC = () => {
                         <input
                             type="password"
                             name="pwd"
+                            placeholder="영문 대/소문자, 숫자, 특수문자 (8~30자)"
                             value={form.pwd}
                             onChange={handleChange}
                             required
                             className={style.inputselectfield}
                         />
+                        
+
+                        <ul className={style.passwordRules}>
+                        <li className={pwdChecks.lowercase ? style.active : ""}>
+                        <span className={style.dot} /> 영문 소문자 1개 이상
+                        </li>
+                        <li className={pwdChecks.uppercase ? style.active : ""}>
+                        <span className={style.dot} /> 영문 대문자 1개 이상
+                        </li>
+                        <li className={pwdChecks.number ? style.active : ""}>
+                        <span className={style.dot} /> 숫자 1개 이상
+                        </li>
+                        <li className={pwdChecks.special ? style.active : ""}>
+                        <span className={style.dot} /> 특수문자 1개 이상
+                        </li>
+                        <li className={pwdChecks.length ? style.active : ""}>
+                        <span className={style.dot} /> 8자 이상
+                        </li>
+                    </ul>
                     </div>
 
                     {/* 비밀번호 확인 */}
@@ -284,11 +454,21 @@ const Signup: React.FC = () => {
                             name="pwdConfirm"
                             value={pwdConfirm}
                             onChange={handlePwdConfirmChange}
+                            onBlur={() => {
+                                setPwdConfirmTouched(true);
+
+                                const error = validatePassword();
+                                setPwdErrorMessage(error);
+                            }}
                             required
                             className={style.inputselectfield}
                         />
+                        
                     </div>
                     {pwdMessage && (<p className={isPwdMatched ? style.success : style.error}> {pwdMessage}</p>)}
+                    {pwdConfirmTouched && pwdErrorMessage && (
+                        <p className={style.error}>{pwdErrorMessage}</p>
+                    )}
 
                     {/* 이메일 */}
                     <div className={style.fieldset}>
@@ -297,6 +477,7 @@ const Signup: React.FC = () => {
                             <input
                                 type="email"
                                 name="email"
+                                placeholder="example@email.com"
                                 value={form.email}
                                 onChange={handleChange}
                                 required
@@ -327,7 +508,14 @@ const Signup: React.FC = () => {
                     <div className={style.buttonRow}>
                         <button type="button" className={style.backButton} onClick={() => navigate(-1)}>뒤 로 가 기</button>
 
-                        <button type="submit" className={style.joinButton}>가 입 하 기</button>
+                        <button type="submit" className={style.joinButton} disabled={
+                            !isPwdValid ||
+                            !isPwdMatched ||
+                            !isNicknameAvailable ||
+                            !isIdAvailable ||
+                            !isEmailAvailable ||
+                            !isCodeAvailable
+                        }>가 입 하 기</button>
                     </div>
                 </div>
             </form>
