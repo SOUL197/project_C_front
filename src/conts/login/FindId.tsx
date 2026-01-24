@@ -90,7 +90,8 @@ const FindId: React.FC = () => {
   };
 
   return (
-    <div className={style.signupContainer}>
+    <div className={style.page}>
+    <div className={style.loginContainer}>
       {!id && (
       <div>
       <h2>아이디 찾기</h2>
@@ -138,7 +139,7 @@ const FindId: React.FC = () => {
             <h2>아이디를 찾았어요</h2>
             <p>비밀번호를 잊으셨다면 '비밀번호 찾기'를 눌러주세요.</p>
             <div className={style.form}>
-                <div className={style.inputRow}>
+                <div className={style.inputGroup}>
                     <p style={{border:'1px solid #ccc', borderRadius:'4px', flex:1, backgroundColor:'white',
                         fontSize:'20px', padding:'8px'
                     }}>{id}</p>
@@ -154,6 +155,7 @@ const FindId: React.FC = () => {
             </div>
         </div>
       )}
+    </div>
     </div>
   );
 };

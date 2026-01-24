@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import ECharts from 'echarts-for-react';
+import style from '../login/login.module.css'
 
-const VisiorChart: React.FC = () => {
+const VisitorChart: React.FC = () => {
     const chartRef = useRef<any>(null);
     const [isDrilldown, setIsDrilldown] = useState(false);
 
@@ -33,7 +34,6 @@ const VisiorChart: React.FC = () => {
                 data: [
                     { value: 6200, name: '남성' },
                     { value: 5800, name: '여성' },
-                    { value: 480, name: '기타' },
                 ],
             },
         ],
@@ -148,7 +148,8 @@ const VisiorChart: React.FC = () => {
     };
 
     return (
-        <div style={{ width: '100%', height: '100%', padding: 16 }}>
+        <div className={style.page}>
+        <div className={style.loginContainer} style={{ width: '50%', height: '100%', padding: 16 }}>
 
             <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
                 <div style={cardStyle}>
@@ -188,6 +189,7 @@ const VisiorChart: React.FC = () => {
                 <ECharts option={matchOption} style={{ height: 300 }} />
             </section>
         </div>
+        </div>
     );
 };
 
@@ -214,4 +216,4 @@ const sectionStyle: React.CSSProperties = {
     marginBottom: 24,
 };
 
-export default VisiorChart;
+export default VisitorChart;

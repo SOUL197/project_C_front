@@ -121,7 +121,7 @@ const Login: React.FC = () => {
         }
     };
     
-
+    // 패스워드리스 인증 수단(QR) 등록 프로세스 시작
     const joinAp = async () => {
         try {
             // 인증 정보 조회
@@ -204,7 +204,7 @@ const Login: React.FC = () => {
           }
     }
 
-    // 등록되면 바로 로그인 수행할 수 있도록 인증번호 요청
+    // 패스워드리스 로그인: 일회용 토큰 발급 후 모바일 승인 요청
     const handleRequestAuthCode = async () => {
         let interval: ReturnType<typeof setInterval> | undefined;
         try {

@@ -87,10 +87,11 @@ const MyPageStats: React.FC = () => {
         data: [64],
       },
     ],
+    barMaxWidth:'25%'
   };
 
   return (
-    <div style={{ padding: 24 }}>
+    <div style={{ padding: 24, width: '50%' }}>
 
       <div style={{ display: 'flex', gap: 16, marginBottom: 24 }}>
         <div style={kpiStyle}>

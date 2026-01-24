@@ -25,7 +25,7 @@ const MyPageStats: React.FC = () => {
     resp.data.weeklyMatch.forEach((item:any) => {
       const date = new Date(item.DAY);
       const jsDay = date.getDay(); // 0(일) ~ 6(토)
-
+      console.log(date, jsDay);
       // 월(0) ~ 일(6) 로 변환
       const weekIndex = jsDay === 0 ? 6 : jsDay - 1;
 

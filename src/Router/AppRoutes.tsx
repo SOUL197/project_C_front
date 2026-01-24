@@ -26,9 +26,6 @@ import MyQna from '../conts/faq/MyQna'
 import Mypagehome from '../conts/mypage/Mypagehome'
 import FindId from '../conts/login/FindId'
 import FindPwd from '../conts/login/FindPwd'
-import MyPageStats from '../conts/chart_ui/MyPageStats'
-import AdminDashboard from '../conts/chart_ui/AdminDashboard'
-import VisiorChart from '../conts/chart_ui/VisiorChart'
 import QnaForm from '../conts/faq/QnaForm'
 import QnaList from '../conts/faq/QnaList'
 import SurveyClient from '../conts/survey copy/SurveyClient'
@@ -36,6 +33,9 @@ import SurveyList from '../conts/survey copy/SurveyList'
 import SurveyAddForm from '../conts/survey copy/SurveyAddForm'
 import SurveyClientResult from '../conts/survey copy/SurveyClientResult'
 import RequireAuth from '../comp/RequiredAuth'
+import VisitorChart from '../conts/chart_ui/VisitorChart copy'
+import MyPageStats from '../conts/chart_ui/MyPageStats copy'
+import AdminDashboard from '../conts/chart_ui/AdminDashboard copy'
 
 const AppRoutes: React.FC = () => {
     const routelist = [
@@ -49,7 +49,7 @@ const AppRoutes: React.FC = () => {
         { path: '/gallery/write', element: <RequireAuth><GalleryForm /></RequireAuth> },
         { path: '/gallery/gdetail/:num', element: <RequireAuth><GalleryDetail /></RequireAuth> },
         { path: '/community/upform', element: <RequireAuth><UpboardForm /></RequireAuth> },
-        { path: '/vchart', element: <VisiorChart /> },
+        { path: '/vchart', element: <VisitorChart /> },
         { path: '/fortune', element: <Fortune /> },
         { path: '/mypage', element: <RequireAuth><Mypagehome /></RequireAuth> },
         { path: '/signup', element: <Signup /> },
@@ -70,6 +70,9 @@ const AppRoutes: React.FC = () => {
         { path: '/surveylist', element: <SurveyList /> },
         { path: '/surveyaddform', element: <RequireAuth><SurveyAddForm /></RequireAuth> },
         { path: '/surveyresult/:num', element: <RequireAuth><SurveyClientResult /></RequireAuth> },
+        { path: '/test1', element: <VisitorChart/> },
+        { path: '/test2', element: <MyPageStats/> },
+        { path: '/test3', element: <AdminDashboard/> },
     ]
 
     return (

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ECharts from "echarts-for-react";
 import axios from "axios";
 
-const VisiorChart: React.FC = () => {
+const VisitorChart: React.FC = () => {
   const chartRef = useRef<any>(null);
   const [isDrilldown, setIsDrilldown] = useState(false);
 
@@ -210,4 +210,4 @@ const sectionStyle: React.CSSProperties = {
   marginBottom: 24,
 };
 
-export default VisiorChart;
+export default VisitorChart;

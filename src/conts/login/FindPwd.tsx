@@ -28,7 +28,7 @@ const FindPwd: React.FC = () => {
         setEmail(state.email);
         setIsEmailVerified(state.emailVerify)
     }
-  },[state])
+  },[state]) // FindId 화면에서 넘어온 경우, 아이디/이메일 인증 단계를 생략하기 위한 처리
 
   useEffect(()=>{
     if(pwd !== passCheck) {
@@ -108,6 +108,14 @@ const FindPwd: React.FC = () => {
   };
   const handleSubmit = async (e:React.FormEvent) => {
     e.preventDefault();
+    if (!isEmailVerified) {
+      alert("이메일 인증을 완료해주세요.");
+      return;
+    }
+    if (pwd !== passCheck) {
+      alert("비밀번호를 확인해주세요.");
+      return;
+    }
     try {
         await axios.post(`${url}/member/findPwd`,{
             id:id,
@@ -123,7 +131,8 @@ const FindPwd: React.FC = () => {
   }
     
   return (
-    <div className={style.signupContainer}>
+    <div className={style.page}>
+    <div className={style.loginContainer}>
       {state === null && !isIdVerified && (
       <div>
       <h2>비밀번호 찾기</h2>
@@ -188,6 +197,7 @@ const FindPwd: React.FC = () => {
             </form>
         </div>
       )}
+    </div>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import { useAuth } from '../../comp/AuthProvider'
 import axios from 'axios'
 import QnaList from '../faq/QnaList'
 import AdminAnswer from '../faq/AdminAnswer'
+import AdminDashboard from '../chart_ui/AdminDashboard copy'
 
 const Mypagehome: React.FC = () => {
   const { member } = useAuth();
@@ -33,6 +34,7 @@ const Mypagehome: React.FC = () => {
   const renderContent = (menu: string) => {
     switch (menu) {
       case 'Chart':
+        if(member && member?.num  <= 0) { return <AdminDashboard/>}
         return <MyPageStats />
       case 'Change Profile':
         return <Mypagedetail onSuccess={handleClose} />;
@@ -164,7 +166,7 @@ const Mypagehome: React.FC = () => {
             개인정보 수정
           </button>
           <button id='Chart' onClick={handleClick} className={style.menuBtn}>
-            내 매칭 통계
+            {(member && member?.num <= 0) ? 'Insight' : '내 매칭 통계'}
           </button>
           <button id='Gallery' onClick={handleClick} className={style.menuBtn}>
             나의 자랑하기
@@ -176,7 +178,7 @@ const Mypagehome: React.FC = () => {
             Like
           </button>
 
-          {(member?.num || 0) <= 0 ?
+          {member && member?.num <= 0 ?
             <button id='AdminA' onClick={handleClick} className={style.menuBtn}>
               1대1 문의 답변
             </button> : <button id='Qna' onClick={handleClick} className={style.menuBtn}>
